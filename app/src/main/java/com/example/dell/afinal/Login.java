@@ -47,7 +47,6 @@ public class Login extends AppCompatActivity {
                 // 使用BmobSDK提供的登陆功能
                 User user = new User();
                 user.setUsername(username);
-                user.setNickName(username);
                 user.setPassword(password);
                 user.login(new SaveListener<User>() {
                     @Override
@@ -87,7 +86,6 @@ public class Login extends AppCompatActivity {
             user.setUsername(userName);
             user.setSign("编辑个性签名");
             user.setEmail(userMail);
-            user.setNickName(userName);
             user.setSex(0);
             user.setPassword(userPwd);
             user.signUp(new SaveListener<User>() {

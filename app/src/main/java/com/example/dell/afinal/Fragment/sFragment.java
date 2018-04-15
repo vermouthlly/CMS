@@ -21,9 +21,6 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
 import com.example.dell.afinal.Login;
-/**
- * Created by dell on 2018/3/8.
- */
 
 public class sFragment extends android.support.v4.app.Fragment {
 
