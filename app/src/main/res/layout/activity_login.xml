@@ -26,9 +26,9 @@
             android:id="@+id/login_et_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@null"
-            android:hint="请输入您的学号"
+            android:hint="@string/input_uname"
             android:inputType="numberDecimal"
             android:maxLines="1"
             android:textColor="@color/primary_text"
@@ -55,9 +55,9 @@
             android:id="@+id/login_et_pwd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@null"
-            android:hint="请输入您的密码"
+            android:hint="@string/input_pwd"
             android:inputType="textPassword"
             android:maxLines="1"
             android:textColor="@color/primary_text"
@@ -71,9 +71,8 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/textview_bg_select"
-        android:clickable="true"
         android:gravity="center"
-        android:text="登录"
+        android:text="@string/login"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
@@ -83,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:text="还没有账号? 创建一个"
+        android:text="@string/link_to_signup"
         android:textColor="@color/secondary_text"
         android:textSize="14sp" />
 
@@ -98,4 +97,5 @@
             android:layout_centerInParent="true"
             android:visibility="invisible"/>
     </RelativeLayout>
+
 </LinearLayout>

@@ -26,9 +26,9 @@
             android:id="@+id/reg_et_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@null"
-            android:hint="请输入您的学号"
+            android:hint="@string/input_uname"
             android:inputType="numberDecimal"
             android:maxLines="1"
             android:textColor="@color/primary_text"
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:hint="请输入您的密码"
+            android:hint="@string/input_pwd"
             android:inputType="textPassword"
             android:maxLines="1"
             android:textColor="@color/primary_text"
@@ -84,9 +84,9 @@
             android:id="@+id/confirm_et_pwd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@null"
-            android:hint="请再次输入密码"
+            android:hint="@string/input_conpwd"
             android:inputType="textPassword"
             android:maxLines="1"
             android:textColor="@color/primary_text"
@@ -94,15 +94,37 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <RadioGroup
+        android:id="@+id/identity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <RadioButton
+            android:id="@+id/student"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/student"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/teacher"/>
+    </RadioGroup>
+
     <Button
         android:id="@+id/reg_bt"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/textview_bg_select"
-        android:clickable="true"
         android:gravity="center"
-        android:text="注册"
+        android:text="@string/register"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
@@ -112,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:text="已经有账号?前往登录"
+        android:text="@string/link_to_login"
         android:textColor="@color/secondary_text"
         android:textSize="14sp" />
 

@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.MainActivity;
@@ -20,7 +22,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText etUsername,etPassword;
     Button btnIn;
@@ -33,23 +35,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         bindView();
-
-        btnIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        linkSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
+    // 绑定控件
     public void bindView() {
         etUsername = findViewById(R.id.login_et_name);
         etPassword = findViewById(R.id.login_et_pwd);
@@ -57,6 +45,22 @@ public class LoginActivity extends AppCompatActivity {
         linkSignup = findViewById(R.id.link_signup);
         linkSignup.setClickable(true);
         progressBar = findViewById(R.id.progress);
+        btnIn.setOnClickListener(this);
+        linkSignup.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.login_tv_login:
+                hideKeyboard(view);
+                login();
+                break;
+            case R.id.link_signup:
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
     // 用户登录
@@ -70,10 +74,6 @@ public class LoginActivity extends AppCompatActivity {
             ToastUtil.toast(LoginActivity.this, "用户名或密码不能为空");
             return;
         }
-
-        // 隐藏软键盘
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
         // 显示进度条
         progressBar.setVisibility(View.VISIBLE);
@@ -95,14 +95,21 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     switch (e.getErrorCode()) {
                         case 101:
-                            ToastUtil.toast(getApplicationContext(), "用户不存在或密码错误");
+                            ToastUtil.toast(getApplicationContext(), "用户名或密码错误");
                             break;
                         default:
-                            ToastUtil.toast(getApplicationContext(), "登陆失败");
+                            ToastUtil.toast(getApplicationContext(), "登陆失败,请检查你的网络");
                             break;
                     }
                 }
             }
         });
+    }
+
+    // 需要时隐藏软键盘
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm != null)
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

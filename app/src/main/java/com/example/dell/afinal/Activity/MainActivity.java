@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.dell.afinal.Adapter.ViewPagerAdapter;
-import com.example.dell.afinal.Fragment.BaseFragment;
+import com.example.dell.afinal.Fragment.CourseFragment;
 import com.example.dell.afinal.Fragment.pFragment;
 import com.example.dell.afinal.Fragment.sFragment;
 import com.example.dell.afinal.R;
@@ -20,7 +20,6 @@ import com.jpeng.jptabbar.anno.Titles;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.v3.Bmob;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bmob.initialize(this, "1c4654f0b841178662bb6187bb6ed989 ");
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setupViewPager(mViewPager);
@@ -51,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
         // 开源控件JpTabbar用来绑定导航栏的icon和text
         mainJpTabbar.setContainer(mViewPager);
+    }
+
+    // 搭建ViewPager
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(CourseFragment.newInstance());
+        adapter.addFragment(pFragment.newInstance());
+        adapter.addFragment(sFragment.newInstance());
+        viewPager.setAdapter(adapter);
     }
 
     // 动态申请权限
@@ -76,14 +83,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // 搭建ViewPager
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(BaseFragment.newInstance());
-        adapter.addFragment(pFragment.newInstance());
-        adapter.addFragment(sFragment.newInstance());
-        viewPager.setAdapter(adapter);
     }
 }

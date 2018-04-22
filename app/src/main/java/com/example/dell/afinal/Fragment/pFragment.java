@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dell.afinal.R;
 
-/**
- * Created by dell on 2018/3/8.
- */
-
 public class pFragment extends android.support.v4.app.Fragment implements BaseQuickAdapter.OnItemClickListener{
 
     public static pFragment newInstance() {
