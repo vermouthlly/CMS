@@ -10,12 +10,16 @@ import com.example.dell.afinal.R;
 
 import java.util.Random;
 
+import cn.bmob.v3.Bmob;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        Bmob.initialize(this, "430bfefb7fad055dc47f06a0ba6f73e4");
 
         new Handler().postDelayed(new Runnable() {
             @Override

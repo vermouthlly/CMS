@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
-import com.example.dell.afinal.Login;
+import com.example.dell.afinal.LoginActivity;
 
 public class sFragment extends android.support.v4.app.Fragment {
 
@@ -60,7 +60,7 @@ public class sFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 if (BmobUser.getCurrentUser(User.class) == null) {
-                    Intent loginIntent = new Intent(getContext(), Login.class);
+                    Intent loginIntent = new Intent(getContext(), LoginActivity.class);
                     startActivity(loginIntent);
                 } else {
                     Intent userIntent = new Intent(getContext(), UserDetailActivity.class);
@@ -95,6 +95,7 @@ public class sFragment extends android.support.v4.app.Fragment {
             loadHead(user);
         } else {
             setTvName.setText("未登录");
+            Picasso.with(getContext()).load(R.mipmap.ic_head).into(setCivHead);
         }
     }
 

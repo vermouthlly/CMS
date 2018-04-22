@@ -7,18 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dell.afinal.R;
+import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.User;
 import com.example.dell.afinal.View.CircleImageView;
 import com.squareup.picasso.Picasso;
@@ -30,7 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
@@ -70,6 +67,7 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        // 若已登录则读取用户数据渲染到用户资料界面中
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
             userTvName.setText(user.getUsername());
@@ -119,9 +117,9 @@ public class UserDetailActivity extends AppCompatActivity {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                    ToastUtil.toast(getApplicationContext(), "修改成功");
                 } else {
-                    Toast.makeText(getApplicationContext(), "修改失败", Toast.LENGTH_SHORT).show();
+                    ToastUtil.toast(getApplicationContext(), "修改失败");
                 }
             }
         });
@@ -139,7 +137,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 checkSelfPermission();
                 break;
             case R.id.user_rl_name:
-                Toast.makeText(getApplicationContext(), "昵称不可修改", Toast.LENGTH_SHORT).show();
+                ToastUtil.toast(getApplicationContext(), "昵称暂不支持修改");
                 break;
             /*case R.id.user_rl_signature:
                 showEditDialog();
@@ -154,11 +152,14 @@ public class UserDetailActivity extends AppCompatActivity {
      * 检查权限
      */
     private void checkSelfPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
-                Toast.makeText(getApplicationContext(), "需要读写权限", Toast.LENGTH_SHORT).show();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+                ToastUtil.toast(getApplicationContext(), "缺少读写权限");
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             }
         } else {
             MultiImageSelector.create()
@@ -181,7 +182,7 @@ public class UserDetailActivity extends AppCompatActivity {
                             .multi() // 多选模式, 默认模式;
                             .start(this, 0);
                 } else {
-                    Toast.makeText(getApplicationContext(), "没有读写权限，请到设置中打开", Toast.LENGTH_SHORT).show();
+                    ToastUtil.toast(getApplicationContext(), "缺少读写权限,请到设置中打开");
                 }
         }
     }
@@ -218,14 +219,14 @@ public class UserDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        Toast.makeText(getApplicationContext(), "头像上传成功", Toast.LENGTH_SHORT).show();
+                                        ToastUtil.toast(getApplicationContext(), "头像上传成功");
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "头像上传失败", Toast.LENGTH_SHORT).show();
+                                        ToastUtil.toast(getApplicationContext(), "头像上传失败");
                                     }
                                 }
                             });
                         } else {
-                            Toast.makeText(getApplicationContext(), "头像上传失败", Toast.LENGTH_SHORT).show();
+                            ToastUtil.toast(getApplicationContext(), "头像上传失败");
                         }
 
                     }

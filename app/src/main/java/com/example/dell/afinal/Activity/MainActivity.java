@@ -25,11 +25,15 @@ import cn.bmob.v3.Bmob;
 public class MainActivity extends AppCompatActivity {
 
     @Titles
-    public static final String[] titles = {"日记","发现", "我的"};
+    public static final String[] titles = {"课程","讨论区", "我的"};
     @SeleIcons
-    public static final int[] selIcons = {R.mipmap.ic_diary_sel, R.mipmap.ic_find_sel, R.mipmap.ic_setting_sel};
+    public static final int[] selIcons = {R.mipmap.ic_course_sel,
+                                          R.mipmap.ic_discuss_sel,
+                                          R.mipmap.ic_setting_sel};
     @NorIcons
-    public static final int[] icons = {R.mipmap.ic_diary, R.mipmap.ic_find, R.mipmap.ic_setting};
+    public static final int[] icons = {R.mipmap.ic_course,
+                                       R.mipmap.ic_discuss,
+                                       R.mipmap.ic_setting};
 
     @BindView(R.id.main_jp_tabbar)
     JPTabBar mainJpTabbar;
@@ -43,31 +47,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setupViewPager(mViewPager);
-        verifyStoragePermissions(this);
+        //verifyStoragePermissions(this);
 
+        // 开源控件JpTabbar用来绑定导航栏的icon和text
         mainJpTabbar.setContainer(mViewPager);
     }
 
     // 动态申请权限
     private void verifyStoragePermissions(Activity activity) {
         try {
-            int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    Manifest.permission.READ_EXTERNAL_STORAGE);
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                ActivityCompat.requestPermissions(activity,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
             }
-            permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            permission = ActivityCompat.checkSelfPermission(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                ActivityCompat.requestPermissions(activity,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             }
             permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA);
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 0);
+                ActivityCompat.requestPermissions(activity,
+                        new String[]{Manifest.permission.CAMERA}, 0);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // 搭建ViewPager
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(BaseFragment.newInstance());

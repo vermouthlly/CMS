@@ -33,11 +33,11 @@
         <activity
             android:name=".Activity.MainActivity"
             android:windowSoftInputMode="adjustResize|stateHidden|adjustPan|stateUnchanged" />
-
-        <activity android:name=".Login" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".UserDetailActivity" />
         <activity android:name=".FeedbackActivity" />
         <activity android:name=".Activity.InfoActivity" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

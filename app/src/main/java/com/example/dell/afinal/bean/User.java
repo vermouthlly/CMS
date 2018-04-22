@@ -6,7 +6,6 @@ package com.example.dell.afinal.bean;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.datatype.BmobRelation;
 
 public class User extends BmobUser {
 
