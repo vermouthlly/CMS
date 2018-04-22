@@ -2,17 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_margin="10dp">
+        android:layout_height="190dp"
+        android:layout_margin="8dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="5dp">
 
             <ImageView
                 android:id="@+id/course_img"
@@ -24,7 +25,7 @@
                 android:id="@+id/course_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="课程名"
+                android:text="@string/course_name"
                 android:textStyle="bold"/>
 
             <TextView
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="课程描述"/>
+                android:text="@string/course_descri"/>
 
         </LinearLayout>
 

@@ -11,4 +11,6 @@
     <string name="register">注册</string>
     <string name="link_to_signup">还没有账号? 创建一个</string>
     <string name="link_to_login">已经有账号?前往登录</string>
+    <string name="course_name">课程名</string>
+    <string name="course_descri">课程简介</string>
 </resources>
