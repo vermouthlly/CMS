@@ -175,7 +175,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="退出登录"
-                android:textColor="@color/white"
+                android:textColor="@color/button_text"
                 android:textSize="16sp" />
         </LinearLayout>
     </com.example.dell.afinal.View.BounceScrollView>

@@ -125,7 +125,7 @@
         android:background="@drawable/textview_bg_select"
         android:gravity="center"
         android:text="@string/register"
-        android:textColor="@color/white"
+        android:textColor="@color/button_text"
         android:textSize="16sp" />
 
     <TextView

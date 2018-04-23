@@ -1,6 +1,7 @@
 package com.example.dell.afinal.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.dell.afinal.CourseDetailActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.Course;
 import com.squareup.picasso.Picasso;
@@ -33,8 +35,20 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         ViewHolder viewHolder = new ViewHolder(view);
 
         /*此处加入事件处理逻辑*/
+        viewHolder.courseItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCourseDetail();
+            }
+        });
 
         return viewHolder;
+    }
+
+    // 跳转到课程详情界面
+    private void showCourseDetail() {
+        Intent intent = new Intent(mContext, CourseDetailActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override

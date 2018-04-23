@@ -16,6 +16,10 @@
     <color name="thrid_text2">#4CAF50</color>
     <color name="ripple">#388E3C</color>
     <color name="bg_color">#eeeade</color>
+    <!--feng added 2018.04.24-->
+    <color name="originalbt_color">#053bde</color>
+    <color name="button_text">#000000</color>
+    <color name="light_grya">#f7f7f7</color>
 
     <color name="text_bg">#EEEEEE</color>
     <color name="red">#ff5252</color>
@@ -28,5 +32,4 @@
     <color name="orange">#ffab40</color>
     <color name="teal">#18ffff</color>
     <color name="search_edit_gray">#ffcccccc</color>
-    <color name="light_grya">#f7f7f7</color>
 </resources>

@@ -13,11 +13,10 @@
         layout="@layout/courdetail_toolbar"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,11 +37,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -61,11 +59,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,11 +82,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -112,6 +108,10 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/textview_bg_select"
+        android:gravity="center"
+        android:textColor="@color/button_text"
+        android:textSize="16sp"
         android:layout_marginTop="100dp"
         android:text="@string/join_course"/>
 
