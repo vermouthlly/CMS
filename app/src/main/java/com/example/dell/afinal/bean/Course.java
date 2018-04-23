@@ -3,6 +3,7 @@ package com.example.dell.afinal.bean;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 
+// 课程类
 public class Course extends BmobObject {
     // 课程名
     private String courseName;

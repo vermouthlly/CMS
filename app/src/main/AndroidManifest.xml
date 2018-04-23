@@ -37,7 +37,8 @@
         <activity android:name=".UserDetailActivity" />
         <activity android:name=".FeedbackActivity" />
         <activity android:name=".Activity.InfoActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".CourseDetailActivity"></activity>
     </application>
 
 </manifest>

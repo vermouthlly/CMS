@@ -3,6 +3,7 @@ package com.example.dell.afinal.bean;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
+// 用户类：继承BmobUser使用Bmob SDK的API实现用户的注册和登录
 public class User extends BmobUser {
     //身份：学生或教师
     private String identity;

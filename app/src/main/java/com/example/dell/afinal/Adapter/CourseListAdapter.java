@@ -29,7 +29,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.course_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
         /*此处加入事件处理逻辑*/

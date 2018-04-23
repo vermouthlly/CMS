@@ -28,4 +28,5 @@
     <color name="orange">#ffab40</color>
     <color name="teal">#18ffff</color>
     <color name="search_edit_gray">#ffcccccc</color>
+    <color name="light_grya">#f7f7f7</color>
 </resources>

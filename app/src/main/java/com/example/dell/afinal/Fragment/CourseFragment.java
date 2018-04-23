@@ -58,5 +58,20 @@ public class CourseFragment extends Fragment {
         course.setCourseName("计算机网络");
         course.setCourseDescription("授课老师：吴迪");
         courseList.add(course);
+
+        Course course1 = new Course();
+        course1.setCourseName("操作系统");
+        course1.setCourseDescription("授课老师：张永东");
+        courseList.add(course1);
+
+        Course course2 = new Course();
+        course2.setCourseName("高等数学");
+        course2.setCourseDescription("授课老师：江颖");
+        courseList.add(course2);
+
+        Course course3 = new Course();
+        course3.setCourseName("信息安全");
+        course3.setCourseDescription("授课老师：蔡国扬");
+        courseList.add(course3);
     }
 }
