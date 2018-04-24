@@ -19,4 +19,9 @@
     <string name="course_place">上课地点</string>
     <string name="course_capacity">课程容量</string>
     <string name="join_course">加入课程</string>
+    <string name="invitation">课程邀请码</string>
+    <string name="input_invitation">请输入课程邀请码</string>
+    <string name="feedback">意见反馈</string>
+    <string name="aboutus">关于我们</string>
+    <string name="mylist">我的课程</string>
 </resources>

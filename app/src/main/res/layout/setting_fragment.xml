@@ -31,7 +31,7 @@
                 android:id="@+id/set_tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:text="未登录"
                 android:textColor="@color/white"
@@ -62,7 +62,42 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout
+                android:id="@+id/my_courselist"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_next" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/mylist"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_next" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="10dp"
                 android:background="@color/divider" />
 
             <LinearLayout
@@ -82,9 +117,9 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="关于我们"
+                    android:text="@string/aboutus"
                     android:textColor="@color/primary_text"
                     android:textSize="16sp" />
 
@@ -97,7 +132,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@color/divider" />
 
             <LinearLayout
@@ -117,9 +152,9 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="意见反馈"
+                    android:text="@string/feedback"
                     android:textColor="@color/primary_text"
                     android:textSize="16sp" />
 
@@ -132,7 +167,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@color/divider" />
         </LinearLayout>
     </com.example.dell.afinal.View.BounceScrollView>

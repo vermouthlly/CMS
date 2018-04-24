@@ -22,17 +22,14 @@ import cn.bmob.v3.datatype.BmobFile;
 
 import com.example.dell.afinal.LoginActivity;
 
-public class sFragment extends android.support.v4.app.Fragment {
+public class sFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private CircleImageView setCivHead;
     private TextView setTvName;
     private LinearLayout setLlUser;
-    private LinearLayout setLlInfo;
-    private LinearLayout setLlFeedback;
 
     public static sFragment newInstance() {
-        sFragment fragment = new sFragment();
-        return fragment;
+        return new sFragment();
     }
 
     @Nullable
@@ -50,40 +47,48 @@ public class sFragment extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        bindView();
+    }
+
+    // 绑定控件并添加点击监听器
+    public void bindView() {
         setCivHead = getActivity().findViewById(R.id.set_civ_head);
         setTvName = getActivity().findViewById(R.id.set_tv_name);
         setLlUser = getActivity().findViewById(R.id.set_ll_user);
-        setLlInfo = getActivity().findViewById(R.id.set_ll_info);
-        setLlFeedback = getActivity().findViewById(R.id.set_ll_feedback);
+        LinearLayout setLlInfo = getActivity().findViewById(R.id.set_ll_info);
+        LinearLayout setLlFeedback = getActivity().findViewById(R.id.set_ll_feedback);
+        setTvName.setOnClickListener(this);
+        setLlFeedback.setOnClickListener(this);
+        setLlInfo.setOnClickListener(this);
+    }
 
-        setTvName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (BmobUser.getCurrentUser(User.class) == null) {
-                    Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(loginIntent);
-                } else {
-                    Intent userIntent = new Intent(getContext(), UserDetailActivity.class);
-                    startActivity(userIntent);
-                }
-            }
-        });
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.set_ll_feedback:
+                Intent intent1 = new Intent(getContext(), FeedbackActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.set_ll_info:
+                Intent intent2 = new Intent(getContext(), InfoActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.set_tv_name:
+                detailOrLogin();
+                break;
+            default: break;
+        }
+    }
 
-        setLlFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(getContext(), FeedbackActivity.class);
-                startActivity(loginIntent);
-            }
-        });
-
-        setLlInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(getContext(), InfoActivity.class);
-                startActivity(loginIntent);
-            }
-        });
+    // 根据登录状态决定跳转到哪一个界面
+    public void detailOrLogin() {
+        if (BmobUser.getCurrentUser(User.class) == null) {
+            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+            startActivity(loginIntent);
+        } else {
+            Intent userIntent = new Intent(getContext(), UserDetailActivity.class);
+            startActivity(userIntent);
+        }
     }
 
     @Override
@@ -107,6 +112,4 @@ public class sFragment extends android.support.v4.app.Fragment {
             Picasso.with(getContext()).load(R.mipmap.ic_head).into(setCivHead);
         }
     }
-
-
 }

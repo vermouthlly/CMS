@@ -1,16 +1,18 @@
 package com.example.dell.afinal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.dell.afinal.Activity.MainActivity;
 import com.example.dell.afinal.Utils.DialogUtil;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
@@ -21,10 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseDetailActivity extends AppCompatActivity {
@@ -55,7 +55,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     Button joinCourse;            // 加入课程按钮
 
     private Unbinder unbinder;
-    private String courseId;
+    private String courseId;        // 课程唯一标识
+    private String invitationCode;  // 课程邀请码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 showCourseCapacity();
                 break;
             case R.id.join_course:
-                joinCourse();
+                showDialogWithInput();
                 break;
             case R.id.back:
                 CourseDetailActivity.this.finish();
@@ -102,33 +103,47 @@ public class CourseDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle == null) return;
-        String name = bundle.getString("courseName", "");
-        String description = bundle.getString("courseDescription", "");
-        courseId = bundle.getString("courseId", "");
-        courseName.setText(name);
-        courseDescription.setText(description);
+        courseId = bundle.getString("courseId", "-");
+        invitationCode = bundle.getString("invitationCode", "");
+        courseName.setText(bundle.getString("courseName", "-"));
+        courseDescription.setText(bundle.getString("courseDescription", "-"));
+        courseTime.setText(bundle.getString("courseTime", "-"));
+        coursePlace.setText(bundle.getString("coursePlace", "-"));
+        courseCapacity.setText(bundle.getString("courseCapacity", "-"));
+    }
+
+    // 点击加入课程按钮弹出带输入的对话框
+    public void showDialogWithInput() {
+        LayoutInflater inflater = LayoutInflater.from(CourseDetailActivity.this);
+        final View view = inflater.inflate(R.layout.input_dialog, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CourseDetailActivity.this);
+        builder.setView(view)
+                .setCancelable(true)
+                .setPositiveButton("提交", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        joinCourse(view);
+                    }
+                })
+                .show();
+    }
+
+    // 检查邀请码是否正确
+    public boolean validateInvitationCode(View view) {
+        EditText input = view.findViewById(R.id.invitation_input);
+        String inputCode = input.getText().toString();
+        return inputCode.equals(invitationCode);
     }
 
     // 加入课程
-    public void joinCourse() {
+    public void joinCourse(View view) {
+        if (!validateInvitationCode(view)) {
+            ToastUtil.toast(CourseDetailActivity.this, "邀请码错误,无法加入课程");
+            return;
+        }
         User user = BmobUser.getCurrentUser(User.class);
-
-        // 课程关联用户, 把当前用户添加到选择了该课程的所有用户记录中
-        BmobRelation relation = new BmobRelation();
-        relation.add(user);
-        Course c = new Course();
-        c.setObjectId(courseId);
-        c.setSelectors(relation);   // 添加关联
-        c.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Log.d("CourseDetailActivity", "course selected");
-                } else {
-                    Log.e("CourseDetailActivity", e.toString());
-                }
-            }
-        });
+        Course c = addUserToCourseRecord(user);
 
         // 用户关联课程，把该课程添加到用户已选择的课程列表中
         BmobRelation relation1 = new BmobRelation();
@@ -145,6 +160,26 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // 课程关联用户, 把当前用户添加到选择了该课程的所有用户记录中
+    public Course addUserToCourseRecord(User user) {
+        BmobRelation relation = new BmobRelation();
+        relation.add(user);
+        Course c = new Course();
+        c.setObjectId(courseId);
+        c.setSelectors(relation);   // 添加关联
+        c.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.d("CourseDetailActivity", "course selected");
+                } else {
+                    Log.e("CourseDetailActivity", e.toString());
+                }
+            }
+        });
+        return c;
     }
 
     // 显示课程名

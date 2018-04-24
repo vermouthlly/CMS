@@ -53,7 +53,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         Bundle bundle = new Bundle();
         bundle.putString("courseName", viewHolder.courseName.getText().toString());
         bundle.putString("courseDescription", viewHolder.courseDescription.getText().toString());
+        bundle.putString("courseTime", viewHolder.courseTime);
+        bundle.putString("coursePlace", viewHolder.coursePlace);
+        bundle.putString("courseCapacity", viewHolder.courseCapacity);
         bundle.putString("courseId", viewHolder.courseId);
+        bundle.putString("invitationCode", viewHolder.invitationCode);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
     }
@@ -63,7 +67,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         Course course = courseList.get(position);
         holder.courseName.setText(course.getCourseName());
         holder.courseDescription.setText(course.getCourseDescription());
+        holder.courseTime = course.getCourseTime();
+        holder.coursePlace = course.getCoursePlace();
+        holder.courseCapacity = String.valueOf(course.getCourseCapacity());
         holder.courseId = course.getObjectId();
+        holder.invitationCode = course.getInvitationCode();
         BmobFile img = course.getHeadFile();
         if (img != null)
             Picasso.with(mContext).load(img.getFileUrl()).into(holder.courseImg);
@@ -81,7 +89,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         ImageView courseImg;  // 图片
         TextView courseName;  // 课程名
         TextView courseDescription;  // 课程简介
+        String courseTime = null;  // 上课时间
+        String coursePlace = null; // 上课地点
+        String courseCapacity = null; // 课程容量
         String courseId = null;  // 数据库生成的唯一课程id
+        String invitationCode = null;  // 课程邀请码
 
         ViewHolder(View view) {
             super(view);

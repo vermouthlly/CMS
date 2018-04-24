@@ -19,6 +19,8 @@ public class Course extends BmobObject {
 
     private BmobFile headFile; // 课程图片
 
+    private String invitationCode; // 课程邀请码
+
     private User manager;      // 一对一关系：用于存储创建并发布该课程的老师
 
     private BmobRelation selectors;  // 多对多关系：用于存储选择了该课程的学生
@@ -77,5 +79,13 @@ public class Course extends BmobObject {
 
     public void setSelectors(BmobRelation selectors) {
         this.selectors = selectors;
+    }
+
+    public String getInvitationCode() {
+        return invitationCode;
+    }
+
+    public void setInvitationCode(String invitationCode) {
+        this.invitationCode = invitationCode;
     }
 }
