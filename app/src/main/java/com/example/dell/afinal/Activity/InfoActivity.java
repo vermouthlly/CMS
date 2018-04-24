@@ -9,12 +9,12 @@ import com.example.dell.afinal.R;
 
 public class InfoActivity extends AppCompatActivity {
 
-    private ImageView btn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
+        ImageView btn = findViewById(R.id.about_iv_back);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

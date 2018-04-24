@@ -16,6 +16,7 @@
         style="@style/coursedetail_item">
 
         <TextView
+            android:id="@+id/cname"
             style="@style/item_tag"
             android:text="@string/course_name"/>
 
@@ -31,6 +32,7 @@
         style="@style/coursedetail_item">
 
         <TextView
+            android:id="@+id/cdescription"
             style="@style/item_tag"
             android:text="@string/course_descri" />
 
@@ -44,6 +46,7 @@
         style="@style/coursedetail_item">
 
         <TextView
+            android:id="@+id/ctime"
             style="@style/item_tag"
             android:text="@string/course_time" />
 
@@ -58,6 +61,22 @@
         style="@style/coursedetail_item">
 
         <TextView
+            android:id="@+id/cplace"
+            style="@style/item_tag"
+            android:text="@string/course_place" />
+
+        <TextView
+            android:id="@+id/course_place"
+            style="@style/item_content"
+            android:text="@string/course_place"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/coursedetail_item">
+
+        <TextView
+            android:id="@+id/ccapatity"
             style="@style/item_tag"
             android:text="@string/course_capacity" />
 
@@ -69,14 +88,15 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="150dp"
+        android:id="@+id/join_course"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/textview_bg_select"
         android:gravity="center"
         android:textColor="@color/button_text"
         android:textSize="16sp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:text="@string/join_course"/>
 
 </LinearLayout>

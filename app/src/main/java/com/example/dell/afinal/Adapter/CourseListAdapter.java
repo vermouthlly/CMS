@@ -47,12 +47,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         return viewHolder;
     }
 
-    // 跳转到课程详情界面
+    // 跳转到课程详情界面，并把课程相关信息传递过去
     private void showCourseDetail(ViewHolder viewHolder) {
         Intent intent = new Intent(mContext, CourseDetailActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("courseName", viewHolder.courseName.getText().toString());
         bundle.putString("courseDescription", viewHolder.courseDescription.getText().toString());
+        bundle.putString("courseId", viewHolder.courseId);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
     }
@@ -62,6 +63,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         Course course = courseList.get(position);
         holder.courseName.setText(course.getCourseName());
         holder.courseDescription.setText(course.getCourseDescription());
+        holder.courseId = course.getObjectId();
         BmobFile img = course.getHeadFile();
         if (img != null)
             Picasso.with(mContext).load(img.getFileUrl()).into(holder.courseImg);
@@ -76,9 +78,10 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View courseItem;
-        ImageView courseImg;
-        TextView courseName;
-        TextView courseDescription;
+        ImageView courseImg;  // 图片
+        TextView courseName;  // 课程名
+        TextView courseDescription;  // 课程简介
+        String courseId = null;  // 数据库生成的唯一课程id
 
         ViewHolder(View view) {
             super(view);

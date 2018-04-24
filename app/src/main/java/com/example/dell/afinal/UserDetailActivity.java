@@ -125,7 +125,8 @@ public class UserDetailActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.user_iv_back, R.id.user_civ_head, R.id.user_rl_head, R.id.user_rl_name, R.id.user_rl_signature, R.id.user_tv_unlogin})
+    @OnClick({R.id.user_iv_back, R.id.user_civ_head, R.id.user_rl_head, R.id.user_rl_name,
+            R.id.user_rl_signature, R.id.user_tv_unlogin})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_iv_back:
@@ -197,6 +198,9 @@ public class UserDetailActivity extends AppCompatActivity {
         this.finish();
     }
 
+    /*
+    * 从相册中选择头像并上传到服务器
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
