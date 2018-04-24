@@ -74,6 +74,7 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
                 startActivity(intent2);
                 break;
             case R.id.set_tv_name:
+            case R.id.set_ll_user:
                 detailOrLogin();
                 break;
             default: break;
