@@ -13,93 +13,57 @@
         layout="@layout/courdetail_toolbar"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp">
+        style="@style/coursedetail_item">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/course_name"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimaryDark"/>
+            style="@style/item_tag"
+            android:text="@string/course_name"/>
 
         <TextView
             android:id="@+id/course_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginStart="40dp"
+            style="@style/item_content"
             android:text="@string/course_name"
             />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp">
+        style="@style/coursedetail_item">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/course_descri"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimaryDark"/>
+            style="@style/item_tag"
+            android:text="@string/course_descri" />
 
         <TextView
             android:id="@+id/course_intro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginStart="40dp"
+            style="@style/item_content"
             android:text="@string/course_descri"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp">
+        style="@style/coursedetail_item">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/course_time"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimaryDark"/>
+            style="@style/item_tag"
+            android:text="@string/course_time" />
 
         <TextView
             android:id="@+id/course_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginStart="40dp"
+            style="@style/item_content"
             android:text="@string/course_time"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp">
+        style="@style/coursedetail_item">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/course_capacity"
-            android:textSize="18sp"
-            android:textColor="@color/colorPrimaryDark"/>
+            style="@style/item_tag"
+            android:text="@string/course_capacity" />
 
         <TextView
             android:id="@+id/course_capacity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginStart="45dp"
+            style="@style/item_content"
             android:text="@string/course_capacity"/>
 
     </LinearLayout>

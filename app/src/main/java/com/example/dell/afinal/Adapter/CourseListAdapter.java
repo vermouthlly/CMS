@@ -2,6 +2,7 @@ package com.example.dell.afinal.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
 
+// 课程列表的适配器
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder> {
     private Context mContext;
     private List<Course> courseList;
@@ -32,13 +34,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
             mContext = parent.getContext();
         }
         View view = LayoutInflater.from(mContext).inflate(R.layout.course_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
 
-        /*此处加入事件处理逻辑*/
+        /*点击卡片的事件处理逻辑*/
         viewHolder.courseItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCourseDetail();
+                showCourseDetail(viewHolder);
             }
         });
 
@@ -46,8 +48,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     }
 
     // 跳转到课程详情界面
-    private void showCourseDetail() {
+    private void showCourseDetail(ViewHolder viewHolder) {
         Intent intent = new Intent(mContext, CourseDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("courseName", viewHolder.courseName.getText().toString());
+        bundle.putString("courseDescription", viewHolder.courseDescription.getText().toString());
+        intent.putExtras(bundle);
         mContext.startActivity(intent);
     }
 
