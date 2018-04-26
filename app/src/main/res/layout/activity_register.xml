@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:paddingLeft="40dp"
     android:paddingRight="40dp"
-    tools:context="com.example.dell.afinal.LoginActivity">
+    tools:context="com.example.dell.afinal.Activity.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -137,6 +137,12 @@
         android:text="@string/link_to_login"
         android:textColor="@color/secondary_text"
         android:textSize="14sp" />
+
+    <View
+        android:layout_width="140dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/divider" />
 
     <RelativeLayout
         android:layout_width="match_parent"

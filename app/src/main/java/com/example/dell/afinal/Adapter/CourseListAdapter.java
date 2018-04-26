@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.dell.afinal.CourseDetailActivity;
+import com.example.dell.afinal.Activity.CourseDetailActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.Course;
 import com.squareup.picasso.Picasso;

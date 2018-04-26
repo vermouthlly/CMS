@@ -1,4 +1,4 @@
-package com.example.dell.afinal;
+package com.example.dell.afinal.Activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,8 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.User;
 import com.example.dell.afinal.View.CircleImageView;

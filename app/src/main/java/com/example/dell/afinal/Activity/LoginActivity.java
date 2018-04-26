@@ -1,4 +1,4 @@
-package com.example.dell.afinal;
+package com.example.dell.afinal.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +9,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.dell.afinal.Activity.MainActivity;
+import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.User;
 import com.example.dell.afinal.Utils.ToastUtil;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 

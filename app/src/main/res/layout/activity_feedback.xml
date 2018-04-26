@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:cardBackgroundColor="?attr/backgroundBg"
-    tools:context="com.example.dell.afinal.FeedbackActivity">
+    tools:context="com.example.dell.afinal.Activity.FeedbackActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -24,4 +24,5 @@
     <string name="feedback">意见反馈</string>
     <string name="aboutus">关于我们</string>
     <string name="mylist">我的课程</string>
+    <string name="notlogin">未登录</string>
 </resources>

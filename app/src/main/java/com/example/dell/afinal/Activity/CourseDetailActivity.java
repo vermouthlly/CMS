@@ -1,4 +1,4 @@
-package com.example.dell.afinal;
+package com.example.dell.afinal.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.DialogUtil;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;

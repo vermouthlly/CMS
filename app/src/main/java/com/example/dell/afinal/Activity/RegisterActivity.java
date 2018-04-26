@@ -1,20 +1,18 @@
-package com.example.dell.afinal;
+package com.example.dell.afinal.Activity;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.SnackBarUtil;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.User;

@@ -28,20 +28,17 @@
                 app:civ_border_width="2dp" />
 
             <TextView
+                style="@style/my_item_text"
                 android:id="@+id/set_tv_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:text="未登录"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:text="@string/notlogin"
+                android:textColor="@color/white" />
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/ic_right" />
         </LinearLayout>
+
     </com.example.dell.afinal.View.RippleView>
 
     <View
@@ -66,32 +63,24 @@
                 android:background="@color/divider" />
 
             <LinearLayout
-                android:id="@+id/my_courselist"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                style="@style/my_item"
+                android:id="@+id/my_courselist">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_next" />
+                    android:src="@mipmap/ic_next"
+                    android:contentDescription="@string/mylist" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/mylist"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp" />
+                    style="@style/my_item_text"
+                    android:text="@string/mylist" />
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_next" />
+                    android:src="@mipmap/ic_next"
+                    android:contentDescription="@string/mylist" />
             </LinearLayout>
 
             <View
@@ -101,32 +90,24 @@
                 android:background="@color/divider" />
 
             <LinearLayout
-                android:id="@+id/set_ll_info"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                style="@style/my_item"
+                android:id="@+id/set_ll_info">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_info" />
+                    android:src="@mipmap/ic_info"
+                    android:contentDescription="@string/aboutus" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/aboutus"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp" />
+                    style="@style/my_item_text"
+                    android:text="@string/aboutus" />
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_next" />
+                    android:src="@mipmap/ic_next"
+                    android:contentDescription="@string/aboutus" />
             </LinearLayout>
 
             <View
@@ -136,13 +117,8 @@
                 android:background="@color/divider" />
 
             <LinearLayout
-                android:id="@+id/set_ll_feedback"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                style="@style/my_item"
+                android:id="@+id/set_ll_feedback">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -150,25 +126,24 @@
                     android:src="@mipmap/ic_feedback" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/feedback"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp" />
+                    style="@style/my_item_text"
+                    android:text="@string/feedback" />
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_next" />
+                    android:src="@mipmap/ic_next"
+                    android:contentDescription="@string/feedback" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:layout_gravity="bottom"
                 android:layout_marginStart="10dp"
                 android:background="@color/divider" />
         </LinearLayout>
+
     </com.example.dell.afinal.View.BounceScrollView>
+
 </LinearLayout>

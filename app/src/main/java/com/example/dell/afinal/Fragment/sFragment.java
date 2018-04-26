@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.dell.afinal.FeedbackActivity;
+import com.example.dell.afinal.Activity.FeedbackActivity;
 import com.example.dell.afinal.Activity.InfoActivity;
 import com.example.dell.afinal.R;
-import com.example.dell.afinal.UserDetailActivity;
+import com.example.dell.afinal.Activity.UserDetailActivity;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
-import com.example.dell.afinal.LoginActivity;
+import com.example.dell.afinal.Activity.LoginActivity;
 
 public class sFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
@@ -92,6 +92,7 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
         }
     }
 
+    // 此处判断用户是否登录
     @Override
     public void onResume() {
         super.onResume();
@@ -105,6 +106,7 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
         }
     }
 
+    // 读取用户头像，未设置则使用默认图像
     private void loadHead(User user) {
         if (user.getHeadFile() != null) {
             BmobFile headFile = user.getHeadFile();

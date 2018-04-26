@@ -1,4 +1,4 @@
-package com.example.dell.afinal;
+package com.example.dell.afinal.Activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.FeedBack;
 import com.example.dell.afinal.View.LinedEditText;
 
