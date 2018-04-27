@@ -64,6 +64,7 @@ public class CourseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // 避免Fragment切换时重复加载布局
         if (mView == null) {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
             progressBar = mView.findViewById(R.id.is_loading);

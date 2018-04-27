@@ -195,6 +195,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private void doLoginOut() {
         ToastUtil.toast(getApplicationContext(), "注销登录");
         BmobUser.logOut();
+        startActivity(new Intent(UserDetailActivity.this, LoginActivity.class));
         this.finish();
     }
 

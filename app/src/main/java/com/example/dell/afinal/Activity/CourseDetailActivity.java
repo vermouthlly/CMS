@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -37,32 +39,21 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.cname)
-    TextView nameFiled;           // 课程名tag
-    @BindView(R.id.cdescription)
-    TextView desFiled;            // 课程简介tag
-    @BindView(R.id.ctime)
-    TextView timeFiled;           // 上课时间tag
-    @BindView(R.id.cplace)
-    TextView placeFiled;          // 上课地点tag
-    @BindView(R.id.ccapatity)
-    TextView capacityFiled;       // 课程容量tag
-    @BindView(R.id.course_name)
-    TextView courseName;          // 课程名content
-    @BindView(R.id.course_intro)
-    TextView courseDescription;   // 课程简介content
-    @BindView(R.id.course_time)
-    TextView courseTime;          // 上课时间content
-    @BindView(R.id.course_place)
-    TextView coursePlace;         // 上课地点content
-    @BindView(R.id.course_capacity)
-    TextView courseCapacity;      // 课程容量content
-    @BindView(R.id.back)
-    ImageView backButton;         // 返回按钮
-    @BindView(R.id.join_course_pro)
-    ProgressBar progressBar;      // 加入课程进度条
-    @BindView(R.id.join_course)
-    Button joinCourse;            // 加入课程按钮
+    @BindView(R.id.load_courseInfo_pro) ProgressBar courseInfoPro;  // 课程详情读取进度
+    @BindView(R.id.course_detail) LinearLayout courseDetailField;  // 课程详情最外层布局
+    @BindView(R.id.cname) TextView nameField;                      // 课程名tag
+    @BindView(R.id.cdescription) TextView desField;                // 课程简介tag
+    @BindView(R.id.ctime) TextView timeField;                      // 上课时间tag
+    @BindView(R.id.cplace) TextView placeField;                    // 上课地点tag
+    @BindView(R.id.ccapatity) TextView capacityField;              // 课程容量tag
+    @BindView(R.id.course_name) TextView courseName;               // 课程名content
+    @BindView(R.id.course_intro) TextView courseDescription;       // 课程简介content
+    @BindView(R.id.course_time) TextView courseTime;               // 上课时间content
+    @BindView(R.id.course_place) TextView coursePlace;             // 上课地点content
+    @BindView(R.id.course_capacity) TextView courseCapacity;       // 课程容量content
+    @BindView(R.id.back) ImageView backButton;                     // 返回按钮
+    @BindView(R.id.join_course_pro) ProgressBar progressBar;       // 加入课程进度条
+    @BindView(R.id.join_course) Button joinCourse;                 // 加入课程按钮
 
     private Unbinder unbinder;
     private String courseId;        // 课程唯一标识
@@ -75,6 +66,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         unbinder = ButterKnife.bind(this);
 
+        checkDuplication();
         loadCourseInfo();
     }
 
@@ -105,8 +97,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 showCourseCapacity();
                 break;
             case R.id.join_course:
-                progressBar.setVisibility(View.VISIBLE);
-                checkDuplication();
+                addOrQuitCourse();
                 break;
             case R.id.back:
                 CourseDetailActivity.this.finish();
@@ -129,7 +120,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseCapacity.setText(bundle.getString("courseCapacity", "-"));
     }
 
-    // 检查用户是否已经选择该课程, 避免重复选课
+    // 检查用户是否已经选择该课程
     public void checkDuplication() {
         BmobQuery<Course> query = new BmobQuery<>();
         User user = BmobUser.getCurrentUser(User.class);
@@ -142,27 +133,33 @@ public class CourseDetailActivity extends AppCompatActivity {
                     for (Course course : list) {
                         courseIds.add(course.getObjectId());
                     }
+                    // 该课程未选择
                     if (!courseIds.contains(courseId)) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        showDialogWithInput();
+                        joinCourse.setText("加入课程");
                     } else {
-                        abnormalResult("duplicated_error");
+                        joinCourse.setText("退出课程");
                     }
+                    courseInfoPro.setVisibility(View.INVISIBLE);
+                    courseDetailField.setVisibility(View.VISIBLE);
                 } else {
-                    abnormalResult("net_error");
+                    netWorkExceptionHint();
                 }
             }
         });
     }
 
-    // 检查操作出现异常结果，需要给予用户足够的提示
-    public void abnormalResult(String code) {
-        if (code.equals("net_error")) {
-            progressBar.setVisibility(View.INVISIBLE);
-            ToastUtil.toast(CourseDetailActivity.this, "操作失败,请检查你的网络");
-        } else if (code.equals("duplicated_error")) {
-            progressBar.setVisibility(View.INVISIBLE);
-            ToastUtil.toast(CourseDetailActivity.this, "你已选择该课程,请勿重复操作");
+    // 出现网络异常，需要给予用户足够的提示
+    public void netWorkExceptionHint() {
+        hideProgress();
+        ToastUtil.toast(CourseDetailActivity.this, "操作失败,请检查你的网络");
+    }
+
+    // 根据按钮状态判定点击按钮的行为：选课或退课
+    public void addOrQuitCourse() {
+        if (joinCourse.getText().toString().equals("加入课程")) {
+            showDialogWithInput();
+        } else {
+            showQuitCourseDialog();
         }
     }
 
@@ -172,15 +169,16 @@ public class CourseDetailActivity extends AppCompatActivity {
         final View view = inflater.inflate(R.layout.input_dialog, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseDetailActivity.this);
-        builder.setView(view)
-                .setCancelable(true)
-                .setPositiveButton("提交", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        joinCourse(view);
-                    }
-                })
-                .show();
+        builder.setView(view);
+        builder.setCancelable(true)
+        .setPositiveButton("提交", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                progressBar.setVisibility(View.VISIBLE);
+                joinCourse(view);
+            }
+        })
+        .show();
     }
 
     // 检查邀请码是否正确
@@ -194,6 +192,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     public void joinCourse(View view) {
         if (!validateInvitationCode(view)) {
             ToastUtil.toast(CourseDetailActivity.this, "邀请码错误,无法加入课程");
+            hideProgress();
             return;
         }
         User user = BmobUser.getCurrentUser(User.class);
@@ -204,17 +203,19 @@ public class CourseDetailActivity extends AppCompatActivity {
     // 用户关联课程，把该课程添加到用户已选择的课程列表中
     public void addCourseToUserRecord(Course course) {
         User user = BmobUser.getCurrentUser(User.class);
-        BmobRelation relation1 = new BmobRelation();
-        relation1.add(course);
-        user.setCourses(relation1);
+        BmobRelation relation = new BmobRelation();
+        relation.add(course);
+        user.setCourses(relation);
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
                     ToastUtil.toast(getApplicationContext(), "添加课程成功");
+                    joinCourse.setText("退出课程");
                 } else {
-                    Log.e("CourseDetailActivity", e.toString());
+                    netWorkExceptionHint();
                 }
+                hideProgress();
             }
         });
     }
@@ -223,10 +224,10 @@ public class CourseDetailActivity extends AppCompatActivity {
     public Course addUserToCourseRecord(User user) {
         BmobRelation relation = new BmobRelation();
         relation.add(user);
-        Course c = new Course();
-        c.setObjectId(courseId);
-        c.setSelectors(relation);   // 添加关联
-        c.update(new UpdateListener() {
+        Course course = new Course();
+        course.setObjectId(courseId);
+        course.setSelectors(relation);   // 添加关联
+        course.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
@@ -236,40 +237,115 @@ public class CourseDetailActivity extends AppCompatActivity {
                 }
             }
         });
-        return c;
+        return course;
+    }
+
+    // 在提示框里完成退选课程操作
+    public void showQuitCourseDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(CourseDetailActivity.this);
+        dialog.setTitle("你确定要退出课程?");
+        dialog.setPositiveButton("我确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                quitCourse();
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        })
+        .setNegativeButton("再想想", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ToastUtil.toast(CourseDetailActivity.this, "操作已取消");
+            }
+        })
+        .setCancelable(false)
+        .show();
+    }
+
+    // 退选课程
+    public void quitCourse() {
+        deleteRelationInUser();
+        deleteRelationInCourse();
+    }
+
+    // 删除User表中Course记录
+    public void deleteRelationInUser() {
+        User user = BmobUser.getCurrentUser(User.class);
+        Course course = new Course();
+        course.setObjectId(courseId);
+        BmobRelation relation = new BmobRelation();
+        relation.remove(course);   // 解除关联
+        user.setCourses(relation);
+        user.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    hideProgress();
+                    joinCourse.setText("加入课程");
+                    ToastUtil.toast(CourseDetailActivity.this, "操作成功");
+                } else {
+                    netWorkExceptionHint();
+                }
+                hideProgress();
+            }
+        });
+    }
+
+    // 退课的同时删除Course表中的User记录
+    public void deleteRelationInCourse() {
+        Course course = new Course();
+        course.setObjectId(courseId);
+        BmobRelation relation = new BmobRelation();
+        relation.remove(BmobUser.getCurrentUser(User.class));
+        course.setSelectors(relation);
+        course.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.d("CourseDetailActivity", "relation removed");
+                } else {
+                    Log.e("CourseDetailActivity", e.toString());
+                }
+            }
+        });
+    }
+
+    // 隐藏进度条
+    public void hideProgress() {
+        if (progressBar.getVisibility() == View.VISIBLE)
+            progressBar.setVisibility(View.INVISIBLE);
     }
 
     // 显示课程名
     public void showCourseName() {
-        String title = nameFiled.getText().toString();
+        String title = nameField.getText().toString();
         String content = courseName.getText().toString();
         DialogUtil.showDialog(CourseDetailActivity.this, title, content);
     }
 
     // 显示课程简介
     public void showCourseDescription() {
-        String title = desFiled.getText().toString();
+        String title = desField.getText().toString();
         String content = courseDescription.getText().toString();
         DialogUtil.showDialog(CourseDetailActivity.this, title, content);
     }
 
     // 显示上课时间段
     public void showCourseTime() {
-        String title = timeFiled.getText().toString();
+        String title = timeField.getText().toString();
         String content = courseTime.getText().toString();
         DialogUtil.showDialog(CourseDetailActivity.this, title, content);
     }
 
     // 显示上课地点
     public void showCoursePlace() {
-        String title = placeFiled.getText().toString();
+        String title = placeField.getText().toString();
         String content = coursePlace.getText().toString();
         DialogUtil.showDialog(CourseDetailActivity.this, title, content);
     }
 
     // 显示课程容量
     public void showCourseCapacity() {
-        String title = capacityFiled.getText().toString();
+        String title = capacityField.getText().toString();
         String content = courseCapacity.getText().toString();
         DialogUtil.showDialog(CourseDetailActivity.this, title, content);
     }

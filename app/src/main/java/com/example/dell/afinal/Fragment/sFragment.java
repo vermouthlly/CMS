@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.FeedbackActivity;
 import com.example.dell.afinal.Activity.InfoActivity;
+import com.example.dell.afinal.Activity.MyCourseActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Activity.UserDetailActivity;
 import com.example.dell.afinal.View.CircleImageView;
@@ -53,10 +54,11 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
     public void bindView() {
         setCivHead = getActivity().findViewById(R.id.set_civ_head);
         setTvName = getActivity().findViewById(R.id.set_tv_name);
-        LinearLayout setLlUser = getActivity().findViewById(R.id.set_ll_user);
+        LinearLayout myCourselist = getActivity().findViewById(R.id.my_courselist);
         LinearLayout setLlInfo = getActivity().findViewById(R.id.set_ll_info);
         LinearLayout setLlFeedback = getActivity().findViewById(R.id.set_ll_feedback);
         setTvName.setOnClickListener(this);
+        myCourselist.setOnClickListener(this);
         setLlFeedback.setOnClickListener(this);
         setLlInfo.setOnClickListener(this);
     }
@@ -64,13 +66,14 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.my_courselist:
+                startActivity(new Intent(getContext(), MyCourseActivity.class));
+                break;
             case R.id.set_ll_feedback:
-                Intent intent1 = new Intent(getContext(), FeedbackActivity.class);
-                startActivity(intent1);
+                startActivity(new Intent(getContext(), FeedbackActivity.class));
                 break;
             case R.id.set_ll_info:
-                Intent intent2 = new Intent(getContext(), InfoActivity.class);
-                startActivity(intent2);
+                startActivity(new Intent(getContext(), InfoActivity.class));
                 break;
             case R.id.set_tv_name:
             case R.id.set_ll_user:

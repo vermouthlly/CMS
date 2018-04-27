@@ -25,4 +25,5 @@
     <string name="aboutus">关于我们</string>
     <string name="mylist">我的课程</string>
     <string name="notlogin">未登录</string>
+    <string name="back">返回</string>
 </resources>
