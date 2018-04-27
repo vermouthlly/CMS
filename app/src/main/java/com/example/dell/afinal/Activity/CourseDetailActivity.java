@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.dell.afinal.R;
@@ -19,13 +20,19 @@ import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
 import com.example.dell.afinal.bean.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseDetailActivity extends AppCompatActivity {
@@ -52,6 +59,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     TextView courseCapacity;      // 课程容量content
     @BindView(R.id.back)
     ImageView backButton;         // 返回按钮
+    @BindView(R.id.join_course_pro)
+    ProgressBar progressBar;      // 加入课程进度条
     @BindView(R.id.join_course)
     Button joinCourse;            // 加入课程按钮
 
@@ -65,6 +74,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_detail);
 
         unbinder = ButterKnife.bind(this);
+
         loadCourseInfo();
     }
 
@@ -74,23 +84,29 @@ public class CourseDetailActivity extends AppCompatActivity {
               R.id.course_capacity, R.id.join_course, R.id.back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.cname: case R.id.course_name:
+            case R.id.cname:
+            case R.id.course_name:
                 showCourseName();
                 break;
-            case R.id.cdescription: case R.id.course_intro:
+            case R.id.cdescription:
+            case R.id.course_intro:
                 showCourseDescription();
                 break;
-            case R.id.ctime: case R.id.course_time:
+            case R.id.ctime:
+            case R.id.course_time:
                 showCourseTime();
                 break;
-            case R.id.cplace: case R.id.course_place:
+            case R.id.cplace:
+            case R.id.course_place:
                 showCoursePlace();
                 break;
-            case R.id.ccapatity: case R.id.course_capacity:
+            case R.id.ccapatity:
+            case R.id.course_capacity:
                 showCourseCapacity();
                 break;
             case R.id.join_course:
-                showDialogWithInput();
+                progressBar.setVisibility(View.VISIBLE);
+                checkDuplication();
                 break;
             case R.id.back:
                 CourseDetailActivity.this.finish();
@@ -113,7 +129,44 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseCapacity.setText(bundle.getString("courseCapacity", "-"));
     }
 
-    // 点击加入课程按钮弹出带输入的对话框
+    // 检查用户是否已经选择该课程, 避免重复选课
+    public void checkDuplication() {
+        BmobQuery<Course> query = new BmobQuery<>();
+        User user = BmobUser.getCurrentUser(User.class);
+        query.addWhereRelatedTo("courses", new BmobPointer(user));
+        query.findObjects(new FindListener<Course>() {
+            @Override
+            public void done(List<Course> list, BmobException e) {
+                if (e == null) {
+                    List<String> courseIds = new ArrayList<>();
+                    for (Course course : list) {
+                        courseIds.add(course.getObjectId());
+                    }
+                    if (!courseIds.contains(courseId)) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        showDialogWithInput();
+                    } else {
+                        abnormalResult("duplicated_error");
+                    }
+                } else {
+                    abnormalResult("net_error");
+                }
+            }
+        });
+    }
+
+    // 检查操作出现异常结果，需要给予用户足够的提示
+    public void abnormalResult(String code) {
+        if (code.equals("net_error")) {
+            progressBar.setVisibility(View.INVISIBLE);
+            ToastUtil.toast(CourseDetailActivity.this, "操作失败,请检查你的网络");
+        } else if (code.equals("duplicated_error")) {
+            progressBar.setVisibility(View.INVISIBLE);
+            ToastUtil.toast(CourseDetailActivity.this, "你已选择该课程,请勿重复操作");
+        }
+    }
+
+    // 点击加入课程按钮弹出带输入的对话框, 提供输入验证码的接口
     public void showDialogWithInput() {
         LayoutInflater inflater = LayoutInflater.from(CourseDetailActivity.this);
         final View view = inflater.inflate(R.layout.input_dialog, null);
@@ -145,10 +198,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         }
         User user = BmobUser.getCurrentUser(User.class);
         Course c = addUserToCourseRecord(user);
+        addCourseToUserRecord(c);
+    }
 
-        // 用户关联课程，把该课程添加到用户已选择的课程列表中
+    // 用户关联课程，把该课程添加到用户已选择的课程列表中
+    public void addCourseToUserRecord(Course course) {
+        User user = BmobUser.getCurrentUser(User.class);
         BmobRelation relation1 = new BmobRelation();
-        relation1.add(c);
+        relation1.add(course);
         user.setCourses(relation1);
         user.update(new UpdateListener() {
             @Override
@@ -160,7 +217,6 @@ public class CourseDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     // 课程关联用户, 把当前用户添加到选择了该课程的所有用户记录中

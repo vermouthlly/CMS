@@ -26,7 +26,6 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
 
     private CircleImageView setCivHead;
     private TextView setTvName;
-    private LinearLayout setLlUser;
 
     public static sFragment newInstance() {
         return new sFragment();
@@ -54,7 +53,7 @@ public class sFragment extends android.support.v4.app.Fragment implements View.O
     public void bindView() {
         setCivHead = getActivity().findViewById(R.id.set_civ_head);
         setTvName = getActivity().findViewById(R.id.set_tv_name);
-        setLlUser = getActivity().findViewById(R.id.set_ll_user);
+        LinearLayout setLlUser = getActivity().findViewById(R.id.set_ll_user);
         LinearLayout setLlInfo = getActivity().findViewById(R.id.set_ll_info);
         LinearLayout setLlFeedback = getActivity().findViewById(R.id.set_ll_feedback);
         setTvName.setOnClickListener(this);
