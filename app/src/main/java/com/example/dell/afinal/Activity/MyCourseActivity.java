@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -39,6 +41,8 @@ public class MyCourseActivity extends AppCompatActivity {
 
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.back)
+    ImageView bt_back;
     @BindView(R.id.course_list)
     RecyclerView my_courseList;
     @BindView(R.id.is_loading)
@@ -61,11 +65,14 @@ public class MyCourseActivity extends AppCompatActivity {
         loadUserCourses();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
+    @OnClick({R.id.back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                MyCourseActivity.this.finish();
+                break;
+            default: break;
+        }
     }
 
     // 构建RecyclerView

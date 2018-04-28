@@ -85,12 +85,24 @@
                 android:text="@string/course_capacity"/>
         </LinearLayout>
 
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                android:id="@+id/snum"
+                style="@style/item_tag"
+                android:text="@string/student_num" />
+            <TextView
+                android:id="@+id/student_num"
+                style="@style/item_content"
+                android:text="@string/student_num"/>
+        </LinearLayout>
+
         <ProgressBar
             style="?android:attr/progressBarStyleSmallInverse"
             android:id="@+id/join_course_pro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="5dp"
             android:visibility="invisible"
             android:layout_gravity="center_horizontal"/>

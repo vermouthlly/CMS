@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,16 @@ import android.widget.TextView;
 import com.example.dell.afinal.Activity.CourseDetailActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.Course;
+import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 // 课程列表的适配器
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder> {
@@ -67,6 +73,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         Course course = courseList.get(position);
         holder.courseName.setText(course.getCourseName());
         holder.courseDescription.setText(course.getCourseDescription());
+        holder.studentNum.setText(String.valueOf(course.getCourseCapacity()));
         holder.courseTime = course.getCourseTime();
         holder.coursePlace = course.getCoursePlace();
         holder.courseCapacity = String.valueOf(course.getCourseCapacity());
@@ -86,14 +93,15 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View courseItem;
-        ImageView courseImg;  // 图片
-        TextView courseName;  // 课程名
-        TextView courseDescription;  // 课程简介
-        String courseTime = null;  // 上课时间
-        String coursePlace = null; // 上课地点
+        ImageView courseImg;          // 图片
+        TextView courseName;          // 课程名
+        TextView courseDescription;   // 课程简介
+        TextView studentNum;          // 选课人数
+        String courseTime = null;     // 上课时间
+        String coursePlace = null;    // 上课地点
         String courseCapacity = null; // 课程容量
-        String courseId = null;  // 数据库生成的唯一课程id
-        String invitationCode = null;  // 课程邀请码
+        String courseId = null;       // 数据库生成的唯一课程id
+        String invitationCode = null; // 课程邀请码
 
         ViewHolder(View view) {
             super(view);
@@ -101,6 +109,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
             courseImg = courseItem.findViewById(R.id.course_img);
             courseName = courseItem.findViewById(R.id.course_name);
             courseDescription = courseItem.findViewById(R.id.course_description);
+            studentNum = courseItem.findViewById(R.id.student_num);
         }
     }
 }

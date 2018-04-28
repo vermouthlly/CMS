@@ -15,9 +15,11 @@
     <string name="course_descri">课程简介</string>
     <string name="course_list">课程列表</string>
     <string name="course_detail">课程详情</string>
+    <string name="course_image">课程图片</string>
     <string name="course_time">上课时间</string>
     <string name="course_place">上课地点</string>
     <string name="course_capacity">课程容量</string>
+    <string name="student_num">已选人数</string>
     <string name="join_course">加入课程</string>
     <string name="invitation">课程邀请码</string>
     <string name="input_invitation">请输入课程邀请码</string>
