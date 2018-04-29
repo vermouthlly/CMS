@@ -28,4 +28,6 @@
     <string name="mylist">我的课程</string>
     <string name="notlogin">未登录</string>
     <string name="back">返回</string>
+    <string name="search_icon">搜索按钮</string>
+    <string name="searchHint">请输入关键字</string>
 </resources>

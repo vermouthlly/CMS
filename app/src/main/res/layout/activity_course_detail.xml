@@ -23,7 +23,7 @@
         <!--外部引入标题栏-->
         <include
             android:id="@+id/detail_toolbar"
-            layout="@layout/courdetail_toolbar"/>
+            layout="@layout/course_detail_toolbar"/>
 
         <LinearLayout
             style="@style/coursedetail_item">

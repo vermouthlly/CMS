@@ -11,7 +11,7 @@
 
         <include
             android:id="@+id/course_tool_bar"
-            layout="@layout/courlist_toolbar"/>
+            layout="@layout/course_list_toolbar"/>
 
     </android.support.design.widget.AppBarLayout>
 

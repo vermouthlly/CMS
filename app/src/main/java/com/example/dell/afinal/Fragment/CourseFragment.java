@@ -12,6 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -20,6 +23,7 @@ import com.example.dell.afinal.Adapter.CourseListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +33,14 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class CourseFragment extends Fragment {
-    private View mView;  // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
-    private ProgressBar progressBar;  // 进度条
-    private Toolbar toolbar;          // 标题栏
+    private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
+    private ProgressBar progressBar;           // 进度条
+    private Toolbar toolbar;                   // 标题栏
+    private MaterialSearchView searchView;     // 搜索框
     private SwipeRefreshLayout refreshLayout;  // 下拉刷新
+    private RecyclerView recyclerView;         // 课程列表
+
+    private CourseListAdapter adapter;         // 课程适配器
     private List<Course> courseList = new ArrayList<>();
     public static final int DATA_READY = 1;
     public static final int LOAD_FAILED = 2;
@@ -67,9 +75,7 @@ public class CourseFragment extends Fragment {
         // 避免Fragment切换时重复加载布局
         if (mView == null) {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
-            progressBar = mView.findViewById(R.id.is_loading);
-            toolbar = mView.findViewById(R.id.course_tool_bar);
-            refreshLayout = mView.findViewById(R.id.swipe_refresh);
+            bindViews(mView);
             progressBar.setVisibility(View.VISIBLE);
             generateCourseList();
         } else {
@@ -81,22 +87,80 @@ public class CourseFragment extends Fragment {
         return mView;
     }
 
+    // 绑定控件
+    public void bindViews(View mView) {
+        progressBar = mView.findViewById(R.id.is_loading);
+        toolbar = mView.findViewById(R.id.toolbar);
+        searchView = mView.findViewById(R.id.search_view);
+        refreshLayout = mView.findViewById(R.id.swipe_refresh);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity)(getActivity())).setSupportActionBar(toolbar);
+
+        // 在这里完成ToolBar和Menu的初始配置
+        AppCompatActivity thisActivity = (AppCompatActivity) getActivity();
+        thisActivity.setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
         refresh();
     }
 
     // 搭建RecyclerView
     public void createRecyclerView() {
-        RecyclerView recyclerView = mView.findViewById(R.id.course_list);
+        recyclerView = mView.findViewById(R.id.course_list);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);  // 设置布局管理器
 
-        CourseListAdapter adapter = new CourseListAdapter(courseList);
+        adapter = new CourseListAdapter(courseList);
         recyclerView.setAdapter(adapter);        // 构造并添加适配器
         adapter.notifyDataSetChanged();
+    }
+
+    // 设置搜索框属性
+    public void initSearchView() {
+        searchView.setVoiceSearch(false);
+        searchView.setEllipsize(true);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                final List<Course> filteredModeList = filter(courseList, newText);
+                adapter.setFilter(filteredModeList);
+                adapter.animateTo(filteredModeList);
+                recyclerView.scrollToPosition(0);
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {}
+
+            @Override
+            public void onSearchViewClosed() {
+                adapter.setFilter(courseList);
+            }
+        });
+    }
+
+    // 根据输入关键字过滤课程条目
+    public List<Course> filter(List<Course> courses, String query) {
+        query = query.toLowerCase();
+
+        final List<Course> filteredModeList = new ArrayList<>();
+        for (Course course : courses) {
+            String courseName = course.getCourseName();
+            String courseDescription = course.getCourseDescription();
+
+            if (courseName.contains(query) || courseDescription.contains(query))
+                filteredModeList.add(course);
+        }
+        return filteredModeList;
     }
 
     // 定义下拉刷新行为
@@ -118,6 +182,7 @@ public class CourseFragment extends Fragment {
                 if (e == null) {
                     courseList = new ArrayList<>(list);
                     createRecyclerView();
+                    initSearchView();            // 必须在RecyclerView生成之后才能给搜索框添加监听
                     Message msg = new Message();
                     msg.what = DATA_READY;
                     handler.sendMessage(msg);
@@ -129,5 +194,13 @@ public class CourseFragment extends Fragment {
                 }
             }
         });
+    }
+
+    // 加载小菜单,设置搜索按钮
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
     }
 }

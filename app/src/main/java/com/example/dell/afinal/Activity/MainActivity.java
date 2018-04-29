@@ -10,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.dell.afinal.Adapter.ViewPagerAdapter;
 import com.example.dell.afinal.Fragment.CourseFragment;
-import com.example.dell.afinal.Fragment.pFragment;
-import com.example.dell.afinal.Fragment.sFragment;
+import com.example.dell.afinal.Fragment.DiscussionFragment;
+import com.example.dell.afinal.Fragment.MineFragment;
 import com.example.dell.afinal.R;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.anno.NorIcons;
@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(CourseFragment.newInstance());
-        adapter.addFragment(pFragment.newInstance());
-        adapter.addFragment(sFragment.newInstance());
+        adapter.addFragment(DiscussionFragment.newInstance());
+        adapter.addFragment(MineFragment.newInstance());
         viewPager.setAdapter(adapter);
     }
 

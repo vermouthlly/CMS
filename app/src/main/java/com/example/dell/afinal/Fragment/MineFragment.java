@@ -23,13 +23,13 @@ import cn.bmob.v3.datatype.BmobFile;
 
 import com.example.dell.afinal.Activity.LoginActivity;
 
-public class sFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class MineFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private CircleImageView setCivHead;
     private TextView setTvName;
 
-    public static sFragment newInstance() {
-        return new sFragment();
+    public static MineFragment newInstance() {
+        return new MineFragment();
     }
 
     @Nullable

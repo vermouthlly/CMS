@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <include
-            layout="@layout/courdetail_toolbar"/>
+            layout="@layout/course_detail_toolbar"/>
 
     </android.support.design.widget.AppBarLayout>
 

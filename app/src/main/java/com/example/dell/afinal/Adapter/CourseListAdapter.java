@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +13,12 @@ import android.widget.TextView;
 import com.example.dell.afinal.Activity.CourseDetailActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.Course;
-import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 // 课程列表的适配器
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder> {
@@ -66,6 +61,67 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         bundle.putString("invitationCode", viewHolder.invitationCode);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
+    }
+
+    // 定义过滤器, 满足搜索功能需求
+    public void setFilter(List<Course> list) {
+        courseList = new ArrayList<>();
+        courseList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    // 匹配搜索文本的动态变化
+    public void animateTo(List<Course> courses) {
+        applyAndAnimateRemovals(courses);
+        applyAndAnimateAdditions(courses);
+        applyAndAnimateMovedItems(courses);
+    }
+
+    // 动态删除搜索结果条目
+    private void applyAndAnimateRemovals(List<Course> courses) {
+        for (int i = courseList.size() - 1; i >= 0; i--) {
+            final Course course = courseList.get(i);
+            if (!courses.contains(course)) {
+                removeItem(i);
+            }
+        }
+    }
+
+    private void removeItem(int position) {
+        courseList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    // 动态增加搜索结果条目
+    private void applyAndAnimateAdditions(List<Course> courses) {
+        for (int i = 0, count = courses.size(); i < count; i++) {
+            final Course people = courseList.get(i);
+            if (!courseList.contains(people)) {
+                addItem(i, people);
+            }
+        }
+    }
+
+    private void addItem(int position, Course course) {
+        courseList.add(position, course);
+        notifyItemInserted(position);
+    }
+
+    // 动态移动搜索结果条目
+    private void applyAndAnimateMovedItems(List<Course> courses) {
+        for (int toPosition = courses.size() - 1; toPosition >= 0; toPosition--) {
+            final Course course = courses.get(toPosition);
+            final int fromPosition = courseList.indexOf(course);
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
+    }
+
+    private void moveItem(int fromPosition, int toPosition) {
+        final Course course = courseList.remove(fromPosition);
+        courseList.add(toPosition, course);
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override

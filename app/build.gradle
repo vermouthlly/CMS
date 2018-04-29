@@ -35,6 +35,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.jpeng:JPTabBar:1.3.3'
     compile 'com.android.support:design:26.1.0'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
     compile 'cn.bmob.android:http-legacy:1.0'
