@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -82,9 +84,9 @@ public class UserDetailActivity extends AppCompatActivity {
         userCbSex.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+                if(isChecked) {
                     changeSex(1);
-                } else {
+                }else {
                     changeSex(0);
                 }
             }
@@ -140,9 +142,9 @@ public class UserDetailActivity extends AppCompatActivity {
             case R.id.user_rl_name:
                 ToastUtil.toast(getApplicationContext(), "昵称暂不支持修改");
                 break;
-            /*case R.id.user_rl_signature:
+            case R.id.user_rl_signature:
                 showEditDialog();
-                break;*/
+                break;
             case R.id.user_tv_unlogin:
                 doLoginOut();
                 break;
@@ -197,6 +199,34 @@ public class UserDetailActivity extends AppCompatActivity {
         BmobUser.logOut();
         startActivity(new Intent(UserDetailActivity.this, LoginActivity.class));
         this.finish();
+    }
+
+    private void showEditDialog() {
+        View view = getLayoutInflater().inflate(R.layout.edit_dialog, null, false);
+        final EditText etSign = (EditText) view.findViewById(R.id.sign_et_sign);
+        TextView tvOk = (TextView) view.findViewById(R.id.sign_tv_ok);
+        final AlertDialog editDialog = new AlertDialog.Builder(this).create();
+        editDialog.setView(view);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDialog.dismiss();
+                User user = BmobUser.getCurrentUser(User.class);
+                user.setSign(etSign.getText().toString());
+                user.update(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            ToastUtil.toast(getApplicationContext(), "编辑成功");
+                        } else {
+                            ToastUtil.toast(getApplicationContext(), "编辑失败");
+                        }
+                    }
+                });
+            }
+        };
+        tvOk.setOnClickListener(listener);
+        editDialog.show();
     }
 
     /*
