@@ -13,18 +13,20 @@
         app:layout_scrollFlags="scroll|enterAlways|snap"
         android:background="@color/colorPrimary">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_centerInParent="true"
+                android:paddingStart="45dp"
+                android:paddingEnd="8dp"
                 android:text="@string/course_list"
                 android:textColor="@color/white"
                 android:textSize="18sp"/>
-        </LinearLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 

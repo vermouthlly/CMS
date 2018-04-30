@@ -16,6 +16,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/layout/activity',
+                            'src/main/res/layout/fragment',
+                            'src/main/res/layout/item',
+                            'src/main/res/layout/toolbar',
+                            'src/main/res/layout/other',
+                            'src/main/res/layout',
+                            'src/main/res'
+                    ]
+        }
+    }
 }
 
 dependencies {
@@ -36,6 +50,7 @@ dependencies {
     compile 'com.jpeng:JPTabBar:1.3.3'
     compile 'com.android.support:design:26.1.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
     compile 'cn.bmob.android:http-legacy:1.0'

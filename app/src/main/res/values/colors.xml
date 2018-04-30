@@ -35,4 +35,6 @@
     <color name="teal">#18ffff</color>
     <color name="search_edit_gray">#ffcccccc</color>
     <color name="search_background">#98dbd4</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="half_black">#808080</color>
 </resources>

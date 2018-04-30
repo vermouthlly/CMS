@@ -31,4 +31,7 @@
     <string name="back">返回</string>
     <string name="search_icon">搜索按钮</string>
     <string name="searchHint">请输入关键字</string>
+    <string name="post">发表帖子</string>
+    <string name="mylikes">我的收藏</string>
+    <string name="mypost">我的帖子</string>
 </resources>

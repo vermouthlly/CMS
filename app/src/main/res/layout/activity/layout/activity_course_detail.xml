@@ -114,8 +114,9 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/textview_bg_select"
             android:gravity="center"
-            android:textColor="@color/button_text"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:text="@string/join_course"/>
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

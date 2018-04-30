@@ -2,21 +2,19 @@ package com.example.dell.afinal.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.dell.afinal.Adapter.PostFragmentAdapter;
 import com.example.dell.afinal.R;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-import butterknife.BindView;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -25,6 +23,7 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
     private View mView;    // Fragment布局
 
     private Unbinder unbinder;
+    private List<Fragment> fragments = new ArrayList<>();
 
     public static DiscussionFragment newInstance() {
         return new DiscussionFragment();
@@ -43,8 +42,21 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.discussion_fragment, container, false);
             unbinder = ButterKnife.bind(this, mView);
+            fragments.add(new AllPostFragment());
+            fragments.add(new PopularPostFragment());
         }
+        createViewPager();
         return mView;
+    }
+
+    // 构造讨论区内部的ViewPager页面
+    public void createViewPager() {
+        ViewPager viewPager = mView.findViewById(R.id.viewpager);
+        viewPager.setAdapter(new PostFragmentAdapter(getChildFragmentManager(), fragments));
+        viewPager.setCurrentItem(0);
+
+        TabLayout tab = mView.findViewById(R.id.post_tab);
+        tab.setupWithViewPager(viewPager);
     }
 
     @Override

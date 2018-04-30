@@ -121,4 +121,24 @@
         <item name="android:hint">@string/searchHint</item>
     </style>
 
+    <!--悬浮按钮组样式-->
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MyTablayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorColor">@color/colorPrimary</item>
+        <item name="tabBackground">@color/white</item>
+        <item name="tabSelectedTextColor">@color/colorPrimary</item>
+        <item name="tabTextAppearance">@style/MyTabTextApperance</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="MyTabTextApperance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
 </resources>
