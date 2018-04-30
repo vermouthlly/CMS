@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.dell.afinal.Activity.MainActivity">
 
-    <android.support.v4.view.ViewPager
+    <include
+        layout="@layout/course_list_toolbar"/>
+
+    <com.example.dell.afinal.View.NoScrollViewPager
         android:id="@+id/vp_main"
         android:layout_width="match_parent"
         android:layout_height="0dp" >
-    </android.support.v4.view.ViewPager>
+    </com.example.dell.afinal.View.NoScrollViewPager>
 
     <View
         android:layout_width="match_parent"

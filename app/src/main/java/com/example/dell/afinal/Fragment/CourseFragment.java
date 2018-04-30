@@ -69,6 +69,12 @@ public class CourseFragment extends Fragment {
         return new CourseFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);     // 设置显示菜单
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,14 +82,13 @@ public class CourseFragment extends Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
             bindViews(mView);
+            generateCourseList();        // 这里完成数据加载
             progressBar.setVisibility(View.VISIBLE);
-            generateCourseList();
         } else {
             ViewGroup parent = (ViewGroup) mView.getParent();
             if (parent != null)
                 parent.removeView(mView);
         }
-
         return mView;
     }
 
@@ -93,16 +98,14 @@ public class CourseFragment extends Fragment {
         toolbar = mView.findViewById(R.id.toolbar);
         searchView = mView.findViewById(R.id.search_view);
         refreshLayout = mView.findViewById(R.id.swipe_refresh);
+        initSearchView();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        // 在这里完成ToolBar和Menu的初始配置
         AppCompatActivity thisActivity = (AppCompatActivity) getActivity();
         thisActivity.setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
         refresh();
     }
 
@@ -121,6 +124,10 @@ public class CourseFragment extends Fragment {
     public void initSearchView() {
         searchView.setVoiceSearch(false);
         searchView.setEllipsize(true);
+    }
+
+    // 给搜索框添加监听事件
+    public void setListenerForSearchView() {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -133,10 +140,9 @@ public class CourseFragment extends Fragment {
                 adapter.setFilter(filteredModeList);
                 adapter.animateTo(filteredModeList);
                 recyclerView.scrollToPosition(0);
-                return false;
+                return true;
             }
         });
-
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {}
@@ -182,7 +188,7 @@ public class CourseFragment extends Fragment {
                 if (e == null) {
                     courseList = new ArrayList<>(list);
                     createRecyclerView();
-                    initSearchView();            // 必须在RecyclerView生成之后才能给搜索框添加监听
+                    setListenerForSearchView();   // 必须在RecyclerView生成之后才能给搜索框添加监听
                     Message msg = new Message();
                     msg.what = DATA_READY;
                     handler.sendMessage(msg);
@@ -199,7 +205,7 @@ public class CourseFragment extends Fragment {
     // 加载小菜单,设置搜索按钮
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_search, menu);
+        inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
     }

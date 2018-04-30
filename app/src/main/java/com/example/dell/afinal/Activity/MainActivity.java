@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import com.example.dell.afinal.Adapter.ViewPagerAdapter;
 import com.example.dell.afinal.Fragment.CourseFragment;
 import com.example.dell.afinal.Fragment.DiscussionFragment;
@@ -17,6 +19,7 @@ import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.anno.NorIcons;
 import com.jpeng.jptabbar.anno.SeleIcons;
 import com.jpeng.jptabbar.anno.Titles;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setupViewPager(mViewPager);
-        //verifyStoragePermissions(this);
 
         // 开源控件JpTabbar用来绑定导航栏的icon和text
         mainJpTabbar.setContainer(mViewPager);

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/CMS.iml" filepath="$PROJECT_DIR$/CMS.iml" />
       <module fileurl="file://C:\Users\dell\Desktop\ClassManagementSystem\CMS.iml" filepath="C:\Users\dell\Desktop\ClassManagementSystem\CMS.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ClassManagementSystem.iml" filepath="$PROJECT_DIR$/ClassManagementSystem.iml" />
       <module fileurl="file://C:\Users\Feng\AndroidStudioProjects\CMS\ClassManagementSystem.iml" filepath="C:\Users\Feng\AndroidStudioProjects\CMS\ClassManagementSystem.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
