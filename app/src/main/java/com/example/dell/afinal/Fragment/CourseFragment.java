@@ -188,7 +188,7 @@ public class CourseFragment extends Fragment {
                 if (e == null) {
                     courseList = new ArrayList<>(list);
                     createRecyclerView();
-                    setListenerForSearchView();   // 必须在RecyclerView生成之后才能给搜索框添加监听
+                    setListenerForSearchView();   // 给搜索框添加监听
                     Message msg = new Message();
                     msg.what = DATA_READY;
                     handler.sendMessage(msg);

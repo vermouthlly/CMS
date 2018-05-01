@@ -11,16 +11,21 @@ import android.view.ViewGroup;
 
 import com.example.dell.afinal.Adapter.PostFragmentAdapter;
 import com.example.dell.afinal.R;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class DiscussionFragment extends android.support.v4.app.Fragment {
 
     private View mView;    // Fragment布局
+    @BindView(R.id.new_post)
+    FloatingActionButton newPost;
 
     private Unbinder unbinder;
     private List<Fragment> fragments = new ArrayList<>();
@@ -47,6 +52,20 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
         }
         createViewPager();
         return mView;
+    }
+
+    @OnClick({R.id.new_post})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.new_post:
+                onNewPostButtonClick();
+                break;
+        }
+    }
+
+    // 点击“发表帖子”按钮
+    public void onNewPostButtonClick() {
+
     }
 
     // 构造讨论区内部的ViewPager页面

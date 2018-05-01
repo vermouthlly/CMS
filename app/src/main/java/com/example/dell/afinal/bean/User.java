@@ -54,6 +54,14 @@ public class User extends BmobUser {
         this.sign = sign;
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public Integer getSex() {
         return sex;
     }

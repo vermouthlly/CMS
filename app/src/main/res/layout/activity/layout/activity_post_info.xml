@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dell.afinal.Activity.PostInfoActivity">
+
+    <!--标题栏-->
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/post_detail_toolbar"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--帖子内容-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.example.dell.afinal.View.CircleImageView
+                    android:id="@+id/user_head_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_head"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_toEndOf="@+id/user_head_image"
+                    android:layout_alignTop="@+id/user_head_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:text="用户名"/>
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_name"
+                    android:layout_alignStart="@+id/user_name"
+                    android:text="05-01 1:30"/>
+
+                <TextView
+                    android:id="@+id/post_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/date"
+                    android:layout_margin="8dp"
+                    android:text="帖子标题写在这里"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/post_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="帖子正文写在这里"
+                    android:layout_below="@+id/post_title"
+                    android:layout_margin="8dp"
+                    android:maxLines="3"
+                    android:ellipsize="end"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="0.8dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/divider"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="评论"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="0.8dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/divider"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:text="评论区功能未开放"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

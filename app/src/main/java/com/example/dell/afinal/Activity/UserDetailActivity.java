@@ -250,7 +250,8 @@ public class UserDetailActivity extends AppCompatActivity {
                         if (e == null) {
                             User user = BmobUser.getCurrentUser(User.class);
                             user.setHeadFile(headFile);
-                            Picasso.with(UserDetailActivity.this).load(headFile.getFileUrl()).into(userCivHead);
+                            Picasso.with(UserDetailActivity.this).load(headFile.getFileUrl())
+                                    .into(userCivHead);
                             user.update(new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
