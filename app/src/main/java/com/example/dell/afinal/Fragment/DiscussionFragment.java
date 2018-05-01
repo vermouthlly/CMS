@@ -1,5 +1,6 @@
 package com.example.dell.afinal.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.dell.afinal.Activity.NewPostActivity;
 import com.example.dell.afinal.Adapter.PostFragmentAdapter;
 import com.example.dell.afinal.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -63,9 +65,10 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    // 点击“发表帖子”按钮
+    // 点击“ 发表帖子”按钮
     public void onNewPostButtonClick() {
-
+        Intent intent = new Intent(getContext(), NewPostActivity.class);
+        startActivity(intent);
     }
 
     // 构造讨论区内部的ViewPager页面

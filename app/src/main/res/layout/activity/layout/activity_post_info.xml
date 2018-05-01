@@ -76,7 +76,6 @@
                     android:text="帖子正文写在这里"
                     android:layout_below="@+id/post_title"
                     android:layout_margin="8dp"
-                    android:maxLines="3"
                     android:ellipsize="end"/>
 
             </RelativeLayout>

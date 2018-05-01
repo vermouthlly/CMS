@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.PostInfoActivity;
 import com.example.dell.afinal.R;
+import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
@@ -20,7 +21,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 
 // 讨论区主题帖的适配器
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
@@ -63,16 +67,33 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Post curPost = postList.get(position);
-        /*holder.userName.setText(curPost.getAuthor().getNickName());*/
         holder.postTitle.setText(curPost.getTitle());
         holder.postContent.setText(curPost.getContent());
         holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
-        /*holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id*/
-        /*BmobFile headImg = curPost.getImage();
-        if (headImg != null)
-            Picasso.with(mContext).load(headImg.getFileUrl()).into(holder.userImage);
-        else
-            Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);*/
+        holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
+        getAuthorData(holder.authorId, holder);
+    }
+
+    // 根据作者id从服务器读取作者头像及用户名(直接getAuthor获取失败 原因尚未明确)
+    private void getAuthorData(String id, final ViewHolder holder) {
+        BmobQuery<User> query = new BmobQuery<>();
+        query.getObject(id, new QueryListener<User>() {
+            @Override
+            public void done(User user, BmobException e) {
+                if (e == null) {
+                    holder.userName.setText(user.getUsername());
+                    if (user.getHeadFile() != null)
+                        Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
+                                .into(holder.userImage);
+                    else
+                        Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
+                } else {
+                    ToastUtil.toast(mContext, e.toString());
+                    holder.userName.setText("匿名用户");
+                    Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
+                }
+            }
+        });
     }
 
     @Override

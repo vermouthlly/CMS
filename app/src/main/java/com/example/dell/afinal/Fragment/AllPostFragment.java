@@ -50,14 +50,10 @@ public class AllPostFragment extends Fragment {
         return mView;
     }
 
-    // 点击发表贴子按钮
-    public void onNewPostButtonClicked() {
-
-    }
-
     // 从服务器读取所有帖子数据
     public void loadPostsFromServer() {
         BmobQuery<Post> query = new BmobQuery<>();
+        query.order("-createdAt");
         query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> list, BmobException e) {

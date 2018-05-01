@@ -11,7 +11,6 @@
         android:id="@+id/user_head_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@mipmap/ic_head"
         android:layout_margin="5dp"/>
 
     <TextView
@@ -20,16 +19,14 @@
         android:layout_alignTop="@+id/user_head_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:text="用户名"/>
+        android:layout_margin="3dp" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_name"
-        android:layout_alignStart="@+id/user_name"
-        android:text="05-01 1:30"/>
+        android:layout_alignStart="@+id/user_name" />
 
     <TextView
         android:id="@+id/post_title"
@@ -58,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.8dp"
         android:background="@color/divider"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"/>
 
 </RelativeLayout>
