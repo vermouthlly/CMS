@@ -86,7 +86,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {
-                    holder.userName.setText(user.getNickName());
+                    if(user.getNickName() != null) {
+                        holder.userName.setText(user.getNickName());
+                    }else {
+                        holder.userName.setText(user.getUsername());
+                    }
+
                     if (user.getHeadFile() != null)
                         Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
                                 .into(holder.userImage);
