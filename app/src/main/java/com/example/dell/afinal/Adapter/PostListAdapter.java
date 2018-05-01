@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.PostInfoActivity;
@@ -71,6 +72,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.postContent.setText(curPost.getContent());
         holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
+        if(curPost.getImage() != null) {
+            BmobFile pros = curPost.getImage();
+            Picasso.with(mContext).load(pros.getFileUrl()).into(holder.p);
+        }
         getAuthorData(holder.authorId, holder);
     }
 
@@ -81,12 +86,18 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {
-                    holder.userName.setText(user.getUsername());
+                    holder.userName.setText(user.getNickName());
                     if (user.getHeadFile() != null)
                         Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
                                 .into(holder.userImage);
                     else
                         Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
+
+                    if (user.getSex() == 0) {
+                        Picasso.with(mContext).load(R.mipmap.male).into(holder.ivSex);
+                    } else {
+                        Picasso.with(mContext).load(R.mipmap.female).into(holder.ivSex);
+                    }
                 } else {
                     ToastUtil.toast(mContext, e.toString());
                     holder.userName.setText("匿名用户");
@@ -109,6 +120,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         TextView postTitle;          // 帖子标题
         TextView postContent;        // 帖子正文
         String authorId;             // 作者
+        ImageView ivSex;             // 性别
+        ImageView p;                 // 图片
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -118,6 +131,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             date = itemView.findViewById(R.id.date);
             postTitle = itemView.findViewById(R.id.post_title);
             postContent = itemView.findViewById(R.id.post_text);
+            ivSex = itemView.findViewById(R.id.find_item_iv_sex);
+            p = itemView.findViewById(R.id.pro);
         }
     }
 }

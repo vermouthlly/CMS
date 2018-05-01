@@ -72,9 +72,9 @@ public class UserDetailActivity extends AppCompatActivity {
         // 若已登录则读取用户数据渲染到用户资料界面中
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
-            userTvName.setText(user.getUsername());
+            userTvName.setText(user.getNickName());
             userTvSignature.setText(user.getSign());
-            if (user.getSex() != null && user.getSex().equals("nan")) {
+            if (user.getSex() != null && user.getSex() == 0) {
                 userCbSex.setChecked(false);
             } else {
                 userCbSex.setChecked(true);
@@ -140,10 +140,10 @@ public class UserDetailActivity extends AppCompatActivity {
                 checkSelfPermission();
                 break;
             case R.id.user_rl_name:
-                ToastUtil.toast(getApplicationContext(), "昵称暂不支持修改");
+                showEditDialog2();
                 break;
             case R.id.user_rl_signature:
-                showEditDialog();
+                showEditDialog1();
                 break;
             case R.id.user_tv_unlogin:
                 doLoginOut();
@@ -201,7 +201,7 @@ public class UserDetailActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private void showEditDialog() {
+    private void showEditDialog1() {
         View view = getLayoutInflater().inflate(R.layout.edit_dialog, null, false);
         final EditText etSign = (EditText) view.findViewById(R.id.sign_et_sign);
         TextView tvOk = (TextView) view.findViewById(R.id.sign_tv_ok);
@@ -217,9 +217,37 @@ public class UserDetailActivity extends AppCompatActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            ToastUtil.toast(getApplicationContext(), "编辑成功");
+                            ToastUtil.toast(getApplicationContext(), "修改签名成功");
                         } else {
-                            ToastUtil.toast(getApplicationContext(), "编辑失败");
+                            ToastUtil.toast(getApplicationContext(), "修改签名失败");
+                        }
+                    }
+                });
+            }
+        };
+        tvOk.setOnClickListener(listener);
+        editDialog.show();
+    }
+
+    private void showEditDialog2() {
+        View view = getLayoutInflater().inflate(R.layout.edit_dialog, null, false);
+        final EditText etSign = (EditText) view.findViewById(R.id.sign_et_sign);
+        TextView tvOk = (TextView) view.findViewById(R.id.sign_tv_ok);
+        final AlertDialog editDialog = new AlertDialog.Builder(this).create();
+        editDialog.setView(view);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDialog.dismiss();
+                User user = BmobUser.getCurrentUser(User.class);
+                user.setNickName(etSign.getText().toString());
+                user.update(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            ToastUtil.toast(getApplicationContext(), "修改昵称成功");
+                        } else {
+                            ToastUtil.toast(getApplicationContext(), "修改昵称失败");
                         }
                     }
                 });

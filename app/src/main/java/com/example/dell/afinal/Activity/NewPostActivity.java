@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,6 +36,8 @@ public class NewPostActivity extends AppCompatActivity {
     EditText inputContent;
     @BindView(R.id.committing)
     ProgressBar progressBar;
+    @BindView(R.id.add_post_photo)
+    ImageView post_photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class NewPostActivity extends AppCompatActivity {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
+
         commitDataToServer();
     }
 
