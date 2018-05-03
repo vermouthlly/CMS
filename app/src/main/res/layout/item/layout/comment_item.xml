@@ -25,12 +25,13 @@
                 android:src="@mipmap/ic_head" />
 
             <ImageView
-                android:id="@+id/find_item_iv_sex"
+                android:id="@+id/user_sex"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:padding="4dp" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -61,35 +62,17 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/post_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/date"
-        android:layout_margin="8dp"
-        android:text="帖子标题写在这里"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:maxLines="1"
-        android:ellipsize="end"/>
-
-    <TextView
-        android:id="@+id/post_text"
+        android:id="@+id/comment_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="帖子正文写在这里"
-        android:layout_below="@+id/post_title"
         android:layout_margin="8dp"
         android:maxLines="3"
         android:ellipsize="end"/>
-
-    <ImageView
-        android:id="@+id/pro"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:padding="8dp"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/divider" />
+
 </LinearLayout>

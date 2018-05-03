@@ -125,7 +125,7 @@
         android:background="@drawable/textview_bg_select"
         android:gravity="center"
         android:text="@string/register"
-        android:textColor="@color/button_text"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <TextView
@@ -135,14 +135,14 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
         android:text="@string/link_to_login"
-        android:textColor="@color/secondary_text"
+        android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
 
-    <View
+    <!--<View
         android:layout_width="140dp"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/divider" />
+        android:background="@color/divider" />-->
 
     <RelativeLayout
         android:layout_width="match_parent"

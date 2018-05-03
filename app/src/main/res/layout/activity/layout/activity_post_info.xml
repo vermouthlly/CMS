@@ -21,13 +21,15 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <!--帖子内容-->
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -40,22 +42,27 @@
                     android:src="@mipmap/ic_head"
                     android:layout_margin="5dp"/>
 
+                <com.example.dell.afinal.View.CircleImageView
+                    android:id="@+id/user_sex"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_alignEnd="@+id/user_head_image"
+                    android:layout_alignBottom="@+id/user_head_image" />
+
                 <TextView
                     android:id="@+id/user_name"
-                    android:layout_toEndOf="@+id/user_head_image"
-                    android:layout_alignTop="@+id/user_head_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:text="用户名"/>
+                    android:layout_toEndOf="@+id/user_head_image"
+                    android:layout_alignTop="@+id/user_head_image"
+                    android:layout_margin="3dp" />
 
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/user_name"
-                    android:layout_alignStart="@+id/user_name"
-                    android:text="05-01 1:30"/>
+                    android:layout_alignStart="@+id/user_name" />
 
                 <TextView
                     android:id="@+id/post_title"
@@ -63,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/date"
                     android:layout_margin="8dp"
-                    android:text="帖子标题写在这里"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:maxLines="1"
@@ -73,7 +79,6 @@
                     android:id="@+id/post_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="帖子正文写在这里"
                     android:layout_below="@+id/post_title"
                     android:layout_margin="8dp"
                     android:ellipsize="end"/>
@@ -84,7 +89,9 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp">
 
                 <View
                     android:layout_width="0dp"
@@ -111,13 +118,58 @@
             </LinearLayout>
 
             <TextView
+                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:text="评论区功能未开放"/>
+                android:text="暂时无评论"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
     </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/divider"
+        android:layout_marginBottom="0.5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/comment_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:hint="这里输入你的评论"/>
+
+        <ProgressBar
+            android:id="@+id/is_loading"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:visibility="invisible"/>
+
+        <Button
+            android:background="@drawable/textview_bg_select"
+            android:id="@+id/commit_comment"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:text="发表"
+            android:textColor="@color/white"
+            android:layout_marginEnd="5dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

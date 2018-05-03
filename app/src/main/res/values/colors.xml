@@ -4,7 +4,8 @@
     <color name="themeColor">#525356</color>
     <color name="colorPrimaryDark">#61C8BE</color>
     <color name="statusBarColor">#080808</color>
-    <color name="colorAccent">#38c491</color>
+    <color name="colorAccent">#61C8BE</color>
+    <!--<color name="colorAccent">#38c491</color>-->
 
     <color name="colorPrimaryLight">#C8E6C9</color>
     <color name="icons">#FFFFFF</color>
@@ -14,8 +15,10 @@
     <color name="secondary_text">#757575</color>
     <color name="backgroundColor">#ffffff</color>
 
-    <color name="thrid_text">#4CAF50</color>
-    <color name="thrid_text2">#4CAF50</color>
+    <color name="thrid_text">#61C8BE</color>
+    <color name="thrid_text2">#61C8BE</color>
+    <!--<color name="thrid_text">#4CAF50</color>
+    <color name="thrid_text2">#4CAF50</color>-->
     <color name="ripple">#388E3C</color>
     <color name="bg_color">#eeeade</color>
     <!--feng added 2018.04.24-->

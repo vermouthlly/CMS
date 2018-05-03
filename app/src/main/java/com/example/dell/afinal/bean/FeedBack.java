@@ -2,10 +2,7 @@ package com.example.dell.afinal.bean;
 
 import cn.bmob.v3.BmobObject;
 
-/**
- * Created by dell on 2018/3/11.
- */
-
+// 反馈类
 public class FeedBack extends BmobObject {
 
     private String content;

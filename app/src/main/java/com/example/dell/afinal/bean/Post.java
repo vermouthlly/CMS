@@ -5,6 +5,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 
+// 讨论区贴子类
 public class Post extends BmobObject {
     private String title;         // 帖子标题
     private String content;       // 帖子内容

@@ -35,5 +35,5 @@
     <string name="post">发表帖子</string>
     <string name="mylikes">我的收藏</string>
     <string name="mypost">我的帖子</string>
-    <string name="postcontent">帖子详情</string>
+    <string name="postcontent">帖子评论</string>
 </resources>

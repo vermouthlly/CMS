@@ -43,7 +43,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         }
         View view = LayoutInflater.from(mContext).inflate(R.layout.post_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
-        
+
         viewHolder.postView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +52,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         });
         return viewHolder;
     }
-    
+
     // 点击帖子跳转
     private void onPostViewClicked(ViewHolder viewHolder) {
         Intent intent = new Intent(mContext, PostInfoActivity.class);
@@ -60,7 +60,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         bundle.putString("postTitle", viewHolder.postTitle.getText().toString());
         bundle.putString("postContent", viewHolder.postContent.getText().toString());
         bundle.putString("date", viewHolder.date.getText().toString());
-        bundle.putString("userId", viewHolder.authorId);
+        bundle.putString("authorId", viewHolder.authorId);
+        bundle.putString("postId", viewHolder.postId);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
     }
@@ -71,6 +72,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.postTitle.setText(curPost.getTitle());
         holder.postContent.setText(curPost.getContent());
         holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
+        holder.postId = curPost.getObjectId();                   // 获取帖子的id
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
         if(curPost.getImage() != null) {
             BmobFile pros = curPost.getImage();
@@ -86,30 +88,39 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {
-                    if(user.getNickName() != null) {
-                        holder.userName.setText(user.getNickName());
-                    }else {
-                        holder.userName.setText(user.getUsername());
-                    }
-
-                    if (user.getHeadFile() != null)
-                        Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
-                                .into(holder.userImage);
-                    else
-                        Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
-
-                    if (user.getSex() == 0) {
-                        Picasso.with(mContext).load(R.mipmap.male).into(holder.ivSex);
-                    } else {
-                        Picasso.with(mContext).load(R.mipmap.female).into(holder.ivSex);
-                    }
+                    onLoadUserSuccess(user, holder);
                 } else {
-                    ToastUtil.toast(mContext, e.toString());
-                    holder.userName.setText("匿名用户");
-                    Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
+                    onLoadUserFailed(holder);
                 }
             }
         });
+    }
+
+    // 成功读取用户数据
+    private void onLoadUserSuccess(User user, ViewHolder holder) {
+        if(user.getNickName() != null) {
+            holder.userName.setText(user.getNickName());
+        } else {
+            holder.userName.setText(user.getUsername());
+        }
+        if (user.getHeadFile() != null) {
+            Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
+                    .into(holder.userImage);
+        }
+        else {
+            Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
+        }
+        if (user.getSex() == 0) {
+            Picasso.with(mContext).load(R.mipmap.male).into(holder.ivSex);
+        } else {
+            Picasso.with(mContext).load(R.mipmap.female).into(holder.ivSex);
+        }
+    }
+
+    // 读取出现异常
+    private void onLoadUserFailed(ViewHolder holder) {
+        holder.userName.setText("匿名用户");
+        Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
     }
 
     @Override
@@ -125,6 +136,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         TextView postTitle;          // 帖子标题
         TextView postContent;        // 帖子正文
         String authorId;             // 作者
+        String postId;               // 帖子的唯一id, 用于加载评论
         ImageView ivSex;             // 性别
         ImageView p;                 // 图片
 
