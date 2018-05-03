@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@mipmap/ic_back"
             android:layout_centerVertical="true"
             android:contentDescription="@string/back" />

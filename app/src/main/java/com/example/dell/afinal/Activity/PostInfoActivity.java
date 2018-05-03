@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,6 +55,8 @@ public class PostInfoActivity extends AppCompatActivity {
     @BindView(R.id.comment_content) EditText commentContent;
     @BindView(R.id.commit_comment) Button commit;
     @BindView(R.id.is_loading) ProgressBar progressBar;
+    @BindView(R.id.comments_loading) ProgressBar commentsLoading;
+    @BindView(R.id.no_comment_hint) TextView noCommentHint;
 
     private String postId;   // 帖子的唯一标识
     private List<Comment> commentList = new ArrayList<>();
@@ -140,6 +144,7 @@ public class PostInfoActivity extends AppCompatActivity {
 
     // 从服务器读取属于该帖子的所有评论
     private void loadCommentsFromServer() {
+        commentsLoading.setVisibility(View.VISIBLE);
         BmobQuery<Comment> query = new BmobQuery<>();
         Post post = new Post();
         post.setObjectId(postId);
@@ -160,11 +165,26 @@ public class PostInfoActivity extends AppCompatActivity {
     private void onLoadCommentsSuccess(List<Comment> list) {
         commentList = list;
         createRecyclerView();
+        if (!checkHasComment(list)) return;
+        commentsLoading.setVisibility(View.INVISIBLE);
+    }
+    
+    // 检查帖子是否有评论
+    public boolean checkHasComment(List<Comment> list) {
+        if (list.size() == 0) {
+            noCommentHint.setText("这个帖子暂时还没有评论~");
+            commentsLoading.setVisibility(View.INVISIBLE);
+            return false;
+        }
+        noCommentHint.setText("全部评论");
+        return true;
     }
 
     // 读取评论数据失败
     private void onLoadCommentsFailed() {
         ToastUtil.toast(PostInfoActivity.this, "加载评论失败,请检查你的网络");
+        commentsLoading.setVisibility(View.INVISIBLE);
+        
     }
 
     // 构建评论列表 RecyclerView
@@ -198,6 +218,7 @@ public class PostInfoActivity extends AppCompatActivity {
                     onCommitSuccess(comment);
                 } else {
                     onCommitFailed();
+                    Log.d("BmobError", e.toString());
                 }
             }
         });
@@ -208,6 +229,9 @@ public class PostInfoActivity extends AppCompatActivity {
         commentList.add(comment);
         adapter.notifyDataSetChanged();
         ToastUtil.toast(PostInfoActivity.this, "发表成功");
+        commentContent.setText("");
+        hideKeyboard(commentContent);
+        noCommentHint.setText("全部评论");
         progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -234,6 +258,13 @@ public class PostInfoActivity extends AppCompatActivity {
 
     private void onBackIconClicked() {
         PostInfoActivity.this.finish();
+    }
+
+    // 需要时隐藏软键盘
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm != null)
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

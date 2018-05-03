@@ -1,149 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.dell.afinal.Activity.PostInfoActivity">
 
     <!--标题栏-->
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/post_detail_toolbar"/>
+        <!--可折叠标题栏-->
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="parallax">
+
+                <include
+                    layout="@layout/post_detail_toolbar" />
+
+                <!--帖子内容-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.example.dell.afinal.View.CircleImageView
+                        android:id="@+id/user_head_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/ic_head"
+                        android:layout_margin="5dp"/>
+
+                    <com.example.dell.afinal.View.CircleImageView
+                        android:id="@+id/user_sex"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_alignEnd="@+id/user_head_image"
+                        android:layout_alignBottom="@+id/user_head_image" />
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/user_head_image"
+                        android:layout_alignTop="@+id/user_head_image"
+                        android:layout_margin="3dp" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/user_name"
+                        android:layout_alignStart="@+id/user_name" />
+
+                    <TextView
+                        android:id="@+id/post_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/date"
+                        android:layout_margin="8dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                    <TextView
+                        android:id="@+id/post_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/post_title"
+                        android:layout_margin="8dp"
+                        android:ellipsize="end"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp_40"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--帖子内容-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.example.dell.afinal.View.CircleImageView
-                    android:id="@+id/user_head_image"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@mipmap/ic_head"
-                    android:layout_margin="5dp"/>
-
-                <com.example.dell.afinal.View.CircleImageView
-                    android:id="@+id/user_sex"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_alignEnd="@+id/user_head_image"
-                    android:layout_alignBottom="@+id/user_head_image" />
-
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/user_head_image"
-                    android:layout_alignTop="@+id/user_head_image"
-                    android:layout_margin="3dp" />
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_name"
-                    android:layout_alignStart="@+id/user_name" />
-
-                <TextView
-                    android:id="@+id/post_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/date"
-                    android:layout_margin="8dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-                <TextView
-                    android:id="@+id/post_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/post_title"
-                    android:layout_margin="8dp"
-                    android:ellipsize="end"/>
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="0.8dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/divider"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="评论"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="center"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="0.8dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/divider"/>
-            </LinearLayout>
+            <ProgressBar
+                android:id="@+id/comments_loading"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"/>
 
             <TextView
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:text="暂时无评论"/>
+                android:id="@+id/no_comment_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="18sp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        </RelativeLayout>
 
-            </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        </LinearLayout>
+        </android.support.v7.widget.RecyclerView>
 
-    </ScrollView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:background="@color/divider"
-        android:layout_marginBottom="0.5dp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/search_background">
 
         <EditText
             android:id="@+id/comment_content"
@@ -172,4 +160,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
