@@ -15,6 +15,7 @@ import com.example.dell.afinal.Fragment.CourseFragment;
 import com.example.dell.afinal.Fragment.DiscussionFragment;
 import com.example.dell.afinal.Fragment.MineFragment;
 import com.example.dell.afinal.R;
+import com.example.dell.afinal.Utils.ToastUtil;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.anno.NorIcons;
 import com.jpeng.jptabbar.anno.SeleIcons;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     JPTabBar mainJpTabbar;
     @BindView(R.id.vp_main)
     ViewPager mViewPager;
+
+    private boolean quitFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,16 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!quitFlag) {
+            quitFlag = true;
+            ToastUtil.toast(MainActivity.this, "再按一次退出");
+        } else {
+            super.onBackPressed();
         }
     }
 }

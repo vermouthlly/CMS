@@ -34,10 +34,12 @@ import butterknife.Unbinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class PostInfoActivity extends AppCompatActivity {
 
@@ -59,6 +61,7 @@ public class PostInfoActivity extends AppCompatActivity {
     @BindView(R.id.no_comment_hint) TextView noCommentHint;
 
     private String postId;   // 帖子的唯一标识
+    private boolean hasLiked; // 用户是否收藏过该帖子
     private List<Comment> commentList = new ArrayList<>();
     private CommentListAdapter adapter;
 
@@ -96,6 +99,7 @@ public class PostInfoActivity extends AppCompatActivity {
             date.setText(bundle.getString("date", ""));
             postId = bundle.getString("postId", "");
             getAuthorData(bundle.getString("authorId", ""));
+            readPostLikes();
         }
     }
 
@@ -142,6 +146,150 @@ public class PostInfoActivity extends AppCompatActivity {
         Picasso.with(PostInfoActivity.this).load(R.mipmap.ic_head).into(userImg);
     }
 
+    // 读取收藏了该帖子的用户列表
+    private void readPostLikes() {
+        Post post = new Post();
+        post.setObjectId(postId);
+        BmobQuery<User> query = new BmobQuery<>();
+        query.addWhereRelatedTo("likes", new BmobPointer(post));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e == null) {
+                    checkIfHasLiked(list);
+                } else {
+                    Log.e("读取收藏列表失败:", e.toString());
+                }
+            }
+        });
+    }
+
+    // 检查当前用户是否已经收藏过该帖子
+    private void checkIfHasLiked(List<User> list) {
+        User user = BmobUser.getCurrentUser(User.class);
+        List<String> idList = new ArrayList<>();
+        for (User u : list)
+            idList.add(u.getObjectId());
+
+        if (idList.contains(user.getObjectId())) {
+            likeButton.setImageResource(R.mipmap.full_star);
+            hasLiked = true;
+        } else {
+            likeButton.setImageResource(R.mipmap.empty_star);
+            hasLiked = false;
+        }
+    }
+
+    // 点击收藏按钮
+    private void onLikeIconClicked() {
+        if (hasLiked) {
+            cancelLike();
+        } else {
+            like();
+        }
+    }
+
+    // 取消收藏
+    private void cancelLike() {
+        Post post = new Post();
+        post.setObjectId(postId);
+        User user = BmobUser.getCurrentUser(User.class);
+        BmobRelation relation = new BmobRelation();
+        relation.remove(user);
+        post.setLikes(relation);
+        post.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    onCancelLikeSuccess();
+                } else {
+                    onNetworkException();
+                }
+            }
+        });
+        removeLikeFromUserLike();
+    }
+
+    // 同时从用户收藏列表中移除该帖子
+    private void removeLikeFromUserLike() {
+        User user = BmobUser.getCurrentUser(User.class);
+        BmobRelation relation = new BmobRelation();
+        Post post = new Post();
+        post.setObjectId(postId);
+        relation.remove(post);
+        user.setLikes(relation);
+        user.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.d("User: ", "取消收藏成功");
+                } else {
+                    Log.e("User: ", "操作失败: " + e.toString());
+                }
+            }
+        });
+    }
+
+    // 取消收藏成功
+    private void onCancelLikeSuccess() {
+        ToastUtil.toast(PostInfoActivity.this, "已取消收藏");
+        likeButton.setImageResource(R.mipmap.empty_star);
+        hasLiked = false;
+    }
+
+    // 取消收藏失败
+    private void onNetworkException() {
+        ToastUtil.toast(PostInfoActivity.this, "操作失败,请检查你的网络或稍后再试");
+    }
+
+    // 增加收藏
+    private void like() {
+        Post post = new Post();
+        post.setObjectId(postId);
+        User user = BmobUser.getCurrentUser(User.class);
+        BmobRelation relation = new BmobRelation();
+        relation.add(user);
+        post.setLikes(relation);
+        post.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    onAddLikeSuccess();
+                } else {
+                    onNetworkException();
+                }
+            }
+        });
+        addPostToUserLike();
+    }
+
+    // 同时把该帖子增加到用户的收藏列表中
+    private void addPostToUserLike() {
+        User user = BmobUser.getCurrentUser(User.class);
+        BmobRelation relation = new BmobRelation();
+        Post post = new Post();
+        post.setObjectId(postId);
+        relation.add(post);
+        user.setLikes(relation);
+        user.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.d("User: ", "增加收藏成功");
+                } else {
+                    Log.e("User: ", "收藏失败: " + e.toString());
+                }
+            }
+        });
+    }
+
+    // 取消收藏成功
+    private void onAddLikeSuccess() {
+        ToastUtil.toast(PostInfoActivity.this, "已收藏");
+        likeButton.setImageResource(R.mipmap.full_star);
+        hasLiked = true;
+    }
+
     // 从服务器读取属于该帖子的所有评论
     private void loadCommentsFromServer() {
         commentsLoading.setVisibility(View.VISIBLE);
@@ -170,13 +318,13 @@ public class PostInfoActivity extends AppCompatActivity {
     }
     
     // 检查帖子是否有评论
-    public boolean checkHasComment(List<Comment> list) {
+    private boolean checkHasComment(List<Comment> list) {
         if (list.size() == 0) {
             noCommentHint.setText("这个帖子暂时还没有评论~");
             commentsLoading.setVisibility(View.INVISIBLE);
             return false;
         }
-        noCommentHint.setText("全部评论");
+        noCommentHint.setText("——全部评论——");
         return true;
     }
 
@@ -225,18 +373,18 @@ public class PostInfoActivity extends AppCompatActivity {
     }
 
     // 提交评论成功
-    public void onCommitSuccess(Comment comment) {
+    private void onCommitSuccess(Comment comment) {
         commentList.add(comment);
         adapter.notifyDataSetChanged();
         ToastUtil.toast(PostInfoActivity.this, "发表成功");
         commentContent.setText("");
         hideKeyboard(commentContent);
-        noCommentHint.setText("全部评论");
+        noCommentHint.setText("——全部评论——");
         progressBar.setVisibility(View.INVISIBLE);
     }
 
     // 提交失败
-    public void onCommitFailed() {
+    private void onCommitFailed() {
         ToastUtil.toast(PostInfoActivity.this, "评论失败！请检查你的网络");
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -249,11 +397,6 @@ public class PostInfoActivity extends AppCompatActivity {
         }
         progressBar.setVisibility(View.VISIBLE);
         return false;
-    }
-
-    // 点击收藏按钮
-    private void onLikeIconClicked() {
-        ToastUtil.toast(PostInfoActivity.this, "收藏功能未开放");
     }
 
     private void onBackIconClicked() {

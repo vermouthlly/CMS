@@ -28,6 +28,7 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -72,6 +73,7 @@ public class CourseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*Bmob.initialize(getContext(), "430bfefb7fad055dc47f06a0ba6f73e4");*/
         setHasOptionsMenu(true);     // 设置显示菜单
     }
 
@@ -124,6 +126,7 @@ public class CourseFragment extends Fragment {
     public void initSearchView() {
         searchView.setVoiceSearch(false);
         searchView.setEllipsize(true);
+        searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestion));
     }
 
     // 给搜索框添加监听事件

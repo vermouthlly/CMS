@@ -141,4 +141,9 @@
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
+    <!--评论输入框样式-->
+    <style name="CommentEidtText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/search_background</item>
+    </style>
+
 </resources>

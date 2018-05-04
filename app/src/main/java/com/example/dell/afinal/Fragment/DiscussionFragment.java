@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.dell.afinal.Activity.MyLikesActivity;
+import com.example.dell.afinal.Activity.MyPostActivity;
 import com.example.dell.afinal.Activity.NewPostActivity;
 import com.example.dell.afinal.Adapter.PostFragmentAdapter;
 import com.example.dell.afinal.R;
@@ -28,6 +30,10 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
     private View mView;    // Fragment布局
     @BindView(R.id.new_post)
     FloatingActionButton newPost;
+    @BindView(R.id.my_post)
+    FloatingActionButton myPost;
+    @BindView(R.id.my_likes)
+    FloatingActionButton myLikes;
 
     private Unbinder unbinder;
     private List<Fragment> fragments = new ArrayList<>();
@@ -56,23 +62,41 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
         return mView;
     }
 
-    @OnClick({R.id.new_post})
+    @OnClick({R.id.new_post, R.id.my_post, R.id.my_likes})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.new_post:
                 onNewPostButtonClick();
                 break;
+            case R.id.my_post:
+                onMyPostButtonClicked();
+                break;
+            case R.id.my_likes:
+                onMyLikesButtonClicked();
+                break;
         }
     }
 
     // 点击“ 发表帖子”按钮
-    public void onNewPostButtonClick() {
+    private void onNewPostButtonClick() {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
         startActivity(intent);
     }
 
+    // 点击“ 我的帖子”按钮
+    private void onMyPostButtonClicked() {
+        Intent intent = new Intent(getContext(), MyPostActivity.class);
+        startActivity(intent);
+    }
+
+    // 点击" 我的收藏"按钮
+    private void onMyLikesButtonClicked() {
+        Intent intent = new Intent(getContext(), MyLikesActivity.class);
+        startActivity(intent);
+    }
+
     // 构造讨论区内部的ViewPager页面
-    public void createViewPager() {
+    private void createViewPager() {
         ViewPager viewPager = mView.findViewById(R.id.viewpager);
         viewPager.setAdapter(new PostFragmentAdapter(getChildFragmentManager(), fragments));
         viewPager.setCurrentItem(0);

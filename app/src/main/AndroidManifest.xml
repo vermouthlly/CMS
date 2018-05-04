@@ -41,7 +41,9 @@
         <activity android:name=".Activity.CourseDetailActivity" />
         <activity android:name=".Activity.MyCourseActivity" />
         <activity android:name=".Activity.PostInfoActivity" />
-        <activity android:name=".Activity.NewPostActivity"></activity>
+        <activity android:name=".Activity.NewPostActivity" />
+        <activity android:name=".Activity.MyPostActivity" />
+        <activity android:name=".Activity.MyLikesActivity"></activity>
     </application>
 
 </manifest>

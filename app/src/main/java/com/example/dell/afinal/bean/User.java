@@ -22,6 +22,8 @@ public class User extends BmobUser {
 
     private BmobRelation courses; // 存储该用户添加的所有课程
 
+    private BmobRelation likes;   // 存储用户收藏的所有帖子
+
     public BmobRelation getCourses() {
         return courses;
     }
@@ -68,6 +70,14 @@ public class User extends BmobUser {
 
     public void setSex(Integer sex) {
         this.sex = sex;
+    }
+
+    public BmobRelation getLikes() {
+        return likes;
+    }
+
+    public void setLikes(BmobRelation likes) {
+        this.likes = likes;
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +75,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
         holder.postId = curPost.getObjectId();                   // 获取帖子的id
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
-        if(curPost.getImage() != null) {
-            BmobFile pros = curPost.getImage();
-            Picasso.with(mContext).load(pros.getFileUrl()).into(holder.p);
-        }
         getAuthorData(holder.authorId, holder);
     }
 
@@ -91,6 +88,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
                     onLoadUserSuccess(user, holder);
                 } else {
                     onLoadUserFailed(holder);
+                    Log.e("读取用户资料失败:", e.toString());
                 }
             }
         });
@@ -106,8 +104,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         if (user.getHeadFile() != null) {
             Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
                     .into(holder.userImage);
-        }
-        else {
+        } else {
             Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
         }
         if (user.getSex() == 0) {

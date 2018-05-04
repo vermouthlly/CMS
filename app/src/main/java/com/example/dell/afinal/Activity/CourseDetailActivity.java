@@ -172,6 +172,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                     }
                 } else {
                     netWorkExceptionHint();
+                    Log.e("Bmob", e.toString());
                 }
             }
         });
@@ -331,6 +332,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                     onQuitCourseSuccess();
                 } else {
                     netWorkExceptionHint();
+                    Log.e("Bmob", e.toString());
                 }
                 hideProgress();
             }

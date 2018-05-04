@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="query_suggestion">
+        <item>操作系统</item>
+        <item>张永东</item>
+        <item>系统分析与设计</item>
+        <item>衣杨</item>
+        <item>潘茂林</item>
+        <item>计算机网络</item>
+        <item>吴迪</item>
+        <item>工作流技术</item>
+        <item>余阳</item>
+        <item>软件测试</item>
+        <item>蔡国扬</item>
+        <item>综合实训</item>
+        <item>王青</item>
+    </string-array>
+</resources>
