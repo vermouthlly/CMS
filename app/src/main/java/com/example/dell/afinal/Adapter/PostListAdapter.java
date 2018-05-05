@@ -75,6 +75,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
         holder.postId = curPost.getObjectId();                   // 获取帖子的id
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
+        if(curPost.getImage() != null) {
+            BmobFile pros = curPost.getImage();
+            Picasso.with(mContext).load(pros.getFileUrl()).into(holder.p);
+        }
         getAuthorData(holder.authorId, holder);
     }
 

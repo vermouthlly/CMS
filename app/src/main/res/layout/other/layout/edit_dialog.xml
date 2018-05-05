@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
             android:background="@null"
-            android:hint="编辑个性签名"
+            android:hint="编辑新内容"
             android:maxLength="32"
             android:maxLines="1"
             android:textColor="@color/primary_text"

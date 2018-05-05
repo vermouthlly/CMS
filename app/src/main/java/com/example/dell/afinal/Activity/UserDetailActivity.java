@@ -217,6 +217,7 @@ public class UserDetailActivity extends AppCompatActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
+                            userTvSignature.setText(etSign.getText().toString());
                             ToastUtil.toast(getApplicationContext(), "修改签名成功");
                         } else {
                             ToastUtil.toast(getApplicationContext(), "修改签名失败");
@@ -245,6 +246,7 @@ public class UserDetailActivity extends AppCompatActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
+                            userTvName.setText(etSign.getText().toString());
                             ToastUtil.toast(getApplicationContext(), "修改昵称成功");
                         } else {
                             ToastUtil.toast(getApplicationContext(), "修改昵称失败");
