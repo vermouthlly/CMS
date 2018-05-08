@@ -3,6 +3,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
+
 public class Teacher extends BmobUser {
 
     /* BmobUser中已经实现了username、password 字段, 不需要重复声明 */

@@ -115,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         user.setUsername(userName);
         user.setPassword(userPwd);
         user.setIdentity(identity);
+        user.setSex(0);
         user.signUp(new SaveListener<User>() {
             @Override
             public void done(User user, BmobException e) {
