@@ -7,9 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.dell.afinal.Activity.MainActivity">
 
-    <include
-        layout="@layout/course_list_toolbar"/>
-
     <com.example.dell.afinal.View.NoScrollViewPager
         android:id="@+id/vp_main"
         android:layout_width="match_parent"

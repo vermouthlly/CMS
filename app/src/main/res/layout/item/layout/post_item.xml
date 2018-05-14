@@ -34,7 +34,8 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:orientation="vertical">
@@ -56,13 +57,25 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/zan"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@mipmap/ic_like"/>
+
+        <TextView
+            android:id="@+id/zan_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginStart="5dp"/>
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/post_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/date"
         android:layout_margin="8dp"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -73,7 +86,6 @@
         android:id="@+id/post_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/post_title"
         android:layout_margin="8dp"
         android:maxLines="3"
         android:ellipsize="end"/>
@@ -88,4 +100,5 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/divider" />
+
 </LinearLayout>

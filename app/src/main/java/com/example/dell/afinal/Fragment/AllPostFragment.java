@@ -54,7 +54,7 @@ public class AllPostFragment extends Fragment {
     public void loadPostsFromServer() {
         BmobQuery<Post> query = new BmobQuery<>();
         query.order("-createdAt");
-        query.setLimit(20);
+        query.setLimit(20);     // 仅加载20个
         query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> list, BmobException e) {

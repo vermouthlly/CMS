@@ -31,8 +31,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
@@ -98,10 +100,29 @@ public class PostInfoActivity extends AppCompatActivity {
             content.setText(bundle.getString("postContent", "——"));
             date.setText(bundle.getString("date", ""));
             postId = bundle.getString("postId", "");
+            /*loadPostImage();*/
             getAuthorData(bundle.getString("authorId", ""));
             readPostLikes();
         }
     }
+
+    // 读取并加载帖子图片
+    /*private void loadPostImage() {
+        BmobQuery<Post> query = new BmobQuery<>();
+        query.getObject(postId, new QueryListener<Post>() {
+            @Override
+            public void done(Post post, BmobException e) {
+                if (e == null) {
+                    BmobFile img = post.getImage();
+                    if (img != null) {
+                        Picasso.with(PostInfoActivity.this).load(img.getFileUrl()).into(image);
+                    }
+                } else {
+                    Log.e("加载帖子图片失败:", e.toString());
+                }
+            }
+        });
+    }*/
 
     // 根据作者id从服务器读取作者头像及用户名(直接getAuthor获取失败 原因尚未明确)
     private void getAuthorData(String id) {
@@ -366,7 +387,7 @@ public class PostInfoActivity extends AppCompatActivity {
                     onCommitSuccess(comment);
                 } else {
                     onCommitFailed();
-                    Log.d("BmobError", e.toString());
+                    Log.d("提交评论失败:", e.toString());
                 }
             }
         });

@@ -23,10 +23,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 // 讨论区主题帖的适配器
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
@@ -51,6 +57,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
                 onPostViewClicked(viewHolder);
             }
         });
+
+        viewHolder.zan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onZanIconClicked(viewHolder);
+            }
+        });
         return viewHolder;
     }
 
@@ -67,6 +80,82 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         mContext.startActivity(intent);
     }
 
+    // 点击点赞图标
+    private void onZanIconClicked(final ViewHolder viewHolder) {
+        BmobQuery<User> query = new BmobQuery<>();
+        final Post post = new Post();
+        post.setObjectId(viewHolder.postId);
+        query.addWhereRelatedTo("zan", new BmobPointer(post));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e == null) {
+                    loadZanDataSuccess(list, viewHolder);
+                } else {
+                    Log.e("读取点赞数失败:", e.toString());
+                }
+            }
+        });
+    }
+
+    // 读取点赞数成功, 判断点击图标是点赞还是取消点赞
+    private void loadZanDataSuccess(List<User> list, ViewHolder viewHolder) {
+        User user = BmobUser.getCurrentUser(User.class);
+        List<String> idList = new ArrayList<>();
+        for (User u : list) idList.add(u.getObjectId());
+        if (!idList.contains(user.getObjectId())) {
+            addZan(viewHolder);
+        } else {
+            cancelZan(viewHolder);
+        }
+    }
+
+    // 增加赞
+    private void addZan(final ViewHolder viewHolder) {
+        User user = BmobUser.getCurrentUser(User.class);
+        Post post = new Post();
+        post.setObjectId(viewHolder.postId);
+        BmobRelation relation = new BmobRelation();
+        relation.add(user);
+        post.setZan(relation);
+        post.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    int zanNum = Integer.parseInt(viewHolder.zanNum.getText().toString());
+                    zanNum += 1;
+                    viewHolder.zanNum.setText(String.valueOf(zanNum));
+                } else {
+                    ToastUtil.toast(mContext, "操作失败，请检查你的网络或稍后再试");
+                    Log.e("操作失败:", e.toString());
+                }
+            }
+        });
+    }
+
+    // 取消赞
+    private void cancelZan(final ViewHolder viewHolder) {
+        User user = BmobUser.getCurrentUser(User.class);
+        Post post = new Post();
+        post.setObjectId(viewHolder.postId);
+        BmobRelation relation = new BmobRelation();
+        relation.remove(user);
+        post.setZan(relation);
+        post.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    int zanNum = Integer.parseInt(viewHolder.zanNum.getText().toString());
+                    zanNum -= 1;
+                    viewHolder.zanNum.setText(String.valueOf(zanNum));
+                } else {
+                    ToastUtil.toast(mContext, "操作失败，请检查你的网络或稍后再试");
+                    Log.e("操作失败:", e.toString());
+                }
+            }
+        });
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Post curPost = postList.get(position);
@@ -77,9 +166,30 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
         if(curPost.getImage() != null) {
             BmobFile pros = curPost.getImage();
-            Picasso.with(mContext).load(pros.getFileUrl()).into(holder.p);
+            Picasso.with(mContext).load(pros.getFileUrl()).into(holder.postImg);
+        } else {
+            Picasso.with(mContext).load(R.mipmap.blank_holder).into(holder.postImg);
         }
+        getAndSetZanNum(holder);
         getAuthorData(holder.authorId, holder);
+    }
+
+    // 获取并设置点赞数
+    private void getAndSetZanNum(final ViewHolder holder) {
+        BmobQuery<User> query = new BmobQuery<>();
+        Post post = new Post();
+        post.setObjectId(holder.postId);
+        query.addWhereRelatedTo("zan", new BmobPointer(post));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e == null) {
+                    holder.zanNum.setText(String.valueOf(list.size()));
+                } else {
+                    Log.e("读取点赞数失败:", e.toString());
+                }
+            }
+        });
     }
 
     // 根据作者id从服务器读取作者头像及用户名(直接getAuthor获取失败 原因尚未明确)
@@ -130,7 +240,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        View postView;               // 帖子卡片
+        View postView;               // 帖子item
         CircleImageView userImage;   // 用户头像
         TextView userName;           // 用户名
         TextView date;               // 日期
@@ -139,7 +249,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         String authorId;             // 作者
         String postId;               // 帖子的唯一id, 用于加载评论
         ImageView ivSex;             // 性别
-        ImageView p;                 // 图片
+        ImageView postImg;           // 帖子图片图片
+        ImageView zan;               // 点赞图标
+        TextView zanNum;             // 点赞数
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -150,7 +262,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             postTitle = itemView.findViewById(R.id.post_title);
             postContent = itemView.findViewById(R.id.post_text);
             ivSex = itemView.findViewById(R.id.find_item_iv_sex);
-            p = itemView.findViewById(R.id.pro);
+            postImg = itemView.findViewById(R.id.pro);
+            zan = itemView.findViewById(R.id.zan);
+            zanNum = itemView.findViewById(R.id.zan_num);
         }
     }
 }
