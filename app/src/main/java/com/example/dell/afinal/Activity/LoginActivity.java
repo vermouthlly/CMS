@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void done(User user, BmobException e) {
                 // 屏蔽进度条
+
                 progressBar.setVisibility(View.INVISIBLE);
                 if (e == null) {
                     ToastUtil.toast(getApplicationContext(), "登陆成功");

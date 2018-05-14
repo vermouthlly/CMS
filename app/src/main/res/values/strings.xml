@@ -16,6 +16,10 @@
     <string name="course_descri">课程简介</string>
     <string name="course_list">课程列表</string>
     <string name="post_list">讨论区</string>
+    <string name="hint_name">请输入课程名称</string>
+    <string name="hint_place">请输入上课地点</string>
+    <string name="hint_time">请输入上课时间</string>
+    <string name="hint_number">请输入学生人数</string>
     <string name="course_detail">课程详情</string>
     <string name="course_image">课程图片</string>
     <string name="course_time">上课时间</string>
