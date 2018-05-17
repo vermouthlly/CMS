@@ -43,9 +43,9 @@
 
         <ImageView
             android:id="@+id/add_post_photo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@mipmap/ic_photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/add_photo"
             android:layout_gravity="center"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"/>

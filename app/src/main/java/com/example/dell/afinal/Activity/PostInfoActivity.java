@@ -106,24 +106,6 @@ public class PostInfoActivity extends AppCompatActivity {
         }
     }
 
-    // 读取并加载帖子图片
-    /*private void loadPostImage() {
-        BmobQuery<Post> query = new BmobQuery<>();
-        query.getObject(postId, new QueryListener<Post>() {
-            @Override
-            public void done(Post post, BmobException e) {
-                if (e == null) {
-                    BmobFile img = post.getImage();
-                    if (img != null) {
-                        Picasso.with(PostInfoActivity.this).load(img.getFileUrl()).into(image);
-                    }
-                } else {
-                    Log.e("加载帖子图片失败:", e.toString());
-                }
-            }
-        });
-    }*/
-
     // 根据作者id从服务器读取作者头像及用户名(直接getAuthor获取失败 原因尚未明确)
     private void getAuthorData(String id) {
         BmobQuery<User> query = new BmobQuery<>();

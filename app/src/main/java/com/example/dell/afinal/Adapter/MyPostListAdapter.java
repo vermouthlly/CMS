@@ -17,12 +17,16 @@ import com.example.dell.afinal.Activity.PostInfoActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
+import com.example.dell.afinal.bean.Comment;
 import com.example.dell.afinal.bean.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 // 我的主题帖数据适配器
@@ -83,7 +87,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                deletePostFromList(viewHolder);
+                findAndDeletePostComments(viewHolder);
             }
         });
         dialog.show();
@@ -107,7 +111,48 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
         });
     }
 
-    // 删除成功
+    // 删除帖子前先查找并删除属于该帖子的所有评论(如果该帖子有评论的话)
+    private void findAndDeletePostComments(final ViewHolder viewHolder) {
+        BmobQuery<Comment> query = new BmobQuery<>();
+        Post post = new Post();
+        post.setObjectId(viewHolder.postId);
+        query.addWhereEqualTo("post", new BmobPointer(post));
+        query.findObjects(new FindListener<Comment>() {
+            @Override
+            public void done(List<Comment> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() == 0) {
+                        deletePostFromList(viewHolder);
+                    } else {
+                        deleteComments(list, viewHolder);
+                    }
+                } else {
+                    Log.e("查找帖子评论失败:", e.toString());
+                }
+            }
+        });
+    }
+
+    private void deleteComments(List<Comment> list, final ViewHolder viewHolder) {
+        for (Comment comment : list) {
+            Comment toDelete = new Comment();
+            toDelete.setObjectId(comment.getObjectId());
+            toDelete.delete(new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        Log.d("删除评论成功:", "OK");
+                        // 此处再删除帖子
+                        deletePostFromList(viewHolder);
+                    } else {
+                        Log.e("删除评论失败:", e.toString());
+                    }
+                }
+            });
+        }
+    }
+
+    // 删除成功, 更新列表
     private void onDeleteSuccess(int pos) {
         ToastUtil.toast(mContext, "删除成功");
         postList.remove(pos);

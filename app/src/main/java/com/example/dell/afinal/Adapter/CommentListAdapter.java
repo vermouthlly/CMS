@@ -46,6 +46,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         holder.authorId = comment.getAuthor().getObjectId();
         holder.commentText.setText(comment.getContent());
         holder.date.setText(comment.getCreatedAt());
+        holder.floorNum.setText("#" + String.valueOf(position+1));
         getAuthorData(holder.authorId, holder);
     }
 
@@ -103,6 +104,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         ImageView userSex;       // 用户性别
         TextView date;           // 发表日期
         TextView commentText;    // 评论内容
+        TextView floorNum;       // 楼层
         String authorId;         // 发表评论的用户的id
 
         ViewHolder(View itemView) {
@@ -113,6 +115,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             userSex = itemView.findViewById(R.id.user_sex);
             date = itemView.findViewById(R.id.date);
             commentText = itemView.findViewById(R.id.comment_text);
+            floorNum = itemView.findViewById(R.id.floor);
         }
     }
 }

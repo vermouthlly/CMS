@@ -94,7 +94,7 @@ public class Teacher_MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!quitFlag) {
             quitFlag = true;
-            ToastUtil.toast(MainActivity.this, "再按一次退出");
+            ToastUtil.toast(Teacher_MainActivity.this, "再按一次退出");
         } else {
             super.onBackPressed();
         }

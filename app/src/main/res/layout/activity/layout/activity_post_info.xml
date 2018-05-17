@@ -135,35 +135,48 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-        android:background="@color/search_background">
+        android:background="@color/light_grya">
 
-        <EditText
-            android:id="@+id/comment_content"
-            android:theme="@style/CommentEidtText"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:hint="这里输入你的评论" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:background="@drawable/base_shape">
 
-        <ProgressBar
-            android:id="@+id/is_loading"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp"
-            android:visibility="invisible"/>
+            <EditText
+                android:id="@+id/comment_content"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="3dp"
+                android:textSize="16sp"
+                android:hint="这里输入你的评论" />
+
+            <ProgressBar
+                android:id="@+id/is_loading"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
 
         <Button
             android:background="@drawable/textview_bg_select"
             android:id="@+id/commit_comment"
             android:layout_width="50dp"
             android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="3dp"
             android:text="发表"
-            android:textColor="@color/white"
-            android:layout_marginEnd="5dp"/>
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
