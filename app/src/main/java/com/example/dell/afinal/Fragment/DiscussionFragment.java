@@ -1,42 +1,40 @@
 package com.example.dell.afinal.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.dell.afinal.Activity.MyLikesActivity;
-import com.example.dell.afinal.Activity.MyPostActivity;
-import com.example.dell.afinal.Activity.NewPostActivity;
-import com.example.dell.afinal.Adapter.PostFragmentAdapter;
+import com.example.dell.afinal.Adapter.DiscussionListAdapter;
 import com.example.dell.afinal.R;
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.example.dell.afinal.bean.Course;
+import com.example.dell.afinal.bean.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class DiscussionFragment extends android.support.v4.app.Fragment {
 
     private View mView;    // Fragment布局
-    @BindView(R.id.new_post)
-    FloatingActionButton newPost;
-    @BindView(R.id.my_post)
-    FloatingActionButton myPost;
-    @BindView(R.id.my_likes)
-    FloatingActionButton myLikes;
-
     private Unbinder unbinder;
-    private List<Fragment> fragments = new ArrayList<>();
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout refreshLayout;
 
     public static DiscussionFragment newInstance() {
         return new DiscussionFragment();
@@ -55,54 +53,57 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.discussion_fragment, container, false);
             unbinder = ButterKnife.bind(this, mView);
-            fragments.add(new AllPostFragment());
-            fragments.add(new PopularPostFragment());
+            loadUserCourse();
+            setPullResfreshListener();
         }
-        createViewPager();
         return mView;
     }
 
-    @OnClick({R.id.new_post, R.id.my_post, R.id.my_likes})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.new_post:
-                onNewPostButtonClick();
-                break;
-            case R.id.my_post:
-                onMyPostButtonClicked();
-                break;
-            case R.id.my_likes:
-                onMyLikesButtonClicked();
-                break;
-        }
+    // 设置下拉刷新行为
+    private void setPullResfreshListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadUserCourse();
+            }
+        });
     }
 
-    // 点击“ 发表帖子”按钮
-    private void onNewPostButtonClick() {
-        Intent intent = new Intent(getContext(), NewPostActivity.class);
-        startActivity(intent);
+    // 读取当前用户的选课记录
+    private void loadUserCourse() {
+        User user = BmobUser.getCurrentUser(User.class);
+        BmobQuery<Course> query = new BmobQuery<>();
+        query.addWhereRelatedTo("courses", new BmobPointer(user));
+        query.findObjects(new FindListener<Course>() {
+            @Override
+            public void done(List<Course> list, BmobException e) {
+                if (e == null) {
+                    onLoadSuccess(list);
+                } else {
+                    onLoadFailed();
+                    Log.e("读取用户选课结果失败:", e.toString());
+                }
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
-    // 点击“ 我的帖子”按钮
-    private void onMyPostButtonClicked() {
-        Intent intent = new Intent(getContext(), MyPostActivity.class);
-        startActivity(intent);
+    // 读取选课记录成功
+    private void onLoadSuccess(List<Course> list) {
+        createRecyclerView(list);
     }
 
-    // 点击" 我的收藏"按钮
-    private void onMyLikesButtonClicked() {
-        Intent intent = new Intent(getContext(), MyLikesActivity.class);
-        startActivity(intent);
+    // 构建RecyclerView
+    private void createRecyclerView(List<Course> list) {
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(manager);
+        DiscussionListAdapter adapter = new DiscussionListAdapter(list);
+        recyclerView.setAdapter(adapter);
     }
 
-    // 构造讨论区内部的ViewPager页面
-    private void createViewPager() {
-        ViewPager viewPager = mView.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new PostFragmentAdapter(getChildFragmentManager(), fragments));
-        viewPager.setCurrentItem(0);
+    // 读取失败
+    private void onLoadFailed() {
 
-        TabLayout tab = mView.findViewById(R.id.post_tab);
-        tab.setupWithViewPager(viewPager);
     }
 
     @Override

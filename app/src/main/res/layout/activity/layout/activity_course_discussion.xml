@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+        layout="@layout/post_list_toolbar"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fab:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/post_tab"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            style="@style/MyTablayout">
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        </android.support.v4.view.ViewPager>
+
+    </LinearLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_addButtonSize="mini"
+        fab:fab_addButtonColorNormal="@color/colorPrimary"
+        fab:fab_addButtonColorPressed="@color/search_background"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="5dp">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/new_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            fab:fab_icon="@mipmap/ic_fab_star"
+            fab:fab_title="@string/post"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/search_background"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/my_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            fab:fab_icon="@mipmap/ic_fab_star"
+            fab:fab_title="@string/mylikes"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/search_background"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/my_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            fab:fab_icon="@mipmap/ic_fab_star"
+            fab:fab_title="@string/mypost"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/search_background"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</android.support.design.widget.CoordinatorLayout>

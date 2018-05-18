@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/diss_item"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/course_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="此处是课程名"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/course_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/enter_discussion"
+                android:layout_marginTop="5dp"
+                android:text="此处是课程简介内容"
+                android:maxLength="100"
+                android:ellipsize="end"/>
+
+            <Button
+                android:id="@+id/enter_discussion"
+                android:background="@drawable/textview_bg_select"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="进入讨论区"
+                android:textColor="@color/white"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:id="@+id/cn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:textSize="16sp"
+                android:text="课程人数"/>
+
+            <TextView
+                android:id="@+id/course_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/cn"
+                android:layout_alignTop="@id/cn"
+                android:layout_marginStart="5dp"
+                android:text="95"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/pn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/post_num"
+                android:layout_alignTop="@+id/post_num"
+                android:text="帖子"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/post_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:text="20"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

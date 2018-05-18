@@ -52,7 +52,6 @@ public class MyCourseActivity extends AppCompatActivity {
 
     private Unbinder unbinder;
     private List<Course> myCourses = new ArrayList<>();
-    private CourseListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +78,7 @@ public class MyCourseActivity extends AppCompatActivity {
     public void createRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         my_courseList.setLayoutManager(manager);
-        adapter = new CourseListAdapter(myCourses);
+        CourseListAdapter adapter = new CourseListAdapter(myCourses);
         my_courseList.setAdapter(adapter);
     }
 
