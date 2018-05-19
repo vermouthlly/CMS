@@ -13,7 +13,12 @@ import android.view.ViewGroup;
 import com.example.dell.afinal.Adapter.DiscussionListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.Course;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -56,6 +61,7 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
             loadUserCourse();
             setPullResfreshListener();
         }
+        EventBus.getDefault().register(this);
         return mView;
     }
 
@@ -67,6 +73,13 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
                 loadUserCourse();
             }
         });
+    }
+
+    // 定义订阅者行为, 当讨论区列表需要更新时做出处理
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event.getMessage().equals("addCourse") || event.getMessage().equals("quitCourse"))
+            loadUserCourse();
     }
 
     // 读取当前用户的选课记录
@@ -110,5 +123,6 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 }

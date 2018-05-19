@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,12 @@ import android.view.ViewGroup;
 import com.example.dell.afinal.Adapter.PostListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +57,7 @@ public class AllPostFragment extends Fragment {
             loadPostsFromServer();
             onPullRefresh();
         }
+        EventBus.getDefault().register(this);
         return mView;
     }
 
@@ -72,6 +79,12 @@ public class AllPostFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event.getMessage().equals("addPost"))
+            loadPostsFromServer();
     }
     
     // 构建RecyclerView
@@ -109,5 +122,6 @@ public class AllPostFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 }

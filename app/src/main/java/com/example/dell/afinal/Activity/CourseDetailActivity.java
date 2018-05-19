@@ -19,13 +19,15 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.DialogUtil;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -172,7 +174,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                     }
                 } else {
                     netWorkExceptionHint();
-                    Log.e("Bmob", e.toString());
+                    Log.e("读取用户课程信息失败:", e.toString());
                 }
             }
         });
@@ -268,6 +270,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         studentNum.setText(String.valueOf(num));
         joinCourse.setText("退出课程");
         ToastUtil.toast(getApplicationContext(), "添加课程成功");
+
+        updateUserCourseList("addCourse");
     }
 
     // 课程关联用户, 把当前用户添加到选择了该课程的所有用户记录中
@@ -347,6 +351,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         hideProgress();
         joinCourse.setText("加入课程");
         ToastUtil.toast(CourseDetailActivity.this, "操作成功");
+
+        updateUserCourseList("quitCourse");
     }
 
     // 退课的同时删除Course表中的User记录
@@ -366,6 +372,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // 选课和退课都会造成用户课程列表的变化, 通过EventBus完成用户课程列表的更新
+    private void updateUserCourseList(String msg) {
+        MessageEvent event = new MessageEvent(msg);
+        EventBus.getDefault().post(event);
     }
 
     // 隐藏进度条
@@ -416,10 +428,10 @@ public class CourseDetailActivity extends AppCompatActivity {
         DialogUtil.showDialog(CourseDetailActivity.this, title, content);
     }
 
-    // 解绑ButterKnife
+    // 解绑ButterKnife + 注销EventBus订阅者
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         unbinder.unbind();
+        super.onDestroy();
     }
 }

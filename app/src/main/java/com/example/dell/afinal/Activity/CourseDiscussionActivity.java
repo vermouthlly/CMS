@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +14,7 @@ import com.example.dell.afinal.Fragment.AllPostFragment;
 import com.example.dell.afinal.Fragment.PopularPostFragment;
 import com.example.dell.afinal.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+
 
 import java.util.ArrayList;
 import java.util.List;

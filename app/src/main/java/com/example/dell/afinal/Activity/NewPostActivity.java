@@ -19,9 +19,12 @@ import android.widget.TextView;
 
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -85,12 +88,12 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     // 点击取消
-    public void onCancleClicked() {
+    private void onCancleClicked() {
         NewPostActivity.this.finish();
     }
 
     // 点击发表
-    public void onCommitClicked() {
+    private void onCommitClicked() {
         if (checkPostContentInput()) {
             ToastUtil.toast(NewPostActivity.this, "正文内容不能为空");
             return;
@@ -160,13 +163,13 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     // 检查输入正文内容, 不允许为空
-    public boolean checkPostContentInput() {
+    private boolean checkPostContentInput() {
         String input = inputContent.getText().toString();
         return TextUtils.isEmpty(input);
     }
 
     // 提交数据到服务器 ( 不包含图片 )
-    public void commitDataToServer() {
+    private void commitDataToServer() {
         String content = inputContent.getText().toString();
         String title = inputTitle.getText().toString();
         User user = BmobUser.getCurrentUser(User.class);
@@ -189,7 +192,7 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     // 提交数据到服务器 ( 包含图片 )
-    public void commitDataToServerWithImage() {
+    private void commitDataToServerWithImage() {
         String content = inputContent.getText().toString();
         String title = inputTitle.getText().toString();
         User user = BmobUser.getCurrentUser(User.class);
@@ -221,10 +224,17 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     // 提交成功
-    public void onSummitSuccess() {
+    private void onSummitSuccess() {
         progressBar.setVisibility(View.INVISIBLE);
         ToastUtil.toast(NewPostActivity.this, "发表成功");
+        updatePostList();
         NewPostActivity.this.finish();
+    }
+
+    // 提醒更新帖子列表
+    private void updatePostList() {
+        MessageEvent event = new MessageEvent("addPost");
+        EventBus.getDefault().post(event);
     }
 
     // 网络错误
