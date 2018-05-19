@@ -17,14 +17,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
             android:layout_marginBottom="5dp"
-            android:text="我加入的课程"/>
+            android:text="我加入的课程"
+            android:textColor="@color/colorPrimary"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="?attr/actionBarSize">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"

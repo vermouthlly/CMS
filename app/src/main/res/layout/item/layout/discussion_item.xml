@@ -20,7 +20,6 @@
                 android:id="@+id/course_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="此处是课程名"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -30,8 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/enter_discussion"
                 android:layout_marginTop="5dp"
-                android:text="此处是课程简介内容"
-                android:maxLength="100"
+                android:maxLength="50"
                 android:ellipsize="end"/>
 
             <Button
@@ -58,7 +56,6 @@
                 android:layout_toEndOf="@id/cn"
                 android:layout_alignTop="@id/cn"
                 android:layout_marginStart="5dp"
-                android:text="95"
                 android:textSize="16sp" />
 
             <TextView
@@ -67,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/post_num"
                 android:layout_alignTop="@+id/post_num"
+                android:layout_marginEnd="5dp"
                 android:text="帖子"
                 android:textSize="16sp"/>
 
@@ -76,8 +74,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:text="20"
                 android:textSize="16sp"/>
 
         </RelativeLayout>

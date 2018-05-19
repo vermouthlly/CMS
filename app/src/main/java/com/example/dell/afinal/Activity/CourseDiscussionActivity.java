@@ -37,6 +37,7 @@ public class CourseDiscussionActivity extends AppCompatActivity {
 
     private Unbinder unbinder;
     private List<Fragment> fragments = new ArrayList<>();
+    private String courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class CourseDiscussionActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         String title = "标题";
         if (bundle != null) {
+            courseId = bundle.getString("courseId", "");
             title = bundle.getString("title", "讨论区");
         }
         toolbarTitle.setText(title);
@@ -77,6 +79,7 @@ public class CourseDiscussionActivity extends AppCompatActivity {
     // 点击“ 发表帖子”按钮
     private void onNewPostButtonClick() {
         Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
+        intent.putExtra("courseId", courseId);
         startActivity(intent);
     }
 

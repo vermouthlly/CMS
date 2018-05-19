@@ -1,5 +1,6 @@
 package com.example.dell.afinal.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -36,6 +37,7 @@ public class AllPostFragment extends Fragment {
     
     private List<Post> postList = new ArrayList<>();
     private Unbinder unbinder;
+    private String courseId;
 
     @Nullable
     @Override
@@ -44,15 +46,18 @@ public class AllPostFragment extends Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.allpost_fragment, container, false);
             unbinder = ButterKnife.bind(this, mView);
+            Intent intent = getActivity().getIntent();
+            courseId = intent.getStringExtra("courseId");
             loadPostsFromServer();
             onPullRefresh();
         }
         return mView;
     }
 
-    // 从服务器读取所有帖子数据
+    // 从服务器读取属于当前课程的所有帖子数据
     public void loadPostsFromServer() {
         BmobQuery<Post> query = new BmobQuery<>();
+        query.addWhereEqualTo("courseId", courseId);
         query.order("-createdAt");
         query.setLimit(20);     // 仅加载20个
         query.findObjects(new FindListener<Post>() {

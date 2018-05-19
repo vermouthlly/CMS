@@ -44,7 +44,8 @@ public class NewPostActivity extends AppCompatActivity {
     private Unbinder unbinder;
     private Context context;
 
-    String Imagepath;
+    String Imagepath;  // 图片路径
+    String courseId;   // 课程的唯一id
 
     @BindView(R.id.cancel)
     TextView cancel;
@@ -65,6 +66,7 @@ public class NewPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_post);
 
         unbinder = ButterKnife.bind(this);
+        courseId = getIntent().getStringExtra("courseId");
     }
 
     @OnClick({R.id.cancel, R.id.commit, R.id.add_post_photo})
@@ -95,12 +97,11 @@ public class NewPostActivity extends AppCompatActivity {
         }
         progressBar.setVisibility(View.VISIBLE);
 
-        if(TextUtils.isEmpty(Imagepath)) {
+        if (TextUtils.isEmpty(Imagepath)) {
             commitDataToServer();
-        }else {
+        } else {
             commitDataToServerWithImage();
         }
-
     }
 
     /**
@@ -126,7 +127,8 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 0:
@@ -163,7 +165,7 @@ public class NewPostActivity extends AppCompatActivity {
         return TextUtils.isEmpty(input);
     }
 
-    // 提交数据到服务器
+    // 提交数据到服务器 ( 不包含图片 )
     public void commitDataToServer() {
         String content = inputContent.getText().toString();
         String title = inputTitle.getText().toString();
@@ -172,6 +174,7 @@ public class NewPostActivity extends AppCompatActivity {
         post.setContent(content);
         post.setTitle(title);
         post.setAuthor(user);
+        post.setCourseId(courseId);
 
         post.save(new SaveListener<String>() {
             @Override
@@ -185,7 +188,7 @@ public class NewPostActivity extends AppCompatActivity {
         });
     }
 
-    // 提交数据到服务器
+    // 提交数据到服务器 ( 包含图片 )
     public void commitDataToServerWithImage() {
         String content = inputContent.getText().toString();
         String title = inputTitle.getText().toString();
@@ -195,6 +198,7 @@ public class NewPostActivity extends AppCompatActivity {
         post.setContent(content);
         post.setTitle(title);
         post.setAuthor(user);
+        post.setCourseId(courseId);
 
         bmobFile.uploadblock(new UploadFileListener() {
             @Override
@@ -206,7 +210,7 @@ public class NewPostActivity extends AppCompatActivity {
                         public void done(String s, BmobException e) {
                             if (e == null) {
                                 onSummitSuccess();
-                            }else {
+                            } else {
                                 onNetworkException();
                             }
                         }
