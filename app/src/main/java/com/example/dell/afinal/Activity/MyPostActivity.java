@@ -4,18 +4,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.dell.afinal.Adapter.MyPostListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,8 @@ public class MyPostActivity extends AppCompatActivity {
     ProgressBar postLoading;
     @BindView(R.id.back)
     ImageView backIcon;
+    @BindView(R.id.no_post_hint)
+    LinearLayout noPostHint;
 
     private List<Post> myPost = new ArrayList<>();
 
@@ -50,6 +57,7 @@ public class MyPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_post);
 
         unbinder = ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initPageTitle();
         postLoading.setVisibility(View.VISIBLE);
         loadMyPost();
@@ -92,9 +100,14 @@ public class MyPostActivity extends AppCompatActivity {
     private void onLoadSuccess(List<Post> list) {
         myPost = list;
         createMyPostList();
-        if (list.size() == 0)
-            ToastUtil.toast(MyPostActivity.this, "你还没有发过帖子哦~");
         postLoading.setVisibility(View.INVISIBLE);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event.getMessage().equals("deletePost")) {
+            loadMyPost();
+        }
     }
 
     // 读取失败
@@ -105,6 +118,8 @@ public class MyPostActivity extends AppCompatActivity {
 
     // 生成帖子列表
     private void createMyPostList() {
+        if (myPost.size() == 0) noPostHint.setVisibility(View.VISIBLE);
+        else noPostHint.setVisibility(View.INVISIBLE);
         LinearLayoutManager manager = new LinearLayoutManager(MyPostActivity.this);
         recyclerView.setLayoutManager(manager);
         MyPostListAdapter adapter = new MyPostListAdapter(myPost);
@@ -115,5 +130,6 @@ public class MyPostActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 }

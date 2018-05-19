@@ -83,7 +83,7 @@ public class AllPostFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-        if (event.getMessage().equals("addPost"))
+        if (event.getMessage().equals("addPost") || event.getMessage().equals("deletePost"))
             loadPostsFromServer();
     }
     

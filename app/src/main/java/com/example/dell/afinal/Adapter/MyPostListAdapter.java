@@ -18,7 +18,10 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.Comment;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,8 +158,15 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
     // 删除成功, 更新列表
     private void onDeleteSuccess(int pos) {
         ToastUtil.toast(mContext, "删除成功");
-        postList.remove(pos);
-        notifyDataSetChanged();
+        /*postList.remove(pos);
+        notifyDataSetChanged();*/
+        updatePostList();
+    }
+
+    // 提醒更新帖子列表
+    private void updatePostList() {
+        MessageEvent event = new MessageEvent("deletePost");
+        EventBus.getDefault().post(event);
     }
 
     // 删除失败
