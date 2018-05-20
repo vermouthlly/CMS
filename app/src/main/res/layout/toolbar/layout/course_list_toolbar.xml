@@ -25,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:paddingStart="45dp"
+                    android:paddingStart="40dp"
                     android:paddingEnd="8dp"
                     android:text="@string/course_list"
                     android:textColor="@color/white"
@@ -33,6 +33,16 @@
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
+
+        <Button
+            android:id="@+id/create_course"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@mipmap/ic_add"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"/>
 
         <com.miguelcatalan.materialsearchview.MaterialSearchView
             android:id="@+id/search_view"

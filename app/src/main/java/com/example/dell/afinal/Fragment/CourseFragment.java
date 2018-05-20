@@ -1,12 +1,14 @@
 package com.example.dell.afinal.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,21 +19,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.dell.afinal.Adapter.CourseListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
+import com.example.dell.afinal.bean.User;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
 public class CourseFragment extends Fragment {
     private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
@@ -40,6 +46,7 @@ public class CourseFragment extends Fragment {
     private MaterialSearchView searchView;     // 搜索框
     private SwipeRefreshLayout refreshLayout;  // 下拉刷新
     private RecyclerView recyclerView;         // 课程列表
+    private Button create;                     //教师增加课程
 
     private CourseListAdapter adapter;         // 课程适配器
     private List<Course> courseList = new ArrayList<>();
@@ -100,6 +107,58 @@ public class CourseFragment extends Fragment {
         toolbar = mView.findViewById(R.id.toolbar);
         searchView = mView.findViewById(R.id.search_view);
         refreshLayout = mView.findViewById(R.id.swipe_refresh);
+        create = mView.findViewById(R.id.create_course);
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = BmobUser.getCurrentUser(User.class);
+                if(user.getIdentity().equals("teacher")) {
+                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+                    View layout = inflater.inflate(R.layout.dialoglayout, null);
+                    final EditText ed_name= layout.findViewById(R.id.ed_name); //变量初始化
+                    final EditText ed_time=  layout.findViewById(R.id.ed_time);
+                    final EditText ed_location = layout.findViewById(R.id.ed_location);
+                    final EditText ed_teacher =  layout.findViewById(R.id.ed_teacher);
+                    final EditText ed_class_capacity = layout.findViewById(R.id.ed_class_capacity);
+                    final EditText ed_code=  layout.findViewById(R.id.ed_code);
+
+                    AlertDialog.Builder builder=  new AlertDialog.Builder(getActivity());
+                    builder.setTitle("创建课程")
+                            .setView(layout)
+                            .setNegativeButton("放弃修改", null)
+                            .setPositiveButton("保存修改", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String name = ed_name.getText().toString();
+                                    String time = ed_time.getText().toString();
+                                    String location = ed_location.getText().toString();
+                                    String teacher = ed_teacher.getText().toString();
+                                    String class_capacity = ed_class_capacity.getText().toString();
+                                    int capacity = Integer.parseInt(class_capacity);
+                                    String code = ed_code.getText().toString();
+                                    Course course = new Course();
+                                    course.setCourseName(name);
+                                    course.setCourseTime(time);
+                                    course.setCoursePlace(location);
+                                    course.setCourseDescription(teacher);
+                                    course.setCourseCapacity(capacity);
+                                    course.setInvitationCode(code);
+
+                                    course.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String s, BmobException e) {
+                                            if (e == null) {
+                                                ToastUtil.toast(getActivity(), "创建成功");
+                                            } else {
+                                                ToastUtil.toast(getActivity(), "创建失败");
+                                            }
+                                        }
+                                    });
+                                }
+                            }).show();
+                }
+            }
+        });
         initSearchView();
     }
 
@@ -184,6 +243,14 @@ public class CourseFragment extends Fragment {
 
     // 初始化课程列表：获取Course表中的所有数据记录，Bmob规定上限为500
     public void generateCourseList() {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user != null) {
+            if(user.getIdentity().equals("teacher")) {
+                create.setVisibility(View.VISIBLE);
+            }
+        }else {
+            ToastUtil.toast(getActivity(), "您未登录，请先登录！");
+        }
         BmobQuery<Course> query = new BmobQuery<>();
         query.findObjects(new FindListener<Course>() {
             @Override
