@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!--外部引入标题栏-->
+    <include
+        android:id="@+id/detail_toolbar"
+        layout="@layout/course_detail_toolbar"/>
 
     <ProgressBar
         android:id="@+id/load_courseInfo_pro"
@@ -18,12 +21,7 @@
         android:layout_height="match_parent"
         android:visibility="invisible"
         android:orientation="vertical"
-        tools:context="com.example.dell.afinal.Activity.CourseDetailActivity">
-
-        <!--外部引入标题栏-->
-        <include
-            android:id="@+id/detail_toolbar"
-            layout="@layout/course_detail_toolbar"/>
+        android:layout_marginTop="?attr/actionBarSize">
 
         <LinearLayout
             style="@style/coursedetail_item">

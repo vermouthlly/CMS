@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.example.dell.afinal.Activity.PostInfoActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
-import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.Comment;
 import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;

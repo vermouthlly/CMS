@@ -11,11 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.dell.afinal.Activity.CourseDetailActivity;
 import com.example.dell.afinal.Activity.CourseDiscussionActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.Course;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -40,13 +43,40 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<DiscussionListAd
         View view = LayoutInflater.from(mContext).inflate(R.layout.discussion_item, parent,
                 false);
         final ViewHolder holder = new ViewHolder(view);
+        setOnClickListener(holder);
+        return holder;
+    }
+
+    // 设置点击监听
+    private void setOnClickListener(final ViewHolder holder) {
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCourseDetail(holder);
+            }
+        });
+
         holder.enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onEnterButtonClicked(holder);
             }
         });
-        return holder;
+    }
+
+    // 跳转到课程详情界面，并把课程相关信息传递过去
+    private void showCourseDetail(ViewHolder viewHolder) {
+        Intent intent = new Intent(mContext, CourseDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("courseName", viewHolder.courseName.getText().toString());
+        bundle.putString("courseDescription", viewHolder.courseDescription.getText().toString());
+        bundle.putString("courseTime", viewHolder.courseTime);
+        bundle.putString("coursePlace", viewHolder.coursePlace);
+        bundle.putString("courseCapacity", viewHolder.courseCapacity);
+        bundle.putString("courseId", viewHolder.courseId);
+        bundle.putString("invitationCode", viewHolder.invitationCode);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
     }
 
     // 点击" 进入讨论区" 按钮
@@ -66,6 +96,10 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<DiscussionListAd
             holder.courseId = course.getObjectId();
             holder.courseName.setText(course.getCourseName());
             holder.courseDescription.setText(course.getCourseDescription());
+            holder.courseTime = course.getCourseTime();
+            holder.coursePlace = course.getCoursePlace();
+            holder.courseCapacity = String.valueOf(course.getCourseCapacity());
+            holder.invitationCode = course.getInvitationCode();
             loadCourseStudents(holder);
             loadCoursePostNumber(holder);
         }
@@ -122,10 +156,17 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<DiscussionListAd
         TextView courseDescription;       // 课程简介
         TextView studentNum;              // 选课学生数目
         TextView postNum;                 // 该课程讨论区的帖子数目
+        String courseTime;                // 上课时间
+        String coursePlace;               // 上课地点
+        String courseCapacity;            // 课程容量
+        String invitationCode;            // 课程邀请码
         Button enter;                     // 进入课程讨论区的按钮
+
+        View view;
 
         ViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             courseName = itemView.findViewById(R.id.course_name);
             courseDescription = itemView.findViewById(R.id.course_description);
             studentNum = itemView.findViewById(R.id.course_num);

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PostFragmentAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragmentList = new ArrayList<>();
-    private String[] titles = {"全部", "精华"};
+    private String[] titles = {"全部", "精选"};
 
     public PostFragmentAdapter(FragmentManager fm, List<Fragment> list) {
         super(fm);
