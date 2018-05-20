@@ -3,7 +3,6 @@ package com.example.dell.afinal.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,16 @@ import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.FeedbackActivity;
 import com.example.dell.afinal.Activity.InfoActivity;
+import com.example.dell.afinal.Activity.LoginActivity;
 import com.example.dell.afinal.Activity.MyCourseActivity;
-import com.example.dell.afinal.R;
 import com.example.dell.afinal.Activity.UserDetailActivity;
+import com.example.dell.afinal.R;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
-
-import com.example.dell.afinal.Activity.LoginActivity;
 
 public class MineFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
@@ -100,7 +98,7 @@ public class MineFragment extends android.support.v4.app.Fragment implements Vie
         super.onResume();
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
-            setTvName.setText(user.getUsername());
+            setTvName.setText(user.getNickName());
             loadHead(user);
         } else {
             setTvName.setText("未登录");
