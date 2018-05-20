@@ -20,16 +20,26 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:paddingStart="45dp"
+                    android:paddingStart="40dp"
                     android:paddingEnd="8dp"
                     android:text="@string/course_list"
                     android:textColor="@color/white"
                     android:textSize="18sp"/>
+
+                <Button
+                    android:id="@+id/create_course"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@mipmap/ic_add"
+                    android:layout_alignBottom="@id/title"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
