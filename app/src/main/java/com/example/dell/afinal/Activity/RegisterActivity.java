@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Pattern p =Pattern.compile("[0-9]*]");
             Matcher result = p.matcher(userName);
             if(!result.matches()){
-                ToastUtil.toast(getApplicationContext(), "学号应为数字");
+                ToastUtil.toast(getApplicationContext(), "学号应全为数字");
                 return;
             }
         }
