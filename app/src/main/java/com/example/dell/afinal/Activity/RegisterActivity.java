@@ -17,6 +17,9 @@ import com.example.dell.afinal.Utils.SnackBarUtil;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.User;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -88,6 +91,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (TextUtils.isEmpty(userName)) {
             ToastUtil.toast(getApplicationContext(), "学号不能为空");
             return;
+        }else {
+            Pattern p =Pattern.compile("[0-9]*]");
+            Matcher result = p.matcher(userName);
+            if(!result.matches()){
+                ToastUtil.toast(getApplicationContext(), "学号应为数字");
+                return;
+            }
         }
         if (TextUtils.isEmpty(userPwd)) {
             ToastUtil.toast(getApplicationContext(), "密码不能为空");
