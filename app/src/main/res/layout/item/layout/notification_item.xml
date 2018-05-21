@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <com.example.dell.afinal.View.CircleImageView
         android:id="@+id/cms_team"
@@ -26,7 +26,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
         android:layout_toEndOf="@id/cms_team"
-        android:text="2018-05-20 20:30:11"/>
+        android:text="YYYY-MM-DD HH:MM:SS"/>
+
+    <TextView
+        android:id="@+id/read_tag"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:background="@drawable/tag_shape"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/cms_team"
+        android:layout_marginEnd="10dp"
+        android:text="标为已读"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/notification_title"

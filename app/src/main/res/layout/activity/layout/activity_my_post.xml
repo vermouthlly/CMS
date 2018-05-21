@@ -22,26 +22,20 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <ProgressBar
+        <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/is_loading"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/no_post_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="空空如也, 你还没有发表过帖子~"
             android:visibility="invisible"/>
-
-        <LinearLayout
-            android:id="@+id/no_post_hint"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="空空如也, 你还没有发表过帖子~" />
-        </LinearLayout>
 
     </FrameLayout>
 

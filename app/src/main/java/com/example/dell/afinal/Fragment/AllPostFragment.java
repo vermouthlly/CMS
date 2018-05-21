@@ -3,12 +3,11 @@ package com.example.dell.afinal.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,9 @@ import cn.bmob.v3.listener.FindListener;
 public class AllPostFragment extends Fragment {
 
     @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout refreshLayout;
+    SwipeRefreshLayout refreshLayout;       // 下拉刷新
+    @BindView(R.id.progress_bar)
+    ContentLoadingProgressBar progressBar;  // 进度条
 
     private View mView;
     
@@ -63,6 +64,8 @@ public class AllPostFragment extends Fragment {
 
     // 从服务器读取属于当前课程的所有帖子数据
     public void loadPostsFromServer() {
+        progressBar.show(); // 显示进度条开始加载
+
         BmobQuery<Post> query = new BmobQuery<>();
         query.addWhereEqualTo("courseId", courseId);
         query.order("-createdAt");
@@ -106,6 +109,7 @@ public class AllPostFragment extends Fragment {
     public void onDataLoaded() {
         /*ToastUtil.toast(getContext(), "数据加载完成");*/
         refreshLayout.setRefreshing(false);
+        progressBar.hide();
     }
 
     // 下拉刷新

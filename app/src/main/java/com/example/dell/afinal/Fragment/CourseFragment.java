@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,14 +42,14 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class CourseFragment extends Fragment {
     private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
-    private ProgressBar progressBar;           // 进度条
-    private Toolbar toolbar;                   // 标题栏
-    private MaterialSearchView searchView;     // 搜索框
-    private SwipeRefreshLayout refreshLayout;  // 下拉刷新
-    private RecyclerView recyclerView;         // 课程列表
-    private Button create;                     //教师增加课程
+    private ContentLoadingProgressBar progressBar;   // 进度条
+    private Toolbar toolbar;                         // 标题栏
+    private MaterialSearchView searchView;           // 搜索框
+    private SwipeRefreshLayout refreshLayout;        // 下拉刷新
+    private RecyclerView recyclerView;               // 课程列表
+    private Button create;                           // 教师增加课程
 
-    private CourseListAdapter adapter;         // 课程适配器
+    private CourseListAdapter adapter;               // 课程适配器
     private List<Course> courseList = new ArrayList<>();
     public static final int DATA_READY = 1;
     public static final int LOAD_FAILED = 2;
@@ -60,14 +61,13 @@ public class CourseFragment extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DATA_READY:
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.hide();
                     refreshLayout.setRefreshing(false);
                     ToastUtil.toast(getContext(), "所有课程加载完成");
                     break;
                 case LOAD_FAILED:
-                    progressBar.setVisibility(View.INVISIBLE);
                     refreshLayout.setRefreshing(false);
-                    ToastUtil.toast(getContext(), "获取课程列表失败, 请刷新重试");
+                    ToastUtil.toast(getContext(), "获取课程列表失败, 请检查你的网络后刷新重试");
                 default: break;
             }
         }
@@ -91,7 +91,6 @@ public class CourseFragment extends Fragment {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
             bindViews(mView);
             generateCourseList();        // 这里完成数据加载
-            progressBar.setVisibility(View.VISIBLE);
         } else {
             ViewGroup parent = (ViewGroup) mView.getParent();
             if (parent != null)
@@ -248,7 +247,7 @@ public class CourseFragment extends Fragment {
             if(user.getIdentity().equals("teacher")) {
                 create.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             ToastUtil.toast(getActivity(), "您未登录，请先登录！");
         }
         BmobQuery<Course> query = new BmobQuery<>();

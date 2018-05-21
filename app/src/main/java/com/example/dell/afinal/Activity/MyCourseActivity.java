@@ -1,5 +1,6 @@
 package com.example.dell.afinal.Activity;
 
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class MyCourseActivity extends AppCompatActivity {
     @BindView(R.id.course_list)
     RecyclerView my_courseList;
     @BindView(R.id.is_loading)
-    ProgressBar progressBar;
+    ContentLoadingProgressBar progressBar;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.no_course_hint)
@@ -114,28 +115,20 @@ public class MyCourseActivity extends AppCompatActivity {
         else
             noCourseHint.setVisibility(View.INVISIBLE);
         createRecyclerView();
-        hideProgress();
+        progressBar.hide();
         refreshLayout.setRefreshing(false);
     }
 
     // 读取失败
     private void onLoadFailed() {
         ToastUtil.toast(getApplicationContext(), "读取课程数据失败, 请检查你的网络");
-        hideProgress();
         refreshLayout.setRefreshing(false);
     }
 
     // 必要的控件属性设置
     private void basicSetting() {
         title.setText("我的课程");
-        progressBar.setVisibility(View.VISIBLE);
         addRefreshListener();
-    }
-
-    // 隐藏进度条
-    private void hideProgress() {
-        if (progressBar.getVisibility() == View.VISIBLE)
-            progressBar.setVisibility(View.INVISIBLE);
     }
 
     // 添加下拉刷新监听

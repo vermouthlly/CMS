@@ -1,5 +1,6 @@
 package com.example.dell.afinal.Activity;
 
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,11 +44,11 @@ public class MyPostActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.is_loading)
-    ProgressBar postLoading;
+    ContentLoadingProgressBar postLoading;
     @BindView(R.id.back)
     ImageView backIcon;
     @BindView(R.id.no_post_hint)
-    LinearLayout noPostHint;
+    TextView noPostHint;
 
     private List<Post> myPost = new ArrayList<>();
 
@@ -59,7 +60,6 @@ public class MyPostActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initPageTitle();
-        postLoading.setVisibility(View.VISIBLE);
         loadMyPost();
     }
 
@@ -100,7 +100,7 @@ public class MyPostActivity extends AppCompatActivity {
     private void onLoadSuccess(List<Post> list) {
         myPost = list;
         createMyPostList();
-        postLoading.setVisibility(View.INVISIBLE);
+        postLoading.hide();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -113,7 +113,6 @@ public class MyPostActivity extends AppCompatActivity {
     // 读取失败
     private void onLoadFailed() {
         ToastUtil.toast(MyPostActivity.this, "数据读取失败, 请检查你的网络");
-        postLoading.setVisibility(View.INVISIBLE);
     }
 
     // 生成帖子列表

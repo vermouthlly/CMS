@@ -97,17 +97,15 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
 
     // 删除指定的帖子
     private void deletePostFromList(ViewHolder viewHolder) {
-        final int pos = viewHolder.getAdapterPosition();
         Post post = new Post();
         post.setObjectId(viewHolder.postId);
         post.delete(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    onDeleteSuccess(pos);
+                    onDeleteSuccess();
                 } else {
-                    onDeleteFailed();
-                    Log.e("删除失败:", e.toString());
+                    onDeleteFailed(e);
                 }
             }
         });
@@ -144,8 +142,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
                 public void done(BmobException e) {
                     if (e == null) {
                         Log.d("删除评论成功:", "OK");
-                        // 此处再删除帖子
-                        deletePostFromList(viewHolder);
+                        deletePostFromList(viewHolder);  // 确保评论删除完成再删除帖子
                     } else {
                         Log.e("删除评论失败:", e.toString());
                     }
@@ -155,10 +152,8 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
     }
 
     // 删除成功, 更新列表
-    private void onDeleteSuccess(int pos) {
+    private void onDeleteSuccess() {
         ToastUtil.toast(mContext, "删除成功");
-        /*postList.remove(pos);
-        notifyDataSetChanged();*/
         updatePostList();
     }
 
@@ -169,8 +164,9 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.Vi
     }
 
     // 删除失败
-    private void onDeleteFailed() {
-        ToastUtil.toast(mContext, "删除失败,请检查你的网络或稍后再试");
+    private void onDeleteFailed(BmobException e) {
+        /*ToastUtil.toast(mContext, "删除失败,请检查你的网络或稍后再试");*/
+        Log.e("删除失败:", e.toString());
     }
 
     @Override
