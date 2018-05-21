@@ -147,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             ToastUtil.toast(getApplicationContext(), "邮箱已存在");
                             break;
                         default:
-                            ToastUtil.toast(getApplicationContext(), "注册失败");
+                            ToastUtil.toast(getApplicationContext(), "注册失败，请检查网络");
                             break;
                     }
                 }
