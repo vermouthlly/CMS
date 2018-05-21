@@ -60,7 +60,7 @@ public class FeedbackActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(content)) {
             Toast.makeText(FeedbackActivity.this, "请输入反馈内容", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(contact)) {
-            Toast.makeText(FeedbackActivity.this, "请输入联系方式", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FeedbackActivity.this, "请输入您的联系方式", Toast.LENGTH_SHORT).show();
         } else {
             FeedBack feedBack = new FeedBack(content, contact);
             feedBack.save(new SaveListener<String>() {
@@ -70,7 +70,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         FeedbackActivity.this.finish();
                         Toast.makeText(FeedbackActivity.this, "提交成功，感谢反馈！", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(FeedbackActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FeedbackActivity.this, "提交失败，请检查您的网络", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
