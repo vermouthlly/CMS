@@ -2,6 +2,7 @@ package com.example.dell.afinal.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.dell.afinal.Activity.CourseCreate;
+import com.example.dell.afinal.Activity.LoginActivity;
+import com.example.dell.afinal.Activity.MainActivity;
 import com.example.dell.afinal.Adapter.CourseListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
@@ -33,6 +37,8 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -113,49 +119,63 @@ public class CourseFragment extends Fragment {
             public void onClick(View v) {
                 User user = BmobUser.getCurrentUser(User.class);
                 if(user.getIdentity().equals("teacher")) {
-                    LayoutInflater inflater = LayoutInflater.from(getActivity());
-                    View layout = inflater.inflate(R.layout.dialoglayout, null);
-                    final EditText ed_name= layout.findViewById(R.id.ed_name); //变量初始化
-                    final EditText ed_time=  layout.findViewById(R.id.ed_time);
-                    final EditText ed_location = layout.findViewById(R.id.ed_location);
-                    final EditText ed_teacher =  layout.findViewById(R.id.ed_teacher);
-                    final EditText ed_class_capacity = layout.findViewById(R.id.ed_class_capacity);
-                    final EditText ed_code=  layout.findViewById(R.id.ed_code);
-
-                    AlertDialog.Builder builder=  new AlertDialog.Builder(getActivity());
-                    builder.setTitle("创建课程")
-                            .setView(layout)
-                            .setNegativeButton("放弃修改", null)
-                            .setPositiveButton("保存修改", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String name = ed_name.getText().toString();
-                                    String time = ed_time.getText().toString();
-                                    String location = ed_location.getText().toString();
-                                    String teacher = ed_teacher.getText().toString();
-                                    String class_capacity = ed_class_capacity.getText().toString();
-                                    int capacity = Integer.parseInt(class_capacity);
-                                    String code = ed_code.getText().toString();
-                                    Course course = new Course();
-                                    course.setCourseName(name);
-                                    course.setCourseTime(time);
-                                    course.setCoursePlace(location);
-                                    course.setCourseDescription(teacher);
-                                    course.setCourseCapacity(capacity);
-                                    course.setInvitationCode(code);
-
-                                    course.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if (e == null) {
-                                                ToastUtil.toast(getActivity(), "创建成功");
-                                            } else {
-                                                ToastUtil.toast(getActivity(), "创建失败");
-                                            }
-                                        }
-                                    });
-                                }
-                            }).show();
+                    Intent intent = new Intent(getContext(), CourseCreate.class);
+                    startActivity(intent);
+//                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+//                    View layout = inflater.inflate(R.layout.dialoglayout, null);
+//                    final EditText ed_name= layout.findViewById(R.id.ed_name); //变量初始化
+//                    final EditText ed_time=  layout.findViewById(R.id.ed_time);
+//                    final EditText ed_location = layout.findViewById(R.id.ed_location);
+//                    final EditText ed_teacher =  layout.findViewById(R.id.ed_teacher);
+//                    final EditText ed_class_capacity = layout.findViewById(R.id.ed_class_capacity);
+//                    final EditText ed_code=  layout.findViewById(R.id.ed_code);
+//
+//                    AlertDialog.Builder builder=  new AlertDialog.Builder(getActivity());
+//                    builder.setTitle("创建课程")
+//                            .setView(layout)
+//                            .setNegativeButton("放弃修改", null)
+//                            .setPositiveButton("保存修改", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    String name = ed_name.getText().toString();
+//                                    String time = ed_time.getText().toString();
+//                                    String location = ed_location.getText().toString();
+//                                    String teacher = ed_teacher.getText().toString();
+//                                    String class_capacity = ed_class_capacity.getText().toString();
+//                                    int capacity = Integer.parseInt(class_capacity);
+//                                    String code = ed_code.getText().toString();
+//                                    Course course = new Course();
+//                                    course.setCourseName(name);
+//                                    course.setCourseTime(time);
+//                                    course.setCoursePlace(location);
+//                                    course.setCourseDescription(teacher);
+//                                    course.setCourseCapacity(capacity);
+//                                    course.setInvitationCode(code);
+//
+//
+//                                    Pattern pnumber = Pattern.compile("[0-9]*");
+//                                    Pattern pcode = Pattern.compile("[0-9]*");
+//                                    Matcher Mnumber = pnumber.matcher(class_capacity);
+//                                    Matcher Mcode = pcode.matcher(code);
+//                                    if(!Mnumber.matches()){
+//                                        ToastUtil.toast(getActivity(), "课程容量应为数字");
+//                                    }else if(!Mcode.matches()){
+//                                        ToastUtil.toast(getActivity(), "邀请码应为数字");
+//                                    } else{
+//                                        course.save(new SaveListener<String>() {
+//                                            @Override
+//                                            public void done(String s, BmobException e) {
+//                                                if (e == null) {
+//                                                    ToastUtil.toast(getActivity(), "创建成功");
+//                                                } else {
+//                                                    ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+//                                                }
+//                                            }
+//                                        });
+//                                    }
+//
+//                                }
+//                            }).show();
                 }
             }
         });

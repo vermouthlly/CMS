@@ -40,5 +40,8 @@
     <string name="post">发表帖子</string>
     <string name="mylikes">我的收藏</string>
     <string name="mypost">我的帖子</string>
+    <string name="create">创建课程</string>
     <string name="postcontent">评论</string>
+    <string name="create_course">创建课程</string>
+    <string name="icode">邀请码</string>
 </resources>

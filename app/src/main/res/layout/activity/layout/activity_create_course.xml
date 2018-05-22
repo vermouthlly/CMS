@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--外部引入标题栏-->
+    <include
+        android:id="@+id/detail_toolbar"
+        layout="@layout/course_create_toolbar" />
+
+
+    <LinearLayout
+        android:id="@+id/course_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/margin_tool_bar"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/cname"
+                style="@style/item_tag"
+                android:text="@string/course_name" />
+
+            <EditText
+                android:id="@+id/course_name"
+                style="@style/item_content"
+                android:text="@string/course_name" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/cdescription"
+                style="@style/item_tag"
+                android:text="@string/course_descri" />
+
+            <EditText
+                android:id="@+id/course_intro"
+                style="@style/item_content"
+                android:text="@string/course_descri" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/ctime"
+                style="@style/item_tag"
+                android:text="@string/course_time" />
+
+            <EditText
+                android:id="@+id/course_time"
+                style="@style/item_content"
+                android:text="@string/course_time" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/cplace"
+                style="@style/item_tag"
+                android:text="@string/course_place" />
+
+            <EditText
+                android:id="@+id/course_place"
+                style="@style/item_content"
+                android:text="@string/course_place" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/ccapatity"
+                style="@style/item_tag"
+                android:text="@string/course_capacity" />
+
+            <EditText
+                android:id="@+id/course_capacity"
+                style="@style/item_content"
+                android:text="@string/course_capacity" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/snum"
+                style="@style/item_tag"
+                android:text="@string/icode" />
+
+            <EditText
+                android:id="@+id/student_num"
+                style="@style/item_content"
+                android:text="@string/icode" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/join_course"
+            style="@style/create_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/textview_bg_select"
+            android:gravity="center"
+            android:text="@string/create_course"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -46,6 +46,8 @@
         <activity android:name=".Activity.MyLikesActivity" />
         <activity android:name=".Activity.CourseDiscussionActivity"/>
         <activity android:name=".Activity.MyNotificationActivity"/>
+        <activity android:name=".Activity.CourseCreate"/>
+
     </application>
 
 </manifest>
