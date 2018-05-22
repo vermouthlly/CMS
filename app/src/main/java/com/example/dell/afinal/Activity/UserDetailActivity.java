@@ -121,7 +121,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 if (e == null) {
                     ToastUtil.toast(getApplicationContext(), "修改成功");
                 } else {
-                    ToastUtil.toast(getApplicationContext(), "修改失败");
+                    ToastUtil.toast(getApplicationContext(), "修改失败，请检查您的网络");
                 }
             }
         });
@@ -159,7 +159,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_CONTACTS)) {
-                ToastUtil.toast(getApplicationContext(), "缺少读写权限");
+                ToastUtil.toast(getApplicationContext(), "缺少读写权限，可在设置中打开");
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -221,7 +221,7 @@ public class UserDetailActivity extends AppCompatActivity {
                             userTvSignature.setText(etSign.getText().toString());
                             ToastUtil.toast(getApplicationContext(), "修改签名成功");
                         } else {
-                            ToastUtil.toast(getApplicationContext(), "修改签名失败");
+                            ToastUtil.toast(getApplicationContext(), "修改签名失败，请检查您的网络");
                         }
                     }
                 });
@@ -250,7 +250,7 @@ public class UserDetailActivity extends AppCompatActivity {
                             userTvName.setText(etSign.getText().toString());
                             ToastUtil.toast(getApplicationContext(), "修改昵称成功");
                         } else {
-                            ToastUtil.toast(getApplicationContext(), "修改昵称失败");
+                            ToastUtil.toast(getApplicationContext(), "修改昵称失败，请检查您的网络");
                         }
                     }
                 });
@@ -289,12 +289,12 @@ public class UserDetailActivity extends AppCompatActivity {
                                     if (e == null) {
                                         ToastUtil.toast(getApplicationContext(), "头像上传成功");
                                     } else {
-                                        ToastUtil.toast(getApplicationContext(), "头像上传失败");
+                                        ToastUtil.toast(getApplicationContext(), "头像上传失败，请检查您的网络");
                                     }
                                 }
                             });
                         } else {
-                            ToastUtil.toast(getApplicationContext(), "头像上传失败");
+                            ToastUtil.toast(getApplicationContext(), "头像上传失败，请检查您的网络");
                         }
 
                     }

@@ -50,6 +50,7 @@ public class NewPostActivity extends AppCompatActivity {
     String Imagepath;  // 图片路径
     String courseId;   // 课程的唯一id
 
+
     @BindView(R.id.cancel)
     TextView cancel;
     @BindView(R.id.commit)
@@ -95,7 +96,7 @@ public class NewPostActivity extends AppCompatActivity {
     // 点击发表
     private void onCommitClicked() {
         if (checkPostContentInput()) {
-            ToastUtil.toast(NewPostActivity.this, "正文内容不能为空");
+            ToastUtil.toast(NewPostActivity.this, "正文内容不能为空，说点什么吧");
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
