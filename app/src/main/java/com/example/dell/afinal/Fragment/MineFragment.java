@@ -3,6 +3,7 @@ package com.example.dell.afinal.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.example.dell.afinal.Activity.FeedbackActivity;
 import com.example.dell.afinal.Activity.InfoActivity;
 import com.example.dell.afinal.Activity.LoginActivity;
 import com.example.dell.afinal.Activity.MyCourseActivity;
+import com.example.dell.afinal.Activity.MyNotificationActivity;
 import com.example.dell.afinal.Activity.UserDetailActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.View.CircleImageView;
@@ -34,8 +36,7 @@ public class MineFragment extends android.support.v4.app.Fragment implements Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.setting_fragment, container, false);
-        return view;
+        return inflater.inflate(R.layout.mine_fragment, container, false);
     }
 
     @Override
@@ -53,10 +54,12 @@ public class MineFragment extends android.support.v4.app.Fragment implements Vie
         setCivHead = getActivity().findViewById(R.id.set_civ_head);
         setTvName = getActivity().findViewById(R.id.set_tv_name);
         LinearLayout myCourselist = getActivity().findViewById(R.id.my_courselist);
+        LinearLayout myNotification = getActivity().findViewById(R.id.my_notification);
         LinearLayout setLlInfo = getActivity().findViewById(R.id.set_ll_info);
         LinearLayout setLlFeedback = getActivity().findViewById(R.id.set_ll_feedback);
         setTvName.setOnClickListener(this);
         myCourselist.setOnClickListener(this);
+        myNotification.setOnClickListener(this);
         setLlFeedback.setOnClickListener(this);
         setLlInfo.setOnClickListener(this);
     }
@@ -67,14 +70,16 @@ public class MineFragment extends android.support.v4.app.Fragment implements Vie
             case R.id.my_courselist:
                 startActivity(new Intent(getContext(), MyCourseActivity.class));
                 break;
+            case R.id.my_notification:
+                startActivity(new Intent(getContext(), MyNotificationActivity.class));
+                break;
             case R.id.set_ll_feedback:
                 startActivity(new Intent(getContext(), FeedbackActivity.class));
                 break;
             case R.id.set_ll_info:
                 startActivity(new Intent(getContext(), InfoActivity.class));
                 break;
-            case R.id.set_tv_name:
-            case R.id.set_ll_user:
+            case R.id.set_tv_name: case R.id.set_ll_user:
                 detailOrLogin();
                 break;
             default: break;
@@ -98,7 +103,11 @@ public class MineFragment extends android.support.v4.app.Fragment implements Vie
         super.onResume();
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
-            setTvName.setText(user.getNickName());
+            if (!TextUtils.isEmpty(user.getNickName())) {
+                setTvName.setText(user.getNickName());
+            } else {
+                setTvName.setText(user.getUsername());
+            }
             loadHead(user);
         } else {
             setTvName.setText("未登录");

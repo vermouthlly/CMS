@@ -30,11 +30,19 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ProgressBar
+    <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/is_loading"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/no_course_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:text="你还没有加入课程, 赶紧去选课吧！"/>
 
 </android.support.design.widget.CoordinatorLayout>

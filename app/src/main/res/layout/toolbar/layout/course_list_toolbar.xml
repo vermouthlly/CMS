@@ -20,6 +20,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
@@ -30,19 +31,18 @@
                     android:text="@string/course_list"
                     android:textColor="@color/white"
                     android:textSize="18sp"/>
+
+                <Button
+                    android:id="@+id/create_course"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@mipmap/ic_add"
+                    android:layout_alignBottom="@id/title"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
-
-        <Button
-            android:id="@+id/create_course"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@mipmap/ic_add"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="5dp"
-            android:visibility="gone"/>
 
         <com.miguelcatalan.materialsearchview.MaterialSearchView
             android:id="@+id/search_view"

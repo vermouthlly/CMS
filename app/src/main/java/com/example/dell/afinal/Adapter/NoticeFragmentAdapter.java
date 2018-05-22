@@ -4,26 +4,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PostFragmentAdapter extends FragmentPagerAdapter {
-    private List<Fragment> fragmentList = new ArrayList<>();
-    private String[] titles = {"全部", "精选"};
+public class NoticeFragmentAdapter extends FragmentPagerAdapter {
+    private List<Fragment> list;
+    private static final String[] titles = {"系统通知", "课程通知"};
 
-    public PostFragmentAdapter(FragmentManager fm, List<Fragment> list) {
+    public NoticeFragmentAdapter(FragmentManager fm, List<Fragment> list) {
         super(fm);
-        fragmentList = list;
+        this.list = list;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        return list.get(position);
     }
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return list.size();
     }
 
     @Override

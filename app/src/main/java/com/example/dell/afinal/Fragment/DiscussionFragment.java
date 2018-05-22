@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.dell.afinal.Adapter.DiscussionListAdapter;
 import com.example.dell.afinal.R;
@@ -40,6 +41,8 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
     RecyclerView recyclerView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.no_course_hint)
+    TextView noCourseHint;
 
     public static DiscussionFragment newInstance() {
         return new DiscussionFragment();
@@ -108,6 +111,8 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
 
     // 构建RecyclerView
     private void createRecyclerView(List<Course> list) {
+        if (list.size() == 0) noCourseHint.setVisibility(View.VISIBLE);
+        else noCourseHint.setVisibility(View.INVISIBLE);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         DiscussionListAdapter adapter = new DiscussionListAdapter(list);

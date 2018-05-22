@@ -1,5 +1,6 @@
 package com.example.dell.afinal.Activity;
 
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +14,13 @@ import android.widget.TextView;
 import com.example.dell.afinal.Adapter.PostListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +44,9 @@ public class MyLikesActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.is_loading)
-    ProgressBar postLoading;
+    ContentLoadingProgressBar postLoading;
+    @BindView(R.id.no_like_hint)
+    TextView noLikeHint;
     @BindView(R.id.back)
     ImageView backIcon;
 
@@ -50,6 +58,8 @@ public class MyLikesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_likes);
 
         unbinder = ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+
         initPageTitle();
         loadMyLikes();
     }
@@ -88,10 +98,16 @@ public class MyLikesActivity extends AppCompatActivity {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event.getMessage().equals("like"))
+            loadMyLikes();
+    }
+
     // 读取收藏列表成功
     private void onLoadLikesSuccess() {
         createLikeList();
-        postLoading.setVisibility(View.INVISIBLE);
+        postLoading.hide();
     }
 
     // 生成收藏列表
@@ -100,8 +116,12 @@ public class MyLikesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         PostListAdapter adapter = new PostListAdapter(postList);
         recyclerView.setAdapter(adapter);
-        if (postList.size() == 0)
+        if (postList.size() == 0) {
+            noLikeHint.setVisibility(View.VISIBLE);
             ToastUtil.toast(MyLikesActivity.this, "你还没有收藏过帖子,赶紧去讨论区逛逛吧~");
+        } else {
+            noLikeHint.setVisibility(View.INVISIBLE);
+        }
     }
 
     // 读取收藏列表失败
@@ -113,5 +133,6 @@ public class MyLikesActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 }

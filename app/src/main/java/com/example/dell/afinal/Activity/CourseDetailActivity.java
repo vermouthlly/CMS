@@ -2,6 +2,7 @@ package com.example.dell.afinal.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +42,8 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.load_courseInfo_pro) ProgressBar courseInfoPro;  // 课程详情读取进度
+    @BindView(R.id.load_courseInfo_pro)
+    ContentLoadingProgressBar courseInfoPro;                     // 课程详情读取进度
     @BindView(R.id.course_detail) LinearLayout courseDetailTag;  // 课程详情最外层布局
     @BindView(R.id.cname) TextView nameTag;                      // 课程名tag
     @BindView(R.id.cdescription) TextView desTag;                // 课程简介tag
@@ -149,7 +151,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     // 加载完成, 显示课程信息
     public void showCourseInfoLayout() {
-        courseInfoPro.setVisibility(View.INVISIBLE);
+        courseInfoPro.hide();
         courseDetailTag.setVisibility(View.VISIBLE);
     }
 
@@ -183,7 +185,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     // 出现网络异常，需要给予用户足够的提示
     public void netWorkExceptionHint() {
         hideProgress();
-        ToastUtil.toast(CourseDetailActivity.this, "操作失败,请检查你的网络");
+        ToastUtil.toast(CourseDetailActivity.this, "无法读取课程信息,请检查你的网络");
     }
 
     // 根据按钮状态判定点击按钮的行为：选课或退课

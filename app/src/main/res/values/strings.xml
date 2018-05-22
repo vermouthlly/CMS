@@ -32,6 +32,7 @@
     <string name="feedback">意见反馈</string>
     <string name="aboutus">关于我们</string>
     <string name="mylist">我的课程</string>
+    <string name="mynotification">我的通知</string>
     <string name="notlogin">未登录</string>
     <string name="back">返回</string>
     <string name="search_icon">搜索按钮</string>
@@ -39,5 +40,8 @@
     <string name="post">发表帖子</string>
     <string name="mylikes">我的收藏</string>
     <string name="mypost">我的帖子</string>
+    <string name="create">创建课程</string>
     <string name="postcontent">评论</string>
+    <string name="create_course">创建课程</string>
+    <string name="icode">邀请码</string>
 </resources>

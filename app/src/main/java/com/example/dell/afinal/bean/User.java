@@ -24,6 +24,8 @@ public class User extends BmobUser {
 
     private BmobRelation likes;   // 存储用户收藏的所有帖子
 
+    private BmobRelation notifications;  // 存储用户已读的所有系统通知
+
     public BmobRelation getCourses() {
         return courses;
     }
@@ -80,4 +82,11 @@ public class User extends BmobUser {
         this.likes = likes;
     }
 
+    public BmobRelation getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(BmobRelation notifications) {
+        this.notifications = notifications;
+    }
 }

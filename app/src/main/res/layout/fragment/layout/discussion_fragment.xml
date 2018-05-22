@@ -39,4 +39,11 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/no_course_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="你还没有加入课程,暂时无法参与讨论"/>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -20,9 +20,12 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.Comment;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +103,6 @@ public class PostInfoActivity extends AppCompatActivity {
             content.setText(bundle.getString("postContent", "——"));
             date.setText(bundle.getString("date", ""));
             postId = bundle.getString("postId", "");
-            /*loadPostImage();*/
             getAuthorData(bundle.getString("authorId", ""));
             readPostLikes();
         }
@@ -190,6 +192,7 @@ public class PostInfoActivity extends AppCompatActivity {
         } else {
             like();
         }
+        EventBus.getDefault().post(new MessageEvent("like"));
     }
 
     // 取消收藏
