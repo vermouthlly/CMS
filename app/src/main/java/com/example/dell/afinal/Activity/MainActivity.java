@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
+    //双击菜单退出
     @Override
     public void onBackPressed() {
         if (!quitFlag) {
