@@ -79,7 +79,8 @@
         <EditText
             android:id="@+id/ed_class_capacity"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout

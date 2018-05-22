@@ -136,6 +136,9 @@ public class CourseFragment extends Fragment {
                                     String class_capacity = ed_class_capacity.getText().toString();
                                     int capacity = Integer.parseInt(class_capacity);
                                     String code = ed_code.getText().toString();
+                                    if("".equals(name) || "".equals(time) || "".equals(location) || "".equals(teacher) || "".equals(code) || "".equals(class_capacity)) {
+                                        ToastUtil.toast(getActivity(), "课程信息不能为空！");
+                                    }
                                     Course course = new Course();
                                     course.setCourseName(name);
                                     course.setCourseTime(time);
