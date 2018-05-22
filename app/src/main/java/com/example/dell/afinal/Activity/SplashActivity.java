@@ -46,6 +46,7 @@ public class SplashActivity extends AppCompatActivity {
                         "                      ——哈利法克斯"
         };
         int random = new Random().nextInt(tips.length);
+
         tv.setText(tips[random]);
         new Handler().postDelayed(new Runnable() {
             @Override
