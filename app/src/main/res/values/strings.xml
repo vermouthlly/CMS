@@ -44,4 +44,9 @@
     <string name="postcontent">评论</string>
     <string name="create_course">创建课程</string>
     <string name="icode">邀请码</string>
+    <string name="send_message">发布通知</string>
+    <string name="message_title">通知标题</string>
+    <string name="message_time">通知时间</string>
+    <string name="message_content">通知内容</string>
+    <string name="content_tip">请输入通知内容</string>
 </resources>

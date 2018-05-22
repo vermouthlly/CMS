@@ -158,7 +158,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     // 检查用户是否已经选择该课程
     public void checkDuplication() {
         BmobQuery<Course> query = new BmobQuery<>();
-        User user = BmobUser.getCurrentUser(User.class);
+        final User user = BmobUser.getCurrentUser(User.class);
         query.addWhereRelatedTo("courses", new BmobPointer(user));
         query.findObjects(new FindListener<Course>() {
             @Override
@@ -169,10 +169,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                         courseIds.add(course.getObjectId());
                     }
                     // 该课程未选择
-                    if (!courseIds.contains(courseId)) {
+                    if (!courseIds.contains(courseId) && user.getIdentity().equals("student")) {
                         joinCourse.setText("加入课程");
-                    } else {
+                    } else if(courseIds.contains(courseId) && user.getIdentity().equals("student")){
                         joinCourse.setText("退出课程");
+                    }else if(!courseIds.contains(courseId) && user.getIdentity().equals("teacher")){
+                        joinCourse.setText("发布通知");
                     }
                 } else {
                     netWorkExceptionHint();
@@ -187,7 +189,11 @@ public class CourseDetailActivity extends AppCompatActivity {
         hideProgress();
         ToastUtil.toast(CourseDetailActivity.this, "无法读取课程信息,请检查你的网络");
     }
-
+    //发布通知
+    public  void sendMessage(){
+        Intent intent = new Intent(CourseDetailActivity.this,SendMessage.class);
+        startActivity(intent);
+    }
     // 根据按钮状态判定点击按钮的行为：选课或退课
     public void addOrQuitCourse() {
         if (joinCourse.getText().toString().equals("加入课程")) {
@@ -195,8 +201,10 @@ public class CourseDetailActivity extends AppCompatActivity {
                 showDialogWithInput();
             else
                 ToastUtil.toast(CourseDetailActivity.this, "已达课程上限,无法加入课程");
-        } else {
+        } else if(joinCourse.getText().toString().equals("退出课程")){
             showQuitCourseDialog();
+        }else if(joinCourse.getText().toString().equals("发布通知")){
+            sendMessage();
         }
     }
 

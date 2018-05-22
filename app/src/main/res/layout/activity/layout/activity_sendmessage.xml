@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--外部引入标题栏-->
+    <include
+        android:id="@+id/detail_toolbar"
+        layout="@layout/message_toolbar" />
+
+
+    <LinearLayout
+        android:id="@+id/course_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/margin_tool_bar"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/item_tag"
+                android:text="@string/message_title" />
+
+            <EditText
+                android:id="@+id/title_input"
+                style="@style/item_content"
+                android:text="@string/message_title" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/coursedetail_item">
+
+            <TextView
+                android:id="@+id/time"
+                style="@style/item_tag"
+                android:text="@string/message_time" />
+
+            <EditText
+                android:id="@+id/time_input"
+                style="@style/item_content"
+                android:text="@string/message_time" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/message_content">
+
+            <TextView
+                android:id="@+id/content"
+                style="@style/item_tag"
+                android:text="@string/message_content" />
+
+            <EditText
+                android:id="@+id/content_input"
+                style="@style/message_input"
+                android:text="@string/content_tip" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/join_course"
+            style="@style/create_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/textview_bg_select"
+            android:gravity="center"
+            android:text="@string/send_message"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

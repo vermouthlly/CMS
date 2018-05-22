@@ -62,6 +62,20 @@
         <item name="android:layout_marginTop">25dp</item>
         <item name="android:layout_marginStart">30dp</item>
     </style>
+    <style name="message_input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:gravity">top</item>
+        <item name="android:background">@drawable/message</item>
+    </style>
+    <style name="message_content">
+        <item name="android:layout_marginTop">25dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">200dp</item>
+    </style>
     <style name="margin_tool_bar">
         <item name="android:paddingTop">40dp</item>
     </style>
