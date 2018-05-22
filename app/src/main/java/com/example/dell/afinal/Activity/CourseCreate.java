@@ -15,7 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.dell.afinal.Fragment.CourseFragment;
 import com.example.dell.afinal.R;
+import com.example.dell.afinal.Utils.ToastUtil;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +29,7 @@ import butterknife.Unbinder;
 
 public class CourseCreate extends AppCompatActivity {
 
-    @BindView(R.id.course_detail) LinearLayout courseDetailTag;  // 课程详情最外层布局
+
     @BindView(R.id.cname) TextView nameTag;                      // 课程名tag
     @BindView(R.id.cdescription) TextView desTag;                // 课程简介tag
     @BindView(R.id.ctime) TextView timeTag;                      // 上课时间tag
@@ -38,7 +43,7 @@ public class CourseCreate extends AppCompatActivity {
     @BindView(R.id.course_capacity) EditText courseCapacity;       // 课程容量content
     @BindView(R.id.student_num) EditText courseCode;               // 邀请码content
     @BindView(R.id.back) ImageView backButton;                     // 返回按钮
-    @BindView(R.id.join_course_pro) ProgressBar progressBar;       // 加入课程进度条
+
     @BindView(R.id.join_course) Button CreateCourse;                 // 加入课程按钮
 
     private Unbinder unbinder;
@@ -59,6 +64,36 @@ public class CourseCreate extends AppCompatActivity {
         String CPlace = coursePlace.getText().toString();
         String Ccapacity = courseCapacity.getText().toString();
         String Ccode = courseName.getText().toString();
+        Pattern p = Pattern.compile("[0-9]{8}");
+        Matcher result1 = p.matcher(Ccapacity);
+        Matcher result2 = p.matcher(Ccode);
+        if(Cname.isEmpty()){
+            ToastUtil.toast(CourseCreate.this, "课程名称不能为空");
+
+        }else if(CDescription.isEmpty()){
+            ToastUtil.toast(CourseCreate.this, "课程描述不能为空");
+
+        }else if(CTime.isEmpty()){
+            ToastUtil.toast(CourseCreate.this, "课程时间不能为空");
+
+        }else if(CPlace.isEmpty()){
+            ToastUtil.toast(CourseCreate.this, "课程地点不能为空");
+
+        }else if(Ccapacity.isEmpty()){
+            ToastUtil.toast(CourseCreate.this, "课程容量不能为空");
+
+        }else if(Ccode.isEmpty()){
+            ToastUtil.toast(CourseCreate.this, "课程邀请码不能为空");
+
+        }else if(!result1.matches()){
+            ToastUtil.toast(CourseCreate.this, "课程容量应为数字");
+
+        }else  if(!result2.matches()){
+            ToastUtil.toast(CourseCreate.this, "课程邀请码应为数字");
+
+        }else{
+            //send
+        }
     }
     @OnClick({R.id.join_course,R.id.back})
     public void onViewClicked(View view) {
@@ -67,9 +102,8 @@ public class CourseCreate extends AppCompatActivity {
                 check();
                 break;
             case R.id.back:
-                CourseCreate.this.finish();
+//                have problem
                 break;
-                default: break;
 
         }
     }
