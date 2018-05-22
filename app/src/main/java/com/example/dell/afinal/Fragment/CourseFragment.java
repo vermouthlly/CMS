@@ -2,11 +2,13 @@ package com.example.dell.afinal.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.dell.afinal.Activity.CourseCreate;
+import com.example.dell.afinal.Activity.LoginActivity;
+import com.example.dell.afinal.Activity.MainActivity;
 import com.example.dell.afinal.Adapter.CourseListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
@@ -32,6 +37,8 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -41,14 +48,14 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class CourseFragment extends Fragment {
     private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
-    private ProgressBar progressBar;           // 进度条
-    private Toolbar toolbar;                   // 标题栏
-    private MaterialSearchView searchView;     // 搜索框
-    private SwipeRefreshLayout refreshLayout;  // 下拉刷新
-    private RecyclerView recyclerView;         // 课程列表
-    private Button create;                     //教师增加课程
+    private ContentLoadingProgressBar progressBar;   // 进度条
+    private Toolbar toolbar;                         // 标题栏
+    private MaterialSearchView searchView;           // 搜索框
+    private SwipeRefreshLayout refreshLayout;        // 下拉刷新
+    private RecyclerView recyclerView;               // 课程列表
+    private Button create;                           // 教师增加课程
 
-    private CourseListAdapter adapter;         // 课程适配器
+    private CourseListAdapter adapter;               // 课程适配器
     private List<Course> courseList = new ArrayList<>();
     public static final int DATA_READY = 1;
     public static final int LOAD_FAILED = 2;
@@ -60,14 +67,13 @@ public class CourseFragment extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DATA_READY:
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.hide();
                     refreshLayout.setRefreshing(false);
                     ToastUtil.toast(getContext(), "所有课程加载完成");
                     break;
                 case LOAD_FAILED:
-                    progressBar.setVisibility(View.INVISIBLE);
                     refreshLayout.setRefreshing(false);
-                    ToastUtil.toast(getContext(), "获取课程列表失败, 请刷新重试");
+                    ToastUtil.toast(getContext(), "获取课程列表失败, 请检查你的网络后刷新重试");
                 default: break;
             }
         }
@@ -80,7 +86,6 @@ public class CourseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*Bmob.initialize(getContext(), "430bfefb7fad055dc47f06a0ba6f73e4");*/
         setHasOptionsMenu(true);     // 设置显示菜单
     }
 
@@ -92,7 +97,6 @@ public class CourseFragment extends Fragment {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
             bindViews(mView);
             generateCourseList();        // 这里完成数据加载
-            progressBar.setVisibility(View.VISIBLE);
         } else {
             ViewGroup parent = (ViewGroup) mView.getParent();
             if (parent != null)
@@ -106,13 +110,16 @@ public class CourseFragment extends Fragment {
         progressBar = mView.findViewById(R.id.is_loading);
         toolbar = mView.findViewById(R.id.toolbar);
         searchView = mView.findViewById(R.id.search_view);
+        initSearchView();
         refreshLayout = mView.findViewById(R.id.swipe_refresh);
         create = mView.findViewById(R.id.create_course);
+
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 User user = BmobUser.getCurrentUser(User.class);
                 if(user.getIdentity().equals("teacher")) {
+
                     LayoutInflater inflater = LayoutInflater.from(getActivity());
                     View layout = inflater.inflate(R.layout.dialoglayout, null);
                     final EditText ed_name= layout.findViewById(R.id.ed_name); //变量初始化
@@ -134,11 +141,17 @@ public class CourseFragment extends Fragment {
                                     String location = ed_location.getText().toString();
                                     String teacher = ed_teacher.getText().toString();
                                     String class_capacity = ed_class_capacity.getText().toString();
-                                    int capacity = Integer.parseInt(class_capacity);
-                                    String code = ed_code.getText().toString();
-                                    if("".equals(name) || "".equals(time) || "".equals(location) || "".equals(teacher) || "".equals(code) || "".equals(class_capacity)) {
-                                        ToastUtil.toast(getActivity(), "课程信息不能为空！");
+
+                                    Pattern pnumber = Pattern.compile("[0-9]*");
+                                    Matcher result = pnumber.matcher(class_capacity);
+                                    int capacity=0;
+                                    if(class_capacity.isEmpty()){
+                                        capacity=0;
+                                    }else if(result.matches()){
+                                        capacity = Integer.parseInt(class_capacity);
                                     }
+
+                                    String code = ed_code.getText().toString();
                                     Course course = new Course();
                                     course.setCourseName(name);
                                     course.setCourseTime(time);
@@ -146,23 +159,23 @@ public class CourseFragment extends Fragment {
                                     course.setCourseDescription(teacher);
                                     course.setCourseCapacity(capacity);
                                     course.setInvitationCode(code);
-
-                                    course.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if (e == null) {
-                                                ToastUtil.toast(getActivity(), "创建成功");
-                                            } else {
-                                                ToastUtil.toast(getActivity(), "创建失败");
+                                        course.save(new SaveListener<String>() {
+                                            @Override
+                                            public void done(String s, BmobException e) {
+                                                if (e == null) {
+                                                    ToastUtil.toast(getActivity(), "创建成功");
+                                                } else {
+                                                    ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+
+
                                 }
                             }).show();
                 }
             }
         });
-        initSearchView();
     }
 
     @Override
@@ -251,7 +264,7 @@ public class CourseFragment extends Fragment {
             if(user.getIdentity().equals("teacher")) {
                 create.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             ToastUtil.toast(getActivity(), "您未登录，请先登录！");
         }
         BmobQuery<Course> query = new BmobQuery<>();

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.example.dell.afinal.bean.Course;
 
 import com.example.dell.afinal.Fragment.CourseFragment;
 import com.example.dell.afinal.R;
@@ -26,7 +27,55 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import com.example.dell.afinal.Activity.CourseCreate;
+import com.example.dell.afinal.Activity.LoginActivity;
+import com.example.dell.afinal.Activity.MainActivity;
+import com.example.dell.afinal.Adapter.CourseListAdapter;
+import com.example.dell.afinal.R;
+import com.example.dell.afinal.Utils.ToastUtil;
+import com.example.dell.afinal.bean.Course;
+import com.example.dell.afinal.bean.User;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 public class CourseCreate extends AppCompatActivity {
 
 
@@ -55,7 +104,19 @@ public class CourseCreate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_course);
-
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //setResult(1);
+                //finish();
+            }
+        });
+        CreateCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               check();
+            }
+        });
     }
     public  void check(){
         String Cname = courseName.getText().toString();
@@ -91,20 +152,30 @@ public class CourseCreate extends AppCompatActivity {
         }else  if(!result2.matches()){
             ToastUtil.toast(CourseCreate.this, "课程邀请码应为数字");
 
-        }else{
-            //send
+        } else{
+            Course course = new Course();
+            course.setCourseName(Cname);
+            course.setCourseTime(CTime);
+            course.setCoursePlace(CPlace);
+            course.setCourseDescription(CDescription);
+            int capacity = Integer.parseInt(Ccapacity);
+            course.setCourseCapacity(capacity);
+            course.setInvitationCode(Ccode);
+            course.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        ToastUtil.toast(CourseCreate.this, "创建成功");
+                    } else {
+                        ToastUtil.toast(CourseCreate.this, "创建失败,请检查您的网络");
+                    }
+                }
+            });
         }
     }
-    @OnClick({R.id.join_course,R.id.back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.join_course:
-                check();
-                break;
-            case R.id.back:
-//                have problem
-                break;
 
-        }
+
+    public void onViewClicked() {
+
     }
 }
