@@ -78,4 +78,8 @@ public class User extends BmobUser {
     public void setSysNotifications(BmobRelation sysNotifications) {
         this.sysNotifications = sysNotifications;
     }
+
+    public void setCourseNotifications(BmobRelation courseNotifications) {
+        this.courseNotifications = courseNotifications;
+    }
 }

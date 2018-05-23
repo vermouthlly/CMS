@@ -19,11 +19,32 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/no_content_hint"
+    <LinearLayout
+        android:id="@+id/no_content_field"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/no_content_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:id="@+id/history"
+            android:background="@drawable/textview_bg_select"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:text="查看历史消息"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/progress_bar"

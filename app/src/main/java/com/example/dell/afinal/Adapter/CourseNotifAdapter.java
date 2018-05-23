@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.dell.afinal.Activity.HistoryNotificationActivity;
+import com.example.dell.afinal.Activity.MyNotificationActivity;
+import com.example.dell.afinal.Fragment.CourseNotificationFragment;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
@@ -32,6 +35,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.ViewHolder> {
     private List<CourseNotification> notifications;
     private Context mContext;
+    private View mView;
 
     public CourseNotifAdapter(List<CourseNotification> list) {
         notifications = list;
@@ -42,9 +46,14 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.notification_item, parent,
-                false);
-        final ViewHolder viewHolder = new ViewHolder(view);
+        if (mContext instanceof MyNotificationActivity) {
+            mView = LayoutInflater.from(mContext).inflate(R.layout.notification_item, parent,
+                    false);
+        } else if (mContext instanceof HistoryNotificationActivity) {
+            mView = LayoutInflater.from(mContext).inflate(R.layout.history_item, parent,
+                    false);
+        }
+        final ViewHolder viewHolder = new ViewHolder(mView);
         viewHolder.readTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,12 +65,14 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
 
     // 点击标记已读
     private void onReadTagClicked(final ViewHolder holder) {
-        /*User user = BmobUser.getCurrentUser(User.class);
+        if (holder.readTag.getText().toString().equals("已读"))
+            return;
+        User user = BmobUser.getCurrentUser(User.class);
         BmobRelation relation = new BmobRelation();
         CourseNotification notification = new CourseNotification();
         notification.setObjectId(holder.id);
         relation.add(notification);
-        user.setNotifications(relation);
+        user.setCourseNotifications(relation);
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -71,7 +82,7 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
                     Log.e("提交标记失败:", e.toString());
                 }
             }
-        });*/
+        });
     }
 
     // 提交成功, 提醒更新消息列表, 不再显示已读消息

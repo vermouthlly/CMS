@@ -8,11 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.dell.afinal.Activity.HistoryNotificationActivity;
+import com.example.dell.afinal.Activity.MyNotificationActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.SystemNotification;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -24,6 +29,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class SystemNotifAdapter extends RecyclerView.Adapter<SystemNotifAdapter.ViewHolder> {
     private List<SystemNotification> notifications;
     private Context mContext;
+    private View mView;
 
     public SystemNotifAdapter(List<SystemNotification> list) {
         notifications = list;
@@ -34,9 +40,14 @@ public class SystemNotifAdapter extends RecyclerView.Adapter<SystemNotifAdapter.
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.notification_item, parent,
-                false);
-        final ViewHolder viewHolder = new ViewHolder(view);
+        if (mContext instanceof MyNotificationActivity) {
+            mView = LayoutInflater.from(mContext).inflate(R.layout.notification_item, parent,
+                    false);
+        } else if (mContext instanceof HistoryNotificationActivity) {
+            mView = LayoutInflater.from(mContext).inflate(R.layout.history_item, parent,
+                    false);
+        }
+        final ViewHolder viewHolder = new ViewHolder(mView);
         viewHolder.readTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,6 +59,8 @@ public class SystemNotifAdapter extends RecyclerView.Adapter<SystemNotifAdapter.
 
     // 点击标记已读
     private void onReadTagClicked(final ViewHolder holder) {
+        if (holder.readTag.getText().toString().equals("已读"))
+            return;
         User user = BmobUser.getCurrentUser(User.class);
         BmobRelation relation = new BmobRelation();
         SystemNotification notification = new SystemNotification();

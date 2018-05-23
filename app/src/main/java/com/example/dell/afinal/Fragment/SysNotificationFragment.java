@@ -1,5 +1,6 @@
 package com.example.dell.afinal.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,8 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.dell.afinal.Activity.HistoryNotificationActivity;
 import com.example.dell.afinal.Adapter.SystemNotifAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
@@ -27,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -45,8 +50,12 @@ public class SysNotificationFragment extends Fragment {
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;
+    @BindView(R.id.no_content_field)
+    LinearLayout noContent;
     @BindView(R.id.no_content_hint)
     TextView noContentHint;
+    @BindView(R.id.history)
+    Button history;
 
     private List<SystemNotification> notifications = new ArrayList<>();
 
@@ -143,11 +152,30 @@ public class SysNotificationFragment extends Fragment {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         if (list.size() == 0) {
-            noContentHint.setVisibility(View.VISIBLE);
+            noContent.setVisibility(View.VISIBLE);
             noContentHint.setText("暂时没有新的通知~");
         } else {
-            noContentHint.setVisibility(View.INVISIBLE);
+            noContent.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @OnClick({R.id.history})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.history:
+                checkHistoryNotification();
+                break;
+        }
+    }
+
+    // 查看历史消息
+    private void checkHistoryNotification() {
+        User user = BmobUser.getCurrentUser(User.class);
+        String userId = user.getObjectId();
+        Intent intent = new Intent(getActivity(), HistoryNotificationActivity.class);
+        intent.putExtra("notification_type", "system");
+        intent.putExtra("user_id", userId);
+        getActivity().startActivity(intent);
     }
 
     // 下拉刷新
@@ -159,7 +187,6 @@ public class SysNotificationFragment extends Fragment {
             }
         });
     }
-
 
     @Override
     public void onDestroyView() {

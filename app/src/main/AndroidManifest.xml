@@ -44,12 +44,11 @@
         <activity android:name=".Activity.NewPostActivity" />
         <activity android:name=".Activity.MyPostActivity" />
         <activity android:name=".Activity.MyLikesActivity" />
-        <activity android:name=".Activity.CourseDiscussionActivity"/>
-        <activity android:name=".Activity.MyNotificationActivity"/>
-        <activity android:name=".Activity.CourseCreate"/>
-        <activity android:name=".Activity.SendMessage"/>
-
-
+        <activity android:name=".Activity.CourseDiscussionActivity" />
+        <activity android:name=".Activity.MyNotificationActivity" />
+        <activity android:name=".Activity.CourseCreate" />
+        <activity android:name=".Activity.SendMessage" />
+        <activity android:name=".Activity.HistoryNotificationActivity"></activity>
     </application>
 
 </manifest>

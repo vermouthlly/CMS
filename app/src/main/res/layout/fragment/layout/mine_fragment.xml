@@ -118,7 +118,7 @@
                     android:id="@+id/noti_hint_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="条未读通知"/>
+                    android:text="条新通知"/>
 
             </LinearLayout>
 
