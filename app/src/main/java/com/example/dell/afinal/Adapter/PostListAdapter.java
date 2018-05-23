@@ -3,7 +3,6 @@ package com.example.dell.afinal.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import com.example.dell.afinal.Activity.PostInfoActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
+import com.example.dell.afinal.bean.Comment;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
@@ -23,7 +23,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -98,12 +97,45 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         });
     }
 
-    // 读取点赞数成功, 判断点击图标是点赞还是取消点赞
-    private void loadZanDataSuccess(List<User> list, ViewHolder viewHolder) {
+    // 读取点赞记录
+    private void loadZanData(final ViewHolder viewHolder) {
+        BmobQuery<User> query = new BmobQuery<>();
+        final Post post = new Post();
+        post.setObjectId(viewHolder.postId);
+        query.addWhereRelatedTo("zan", new BmobPointer(post));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e == null) {
+                    setZanIcon(list, viewHolder);
+                } else {
+                    Log.e("读取点赞数失败:", e.toString());
+                }
+            }
+        });
+    }
+
+    // 检查是否曾经点赞
+    private boolean checkIfAlreadyLiked(List<User> list) {
         User user = BmobUser.getCurrentUser(User.class);
-        List<String> idList = new ArrayList<>();
-        for (User u : list) idList.add(u.getObjectId());
-        if (!idList.contains(user.getObjectId())) {
+        for (User u  : list)
+            if (u.getObjectId().equals(user.getObjectId()))
+                return true;
+        return false;
+    }
+
+    // 根据是否曾经点赞的结果设置初始的点赞图标
+    private void setZanIcon(List<User> list, final ViewHolder holder) {
+        if (!checkIfAlreadyLiked(list)) {
+            holder.zan.setImageResource(R.mipmap.ic_like);
+        } else {
+            holder.zan.setImageResource(R.mipmap.ic_liked);
+        }
+    }
+
+    // 判断点击图标是点赞还是取消点赞
+    private void loadZanDataSuccess(List<User> list, ViewHolder viewHolder) {
+        if (!checkIfAlreadyLiked(list)) {
             addZan(viewHolder);
         } else {
             cancelZan(viewHolder);
@@ -122,9 +154,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    int zanNum = Integer.parseInt(viewHolder.zanNum.getText().toString());
-                    zanNum += 1;
-                    viewHolder.zanNum.setText(String.valueOf(zanNum));
+                    zanSetting("addZan", viewHolder);
                 } else {
                     ToastUtil.toast(mContext, "操作失败，请检查你的网络或稍后再试");
                     Log.e("操作失败:", e.toString());
@@ -145,15 +175,28 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    int zanNum = Integer.parseInt(viewHolder.zanNum.getText().toString());
-                    zanNum -= 1;
-                    viewHolder.zanNum.setText(String.valueOf(zanNum));
+                    zanSetting("cancelZan", viewHolder);
                 } else {
                     ToastUtil.toast(mContext, "操作失败，请检查你的网络或稍后再试");
                     Log.e("操作失败:", e.toString());
                 }
             }
         });
+    }
+
+    // 根据点赞或者取消赞更改相关UI
+    private void zanSetting(String op, final ViewHolder viewHolder) {
+        if (op.equals("addZan")) {
+            int zanNum = Integer.parseInt(viewHolder.zanNum.getText().toString());
+            zanNum += 1;
+            viewHolder.zanNum.setText(String.valueOf(zanNum));
+            viewHolder.zan.setImageResource(R.mipmap.ic_liked);
+        } else if (op.equals("cancelZan")) {
+            int zanNum = Integer.parseInt(viewHolder.zanNum.getText().toString());
+            zanNum -= 1;
+            viewHolder.zanNum.setText(String.valueOf(zanNum));
+            viewHolder.zan.setImageResource(R.mipmap.ic_like);
+        }
     }
 
     @Override
@@ -170,6 +213,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         } else {
             Picasso.with(mContext).load(R.mipmap.blank_holder).into(holder.postImg);
         }
+        loadZanData(holder);
         getAndSetZanNum(holder);
         getAuthorData(holder.authorId, holder);
     }

@@ -10,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dell.afinal.Adapter.NoticeFragmentAdapter;
-import com.example.dell.afinal.Fragment.AllPostFragment;
 import com.example.dell.afinal.Fragment.CourseNotificationFragment;
-import com.example.dell.afinal.Fragment.PopularPostFragment;
 import com.example.dell.afinal.Fragment.SysNotificationFragment;
 import com.example.dell.afinal.R;
 

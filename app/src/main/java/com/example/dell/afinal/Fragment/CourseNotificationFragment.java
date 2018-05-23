@@ -14,12 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.dell.afinal.Adapter.CourseNotifAdapter;
-import com.example.dell.afinal.Adapter.NotificationListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.CourseNotification;
-import com.example.dell.afinal.bean.SystemNotification;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class CourseNotificationFragment extends Fragment {
         return mView;
     }
 
-    // 从系统消息列表中读取所有的消息
+    // 从课程消息列表中读取所有的消息
     private void loadNotification() {
         BmobQuery<CourseNotification> query = new BmobQuery<>();
         query.order("-createdAt");
@@ -90,7 +91,7 @@ public class CourseNotificationFragment extends Fragment {
 
     // 读取失败
     private void onLoadFailed(BmobException e) {
-        Log.e("读取系统消息失败:", e.toString());
+        Log.e("读取课程消息失败:", e.toString());
         ToastUtil.toast(getContext(), "无法读取系统消息, 请检查你的网络后刷新重试");
         refreshLayout.setRefreshing(false);
     }
@@ -124,6 +125,14 @@ public class CourseNotificationFragment extends Fragment {
             }
             if (j == read.size()) notifications.add(all.get(i));
         }
+        notifyMineFragment();
+    }
+
+    // 提醒MineFragment更新未读通知数
+    private void notifyMineFragment() {
+        String unread = Integer.toString(notifications.size());
+        MessageEvent event = new MessageEvent(unread);
+        EventBus.getDefault().post(event);
     }
 
     // 生成通知列表

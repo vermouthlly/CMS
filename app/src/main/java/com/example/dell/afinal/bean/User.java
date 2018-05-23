@@ -2,7 +2,6 @@ package com.example.dell.afinal.bean;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 
 // 用户类：继承BmobUser使用Bmob SDK的API实现用户的注册和登录
@@ -24,11 +23,9 @@ public class User extends BmobUser {
 
     private BmobRelation likes;   // 存储用户收藏的所有帖子
 
-    private BmobRelation notifications;  // 存储用户已读的所有系统通知
+    private BmobRelation sysNotifications;  // 存储用户已读的所有系统通知
 
-    public BmobRelation getCourses() {
-        return courses;
-    }
+    private BmobRelation courseNotifications; // 存储用户已读的所有课程通知
 
     public void setCourses(BmobRelation courses) {
         this.courses = courses;
@@ -74,19 +71,11 @@ public class User extends BmobUser {
         this.sex = sex;
     }
 
-    public BmobRelation getLikes() {
-        return likes;
-    }
-
     public void setLikes(BmobRelation likes) {
         this.likes = likes;
     }
 
-    public BmobRelation getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(BmobRelation notifications) {
-        this.notifications = notifications;
+    public void setSysNotifications(BmobRelation sysNotifications) {
+        this.sysNotifications = sysNotifications;
     }
 }

@@ -56,7 +56,7 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
 
     // 点击标记已读
     private void onReadTagClicked(final ViewHolder holder) {
-        User user = BmobUser.getCurrentUser(User.class);
+        /*User user = BmobUser.getCurrentUser(User.class);
         BmobRelation relation = new BmobRelation();
         CourseNotification notification = new CourseNotification();
         notification.setObjectId(holder.id);
@@ -71,7 +71,7 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
                     Log.e("提交标记失败:", e.toString());
                 }
             }
-        });
+        });*/
     }
 
     // 提交成功, 提醒更新消息列表, 不再显示已读消息

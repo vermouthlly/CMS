@@ -13,11 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.dell.afinal.Adapter.NotificationListAdapter;
+import com.example.dell.afinal.Adapter.SystemNotifAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.SystemNotification;
 import com.example.dell.afinal.bean.User;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +101,7 @@ public class SysNotificationFragment extends Fragment {
     private void loadUserReadList(final List<SystemNotification> all) {
         BmobQuery<SystemNotification> query = new BmobQuery<>();
         User user = BmobUser.getCurrentUser(User.class);
-        query.addWhereRelatedTo("notifications", new BmobPointer(user));
+        query.addWhereRelatedTo("sysNotifications", new BmobPointer(user));
         query.findObjects(new FindListener<SystemNotification>() {
             @Override
             public void done(List<SystemNotification> list, BmobException e) {
@@ -112,7 +115,7 @@ public class SysNotificationFragment extends Fragment {
         });
     }
 
-    // 检查该消息是否已读
+    // 检查该消息是否已读 ( 这个方法效率比较低下, 有待优化 )
     private void checkIfHasRead(List<SystemNotification> read, List<SystemNotification> all) {
         int i, j;
         notifications.clear();
@@ -123,12 +126,20 @@ public class SysNotificationFragment extends Fragment {
             }
             if (j == read.size()) notifications.add(all.get(i));
         }
+        notifyMineFragment();
+    }
+
+    // 提醒MineFragment更新未读通知数
+    private void notifyMineFragment() {
+        String unread = Integer.toString(notifications.size());
+        MessageEvent event = new MessageEvent(unread);
+        EventBus.getDefault().post(event);
     }
 
     // 生成通知列表
     private void createRecyclerView(List<SystemNotification> list) {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        NotificationListAdapter adapter = new NotificationListAdapter(list);
+        SystemNotifAdapter adapter = new SystemNotifAdapter(list);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         if (list.size() == 0) {

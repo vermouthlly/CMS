@@ -80,12 +80,6 @@
                     style="@style/my_item_text"
                     android:text="@string/mylist" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/ic_next"
-                    android:contentDescription="@string/mylist" />
-
             </LinearLayout>
 
             <View
@@ -109,11 +103,22 @@
                     style="@style/my_item_text"
                     android:text="@string/mynotification" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/ic_next"
-                    android:contentDescription="@string/mynotification" />
+                <TextView
+                    android:id="@+id/noti_num"
+                    android:background="@drawable/noti_shape"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginEnd="3dp"
+                    android:gravity="center"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/noti_hint_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="条未读通知"/>
 
             </LinearLayout>
 
@@ -138,12 +143,6 @@
                     style="@style/my_item_text"
                     android:text="@string/aboutus" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/ic_next"
-                    android:contentDescription="@string/aboutus" />
-
             </LinearLayout>
 
             <View
@@ -166,12 +165,6 @@
                 <TextView
                     style="@style/my_item_text"
                     android:text="@string/feedback" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/ic_next"
-                    android:contentDescription="@string/feedback" />
 
             </LinearLayout>
 

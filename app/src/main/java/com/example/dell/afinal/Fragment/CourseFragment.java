@@ -270,6 +270,7 @@ public class CourseFragment extends Fragment {
             ToastUtil.toast(getActivity(), "您未登录，请先登录！");
         }
         BmobQuery<Course> query = new BmobQuery<>();
+        query.order("-createdAt");
         query.findObjects(new FindListener<Course>() {
             @Override
             public void done(List<Course> list, BmobException e) {

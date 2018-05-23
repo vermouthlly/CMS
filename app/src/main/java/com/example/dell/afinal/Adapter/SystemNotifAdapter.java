@@ -11,28 +11,21 @@ import android.widget.TextView;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
-import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.SystemNotification;
 import com.example.dell.afinal.bean.User;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.ViewHolder> {
+public class SystemNotifAdapter extends RecyclerView.Adapter<SystemNotifAdapter.ViewHolder> {
     private List<SystemNotification> notifications;
     private Context mContext;
 
-    public NotificationListAdapter(List<SystemNotification> list) {
+    public SystemNotifAdapter(List<SystemNotification> list) {
         notifications = list;
     }
 
@@ -60,7 +53,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         SystemNotification notification = new SystemNotification();
         notification.setObjectId(holder.id);
         relation.add(notification);
-        user.setNotifications(relation);
+        user.setSysNotifications(relation);
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
