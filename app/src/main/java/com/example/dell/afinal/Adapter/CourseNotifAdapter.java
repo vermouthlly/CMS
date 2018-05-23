@@ -106,6 +106,7 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
         TextView readTag;             // 标为已读
         String id;                    // 通知的唯一标识
 
+
         ViewHolder(View itemView) {
             super(itemView);
             view = itemView;
