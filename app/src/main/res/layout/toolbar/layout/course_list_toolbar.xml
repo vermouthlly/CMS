@@ -26,8 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:paddingStart="40dp"
-                    android:paddingEnd="8dp"
+                    android:paddingLeft="40dp"
                     android:text="@string/course_list"
                     android:textColor="@color/white"
                     android:textSize="18sp"/>

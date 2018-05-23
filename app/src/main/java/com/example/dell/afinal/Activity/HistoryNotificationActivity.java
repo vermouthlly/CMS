@@ -41,6 +41,8 @@ public class HistoryNotificationActivity extends AppCompatActivity {
     TextView title;
     @BindView(R.id.back)
     ImageView back;
+    @BindView(R.id.no_content_hint)
+    TextView noContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,12 @@ public class HistoryNotificationActivity extends AppCompatActivity {
         SystemNotifAdapter adapter = new SystemNotifAdapter(list);
         recyclerView.setAdapter(adapter);
         progressBar.hide();
+        if (list.size() == 0) {
+            noContent.setText("历史消息记录为空~");
+            noContent.setVisibility(View.VISIBLE);
+        } else {
+            noContent.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void onLoadFailed(BmobException e) {
@@ -124,6 +132,12 @@ public class HistoryNotificationActivity extends AppCompatActivity {
         CourseNotifAdapter adapter = new CourseNotifAdapter(list);
         recyclerView.setAdapter(adapter);
         progressBar.hide();
+        if (list.size() == 0) {
+            noContent.setText("历史消息记录为空~");
+            noContent.setVisibility(View.VISIBLE);
+        } else {
+            noContent.setVisibility(View.INVISIBLE);
+        }
     }
 
     // 设置标题

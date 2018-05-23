@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +42,7 @@ public class SendMessage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         courseId = intent.getStringExtra("id");
 
         init();
@@ -69,7 +70,9 @@ public class SendMessage extends AppCompatActivity {
                 final User user = BmobUser.getCurrentUser(User.class);
                 String t = tit.getText().toString();
                 String c = content.getText().toString();
-                String timeMillis = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA).format(new Date());
+                if (!checkNotificationContent(c)) return;
+                String timeMillis = new SimpleDateFormat("yyyy年MM月dd日 HH:mm",
+                        Locale.CHINA).format(new Date());
                 CourseNotification cn = new CourseNotification();
                 cn.setCreateTime(timeMillis);
                 cn.setTitle(t);
@@ -81,7 +84,7 @@ public class SendMessage extends AppCompatActivity {
                     public void done(String s, BmobException e) {
                         if(e == null) {
                             ToastUtil.toast(SendMessage.this, "发布成功");
-                        }else {
+                        } else {
                             ToastUtil.toast(SendMessage.this, "发布失败");
                         }
                     }
@@ -89,5 +92,14 @@ public class SendMessage extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    // 通知正文内容作为空判断
+    private boolean checkNotificationContent(String content) {
+        if (TextUtils.isEmpty(content)) {
+            ToastUtil.toast(SendMessage.this, "通知正文不允许为空");
+            return false;
+        }
+        return true;
     }
 }

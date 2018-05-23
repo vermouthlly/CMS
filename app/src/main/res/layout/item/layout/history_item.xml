@@ -56,8 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/notification_title"
         android:layout_alignStart="@+id/notification_title"
-        android:text="这里是通知的正文"
-        android:maxLength="100"/>
+        android:text="这里是通知的正文" />
 
     <View
         android:layout_width="match_parent"
