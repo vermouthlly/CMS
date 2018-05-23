@@ -8,7 +8,7 @@ public class CourseNotification extends BmobObject {
 
     private String title;     // 通知的标题
     private String content;   // 通知的内容
-    private String date;      // 通知创建的日期
+    private String createTime;      // 通知创建的日期
     private String CourseId; // 课程ID,用户通知分区
     private User author;     //课程通知，即老师
     private  BmobRelation student; //待接收通知的学生
@@ -21,14 +21,16 @@ public class CourseNotification extends BmobObject {
         this.student = student;
     }
 
-    public  void  setCourseId(String ID){this.CourseId=ID;}
+    public void setCourseId(String ID){this.CourseId = ID;}
 
     public String getCourseId(){
         return this.CourseId;
     }
+
     public void setAuthor(User user){
         this.author = user;
     }
+
     public User getAuthor(){
         return this.author;
     }
@@ -49,11 +51,11 @@ public class CourseNotification extends BmobObject {
         this.content = content;
     }
 
-    public String getDate() {
-        return date;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.dell.afinal.Adapter.NoticeFragmentAdapter;
 import com.example.dell.afinal.Fragment.AllPostFragment;
+import com.example.dell.afinal.Fragment.CourseNotificationFragment;
 import com.example.dell.afinal.Fragment.PopularPostFragment;
 import com.example.dell.afinal.Fragment.SysNotificationFragment;
 import com.example.dell.afinal.R;
@@ -64,7 +65,7 @@ public class MyNotificationActivity extends AppCompatActivity {
     private void createViewPager() {
         List<Fragment> list = new ArrayList<>();
         list.add(SysNotificationFragment.getInstance());
-        list.add(SysNotificationFragment.getInstance());
+        list.add(CourseNotificationFragment.getInstance());
         NoticeFragmentAdapter adapter = new NoticeFragmentAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

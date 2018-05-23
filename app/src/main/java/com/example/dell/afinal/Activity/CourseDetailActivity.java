@@ -159,29 +159,52 @@ public class CourseDetailActivity extends AppCompatActivity {
     public void checkDuplication() {
         BmobQuery<Course> query = new BmobQuery<>();
         final User user = BmobUser.getCurrentUser(User.class);
-        query.addWhereRelatedTo("courses", new BmobPointer(user));
-        query.findObjects(new FindListener<Course>() {
-            @Override
-            public void done(List<Course> list, BmobException e) {
-                if (e == null) {
-                    List<String> courseIds = new ArrayList<>();
-                    for (Course course : list) {
-                        courseIds.add(course.getObjectId());
+        final String identity = user.getIdentity();
+        if(identity.equals("student")) {
+            query.addWhereRelatedTo("courses", new BmobPointer(user));
+            query.findObjects(new FindListener<Course>() {
+                @Override
+                public void done(List<Course> list, BmobException e) {
+                    if (e == null) {
+                        List<String> courseIds = new ArrayList<>();
+                        for (Course course : list) {
+                            courseIds.add(course.getObjectId());
+                        }
+                        // 该课程未选择
+                        if (!courseIds.contains(courseId) ) {
+                            joinCourse.setText("加入课程");
+                        } else if(courseIds.contains(courseId) ){
+                            joinCourse.setText("退出课程");
+                        }
+                    } else {
+                        netWorkExceptionHint();
+                        Log.e("读取用户课程信息失败:", e.toString());
                     }
-                    // 该课程未选择
-                    if (!courseIds.contains(courseId) && user.getIdentity().equals("student")) {
-                        joinCourse.setText("加入课程");
-                    } else if(courseIds.contains(courseId) && user.getIdentity().equals("student")){
-                        joinCourse.setText("退出课程");
-                    }else if(!courseIds.contains(courseId) && user.getIdentity().equals("teacher")){
-                        joinCourse.setText("发布通知");
-                    }
-                } else {
-                    netWorkExceptionHint();
-                    Log.e("读取用户课程信息失败:", e.toString());
                 }
-            }
-        });
+            });
+        }else if(identity.equals("teacher")) {
+            query.addWhereEqualTo("manager", new BmobPointer(user));
+            query.findObjects(new FindListener<Course>() {
+                @Override
+                public void done(List<Course> list, BmobException e) {
+                    if(e==null){
+                        List<String> courseIds = new ArrayList<>();
+                        for (Course course : list) {
+                            courseIds.add(course.getObjectId());
+                        }
+                        // 该课程未选择
+                        if (!courseIds.contains(courseId) ) {
+                            joinCourse.setVisibility(View.INVISIBLE);
+                        } else if(courseIds.contains(courseId) ){
+                            joinCourse.setText("发布通知");
+                        }
+                    }else{
+                        Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                    }
+                }
+            });
+        }
+
     }
 
     // 出现网络异常，需要给予用户足够的提示
@@ -189,11 +212,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         hideProgress();
         ToastUtil.toast(CourseDetailActivity.this, "无法读取课程信息,请检查你的网络");
     }
-    //发布通知
-    public  void sendMessage(){
-        Intent intent = new Intent(CourseDetailActivity.this,SendMessage.class);
-        startActivity(intent);
-    }
+
     // 根据按钮状态判定点击按钮的行为：选课或退课
     public void addOrQuitCourse() {
         if (joinCourse.getText().toString().equals("加入课程")) {
@@ -206,6 +225,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         }else if(joinCourse.getText().toString().equals("发布通知")){
             sendMessage();
         }
+    }
+
+    //发布通知
+    public void sendMessage(){
+        Intent intent = new Intent();
+        intent.putExtra("id", courseId);
+        intent.setClass(CourseDetailActivity.this, SendMessage.class);
+        startActivity(intent);
     }
 
     // 检查是否已达课程上限

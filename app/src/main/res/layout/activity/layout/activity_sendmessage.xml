@@ -1,73 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:cardBackgroundColor="?attr/backgroundBg"
+    tools:context="com.example.dell.afinal.Activity.SendMessage">
 
-    <!--外部引入标题栏-->
-    <include
-        android:id="@+id/detail_toolbar"
-        layout="@layout/message_toolbar" />
-
-
-    <LinearLayout
-        android:id="@+id/course_detail"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/margin_tool_bar"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary">
 
-        <LinearLayout style="@style/coursedetail_item">
+        <com.example.dell.afinal.View.RippleView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true">
 
-            <TextView
-                android:id="@+id/title"
-                style="@style/item_tag"
-                android:text="@string/message_title" />
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@mipmap/ic_back" />
+        </com.example.dell.afinal.View.RippleView>
 
-            <EditText
-                android:id="@+id/title_input"
-                style="@style/item_content"
-                android:text="@string/message_title" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/coursedetail_item">
-
-            <TextView
-                android:id="@+id/time"
-                style="@style/item_tag"
-                android:text="@string/message_time" />
-
-            <EditText
-                android:id="@+id/time_input"
-                style="@style/item_content"
-                android:text="@string/message_time" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/message_content">
-
-            <TextView
-                android:id="@+id/content"
-                style="@style/item_tag"
-                android:text="@string/message_content" />
-
-            <EditText
-                android:id="@+id/content_input"
-                style="@style/message_input"
-                android:text="@string/content_tip" />
-        </LinearLayout>
-
-
-        <Button
-            android:id="@+id/join_course"
-            style="@style/create_button"
-            android:layout_width="200dp"
+        <TextView
+            android:id="@+id/top_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/textview_bg_select"
-            android:gravity="center"
-            android:text="@string/send_message"
+            android:layout_centerInParent="true"
+            android:text="编辑通知"
             android:textColor="@color/white"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:textSize="18sp" />
 
-</android.support.constraint.ConstraintLayout>
+        <com.example.dell.afinal.View.RippleView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <Button
+                android:id="@+id/save_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@mipmap/ic_save" />
+        </com.example.dell.afinal.View.RippleView>
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="?attr/backgroundBg"
+        app:cardCornerRadius="6dp"
+        app:contentPadding="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/editor_shape"
+                android:ellipsize="end"
+                android:hint="请输入标题"
+                android:maxLines="1"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text"
+                android:textSize="16sp" />
+
+            <com.example.dell.afinal.View.LinedEditText
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/editor_shape"
+                android:gravity="top"
+                android:hint="请输入通知内容"
+                android:lineSpacingExtra="8dp"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

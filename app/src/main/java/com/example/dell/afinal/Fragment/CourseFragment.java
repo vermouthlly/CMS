@@ -2,7 +2,6 @@ package com.example.dell.afinal.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,11 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
-import com.example.dell.afinal.Activity.CourseCreate;
-import com.example.dell.afinal.Activity.LoginActivity;
-import com.example.dell.afinal.Activity.MainActivity;
 import com.example.dell.afinal.Adapter.CourseListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
@@ -45,6 +40,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseFragment extends Fragment {
     private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
@@ -117,9 +113,8 @@ public class CourseFragment extends Fragment {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = BmobUser.getCurrentUser(User.class);
+                final User user = BmobUser.getCurrentUser(User.class);
                 if(user.getIdentity().equals("teacher")) {
-
                     LayoutInflater inflater = LayoutInflater.from(getActivity());
                     View layout = inflater.inflate(R.layout.dialoglayout, null);
                     final EditText ed_name= layout.findViewById(R.id.ed_name); //变量初始化
@@ -150,27 +145,34 @@ public class CourseFragment extends Fragment {
                                     }else if(result.matches()){
                                         capacity = Integer.parseInt(class_capacity);
                                     }
-
                                     String code = ed_code.getText().toString();
-                                    Course course = new Course();
+                                    final Course course = new Course();
                                     course.setCourseName(name);
                                     course.setCourseTime(time);
                                     course.setCoursePlace(location);
                                     course.setCourseDescription(teacher);
                                     course.setCourseCapacity(capacity);
                                     course.setInvitationCode(code);
-                                        course.save(new SaveListener<String>() {
-                                            @Override
-                                            public void done(String s, BmobException e) {
-                                                if (e == null) {
-                                                    ToastUtil.toast(getActivity(), "创建成功");
-                                                } else {
-                                                    ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
-                                                }
+                                    course.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String s, BmobException e) {
+                                            if (e == null) {
+                                                course.setManager(user);
+                                                course.update(new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if (e == null) {
+                                                            ToastUtil.toast(getActivity(), "创建成功");
+                                                        } else {
+                                                            ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
                                             }
-                                        });
-
-
+                                        }
+                                    });
                                 }
                             }).show();
                 }
