@@ -149,45 +149,51 @@ public class CourseFragment extends Fragment {
                             String teacher = ed_teacher.getText().toString();
                             String class_capacity = ed_class_capacity.getText().toString();
 
-                            Pattern pnumber = Pattern.compile("[0-9]*");
-                            Matcher result = pnumber.matcher(class_capacity);
-                            int capacity = 0;
-                            if (class_capacity.isEmpty()){
-                                capacity = 0;
-                            } else if(result.matches()){
-                                capacity = Integer.parseInt(class_capacity);
-                            }
-                            String code = ed_code.getText().toString();
-                            final Course course = new Course();
-                            course.setCourseName(name);
-                            course.setCourseTime(time);
-                            course.setCoursePlace(location);
-                            course.setCourseDescription(teacher);
-                            course.setCourseCapacity(capacity);
-                            course.setInvitationCode(code);
+
                             if(!name.isEmpty() && !time.isEmpty() && !location.isEmpty() && !teacher.isEmpty()
                                     && !class_capacity.isEmpty()){
-                                course.save(new SaveListener<String>() {
-                                    @Override
-                                    public void done(String s, BmobException e) {
-                                        if (e == null) {
-                                            course.setManager(user);
-                                            course.update(new UpdateListener() {
-                                                @Override
-                                                public void done(BmobException e) {
-                                                    if (e == null) {
-                                                        ToastUtil.toast(getActivity(), "创建成功");
-                                                    } else {
-                                                        ToastUtil.toast(getActivity(), "创建失败," +
-                                                                "请检查您的网络");
+                                Pattern pnumber = Pattern.compile("[0-9]*");
+                                Matcher result = pnumber.matcher(class_capacity);
+                                int capacity = 0;
+                                if(result.matches()){
+                                    capacity = Integer.parseInt(class_capacity);
+                                }else {
+                                    capacity =0;
+                                }
+                                String code = ed_code.getText().toString();
+                                final Course course = new Course();
+                                course.setCourseName(name);
+                                course.setCourseTime(time);
+                                course.setCoursePlace(location);
+                                course.setCourseDescription(teacher);
+                                course.setCourseCapacity(capacity);
+                                course.setInvitationCode(code);
+                                if(capacity>=1){
+                                    course.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String s, BmobException e) {
+                                            if (e == null) {
+                                                course.setManager(user);
+                                                course.update(new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if (e == null) {
+                                                            ToastUtil.toast(getActivity(), "创建成功");
+                                                        } else {
+                                                            ToastUtil.toast(getActivity(), "创建失败," +
+                                                                    "请检查您的网络");
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        } else {
-                                            ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                                });
+                                            } else {
+                                                ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }else {
+                                    ToastUtil.toast(getActivity(), "创建失败,课程容量应为正整数");
+                                }
+
                             }else{
                                 ToastUtil.toast(getActivity(), "创建失败,课程信息不能为空");
                             }
