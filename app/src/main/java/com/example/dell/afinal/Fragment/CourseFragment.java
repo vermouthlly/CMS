@@ -165,27 +165,33 @@ public class CourseFragment extends Fragment {
                             course.setCourseDescription(teacher);
                             course.setCourseCapacity(capacity);
                             course.setInvitationCode(code);
-                            course.save(new SaveListener<String>() {
-                                @Override
-                                public void done(String s, BmobException e) {
-                                    if (e == null) {
-                                        course.setManager(user);
-                                        course.update(new UpdateListener() {
-                                            @Override
-                                            public void done(BmobException e) {
-                                                if (e == null) {
-                                                    ToastUtil.toast(getActivity(), "创建成功");
-                                                } else {
-                                                    ToastUtil.toast(getActivity(), "创建失败," +
-                                                            "请检查您的网络");
+                            if(!name.isEmpty() && !time.isEmpty() && !location.isEmpty() && !teacher.isEmpty()
+                                    && !class_capacity.isEmpty()){
+                                course.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if (e == null) {
+                                            course.setManager(user);
+                                            course.update(new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        ToastUtil.toast(getActivity(), "创建成功");
+                                                    } else {
+                                                        ToastUtil.toast(getActivity(), "创建失败," +
+                                                                "请检查您的网络");
+                                                    }
                                                 }
-                                            }
-                                        });
-                                    } else {
-                                        ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                            });
+                                        } else {
+                                            ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }else{
+                                ToastUtil.toast(getActivity(), "创建失败,课程信息不能为空");
+                            }
+
                         }
                     }).show();
         }
