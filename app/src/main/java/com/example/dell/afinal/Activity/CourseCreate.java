@@ -1,22 +1,13 @@
 package com.example.dell.afinal.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.dell.afinal.bean.Course;
-
-import com.example.dell.afinal.Fragment.CourseFragment;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 
@@ -24,61 +15,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-
-import com.example.dell.afinal.Activity.CourseCreate;
-import com.example.dell.afinal.Activity.LoginActivity;
-import com.example.dell.afinal.Activity.MainActivity;
-import com.example.dell.afinal.Adapter.CourseListAdapter;
-import com.example.dell.afinal.R;
-import com.example.dell.afinal.Utils.ToastUtil;
-import com.example.dell.afinal.bean.Course;
-import com.example.dell.afinal.bean.User;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+
 public class CourseCreate extends AppCompatActivity {
-
-
     @BindView(R.id.cname) TextView nameTag;                      // 课程名tag
     @BindView(R.id.cdescription) TextView desTag;                // 课程简介tag
     @BindView(R.id.ctime) TextView timeTag;                      // 上课时间tag
@@ -118,6 +59,7 @@ public class CourseCreate extends AppCompatActivity {
             }
         });
     }
+
     public  void check(){
         String Cname = courseName.getText().toString();
         String CDescription = courseDescription.getText().toString();
@@ -152,7 +94,7 @@ public class CourseCreate extends AppCompatActivity {
         }else  if(!result2.matches()){
             ToastUtil.toast(CourseCreate.this, "课程邀请码应为数字");
 
-        } else{
+        } else {
             Course course = new Course();
             course.setCourseName(Cname);
             course.setCourseTime(CTime);

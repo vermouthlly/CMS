@@ -10,26 +10,19 @@ import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.HistoryNotificationActivity;
 import com.example.dell.afinal.Activity.MyNotificationActivity;
-import com.example.dell.afinal.Fragment.CourseNotificationFragment;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.CourseNotification;
-import com.example.dell.afinal.bean.MessageEvent;
-import com.example.dell.afinal.bean.SystemNotification;
 import com.example.dell.afinal.bean.User;
-
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.ViewHolder> {
@@ -100,6 +93,44 @@ public class CourseNotifAdapter extends RecyclerView.Adapter<CourseNotifAdapter.
         holder.content.setText(notification.getContent());
         holder.date.setText(notification.getCreatedAt());
         holder.id = notification.getObjectId();
+        getAuthorData(notification.getAuthor().getObjectId(), holder);
+    }
+
+    // 根据作者id从服务器读取作者头像及用户名
+    private void getAuthorData(String id, final ViewHolder holder) {
+        BmobQuery<User> query = new BmobQuery<>();
+        query.getObject(id, new QueryListener<User>() {
+            @Override
+            public void done(User user, BmobException e) {
+                if (e == null) {
+                    onLoadUserSuccess(user, holder);
+                } else {
+                    onLoadUserFailed(holder);
+                    Log.e("读取用户资料失败:", e.toString());
+                }
+            }
+        });
+    }
+
+    // 成功读取用户数据
+    private void onLoadUserSuccess(User user, ViewHolder holder) {
+        if(user.getNickName() != null) {
+            holder.userName.setText(user.getNickName());
+        } else {
+            holder.userName.setText(user.getUsername());
+        }
+        if (user.getHeadFile() != null) {
+            Picasso.with(mContext).load(user.getHeadFile().getFileUrl())
+                    .into(holder.userImage);
+        } else {
+            Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
+        }
+    }
+
+    // 读取出现异常
+    private void onLoadUserFailed(ViewHolder holder) {
+        holder.userName.setText("匿名用户");
+        Picasso.with(mContext).load(R.mipmap.ic_head).into(holder.userImage);
     }
 
     @Override

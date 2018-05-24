@@ -11,7 +11,7 @@ public class CourseNotification extends BmobObject {
     private String createTime;       // 通知创建的日期
     private String CourseId;         // 课程ID,用户通知分区
     private User author;             // 课程通知，即老师
-    private BmobRelation student;   // 待接收通知的学生
+    private BmobRelation student;    // 待接收通知的学生
 
     public BmobRelation getStudent() {
         return student;

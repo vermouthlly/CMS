@@ -91,10 +91,11 @@
             android:id="@+id/code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="邀请码：" />
+            android:text="    邀请码：" />
         <EditText
             android:id="@+id/ed_code"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
 </LinearLayout>

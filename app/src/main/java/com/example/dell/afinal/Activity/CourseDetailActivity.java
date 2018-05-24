@@ -155,7 +155,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseDetailTag.setVisibility(View.VISIBLE);
     }
 
-    // 检查用户是否已经选择该课程
+    // 检查用户是否已经选择该课程 | 或者该门课程是否是当前用户(教师)创建
     public void checkDuplication() {
         BmobQuery<Course> query = new BmobQuery<>();
         final User user = BmobUser.getCurrentUser(User.class);
@@ -182,23 +182,23 @@ public class CourseDetailActivity extends AppCompatActivity {
                     }
                 }
             });
-        }else if(identity.equals("teacher")) {
+        } else if(identity.equals("teacher")) {
             query.addWhereEqualTo("manager", new BmobPointer(user));
             query.findObjects(new FindListener<Course>() {
                 @Override
                 public void done(List<Course> list, BmobException e) {
-                    if(e==null){
+                    if (e==null) {
                         List<String> courseIds = new ArrayList<>();
                         for (Course course : list) {
                             courseIds.add(course.getObjectId());
                         }
-                        // 该课程未选择
+                        // 该课程不是该教师创建, 不提供发布通知接口
                         if (!courseIds.contains(courseId) ) {
                             joinCourse.setVisibility(View.INVISIBLE);
                         } else if(courseIds.contains(courseId) ){
                             joinCourse.setText("发布通知");
                         }
-                    }else{
+                    } else {
                         Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
                     }
                 }

@@ -95,7 +95,6 @@ public class CourseNotificationFragment extends Fragment {
     // 读取成功
     private void onLoadSuccess(List<CourseNotification> list) {
         loadUserCourses(list);
-
         refreshLayout.setRefreshing(false);
         progressBar.hide();
     }

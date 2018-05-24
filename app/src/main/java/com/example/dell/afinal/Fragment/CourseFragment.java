@@ -92,7 +92,8 @@ public class CourseFragment extends Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
             bindViews(mView);
-            generateCourseList();        // 这里完成数据加载
+            showCreateInterfaceOrNot();
+            generateCourseList();
         } else {
             ViewGroup parent = (ViewGroup) mView.getParent();
             if (parent != null)
@@ -109,75 +110,85 @@ public class CourseFragment extends Fragment {
         initSearchView();
         refreshLayout = mView.findViewById(R.id.swipe_refresh);
         create = mView.findViewById(R.id.create_course);
+        onCreateButtonClickedListener();
+    }
 
+    // 教师创建课程
+    private void onCreateButtonClickedListener() {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final User user = BmobUser.getCurrentUser(User.class);
-                if(user.getIdentity().equals("teacher")) {
-                    LayoutInflater inflater = LayoutInflater.from(getActivity());
-                    View layout = inflater.inflate(R.layout.dialoglayout, null);
-                    final EditText ed_name= layout.findViewById(R.id.ed_name); //变量初始化
-                    final EditText ed_time=  layout.findViewById(R.id.ed_time);
-                    final EditText ed_location = layout.findViewById(R.id.ed_location);
-                    final EditText ed_teacher =  layout.findViewById(R.id.ed_teacher);
-                    final EditText ed_class_capacity = layout.findViewById(R.id.ed_class_capacity);
-                    final EditText ed_code=  layout.findViewById(R.id.ed_code);
-
-                    AlertDialog.Builder builder=  new AlertDialog.Builder(getActivity());
-                    builder.setTitle("创建课程")
-                            .setView(layout)
-                            .setNegativeButton("放弃修改", null)
-                            .setPositiveButton("保存修改", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String name = ed_name.getText().toString();
-                                    String time = ed_time.getText().toString();
-                                    String location = ed_location.getText().toString();
-                                    String teacher = ed_teacher.getText().toString();
-                                    String class_capacity = ed_class_capacity.getText().toString();
-
-                                    Pattern pnumber = Pattern.compile("[0-9]*");
-                                    Matcher result = pnumber.matcher(class_capacity);
-                                    int capacity=0;
-                                    if(class_capacity.isEmpty()){
-                                        capacity=0;
-                                    }else if(result.matches()){
-                                        capacity = Integer.parseInt(class_capacity);
-                                    }
-                                    String code = ed_code.getText().toString();
-                                    final Course course = new Course();
-                                    course.setCourseName(name);
-                                    course.setCourseTime(time);
-                                    course.setCoursePlace(location);
-                                    course.setCourseDescription(teacher);
-                                    course.setCourseCapacity(capacity);
-                                    course.setInvitationCode(code);
-                                    course.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if (e == null) {
-                                                course.setManager(user);
-                                                course.update(new UpdateListener() {
-                                                    @Override
-                                                    public void done(BmobException e) {
-                                                        if (e == null) {
-                                                            ToastUtil.toast(getActivity(), "创建成功");
-                                                        } else {
-                                                            ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
-                                                        }
-                                                    }
-                                                });
-                                            } else {
-                                                ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
-                                            }
-                                        }
-                                    });
-                                }
-                            }).show();
-                }
+                createCourse();
             }
         });
+    }
+
+    // 创建课程, 在可交互对话框中完成
+    private void createCourse() {
+        final User user = BmobUser.getCurrentUser(User.class);
+        if (user.getIdentity().equals("teacher")) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View layout = inflater.inflate(R.layout.dialoglayout, null);
+            final EditText ed_name= layout.findViewById(R.id.ed_name);
+            final EditText ed_time=  layout.findViewById(R.id.ed_time);
+            final EditText ed_location = layout.findViewById(R.id.ed_location);
+            final EditText ed_teacher =  layout.findViewById(R.id.ed_teacher);
+            final EditText ed_class_capacity = layout.findViewById(R.id.ed_class_capacity);
+            final EditText ed_code=  layout.findViewById(R.id.ed_code);
+
+            AlertDialog.Builder builder=  new AlertDialog.Builder(getActivity());
+            builder.setTitle("创建课程")
+                    .setView(layout)
+                    .setNegativeButton("取消创建", null)
+                    .setPositiveButton("确认创建", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String name = ed_name.getText().toString();
+                            String time = ed_time.getText().toString();
+                            String location = ed_location.getText().toString();
+                            String teacher = ed_teacher.getText().toString();
+                            String class_capacity = ed_class_capacity.getText().toString();
+
+                            Pattern pnumber = Pattern.compile("[0-9]*");
+                            Matcher result = pnumber.matcher(class_capacity);
+                            int capacity = 0;
+                            if (class_capacity.isEmpty()){
+                                capacity = 0;
+                            } else if(result.matches()){
+                                capacity = Integer.parseInt(class_capacity);
+                            }
+                            String code = ed_code.getText().toString();
+                            final Course course = new Course();
+                            course.setCourseName(name);
+                            course.setCourseTime(time);
+                            course.setCoursePlace(location);
+                            course.setCourseDescription(teacher);
+                            course.setCourseCapacity(capacity);
+                            course.setInvitationCode(code);
+                            course.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String s, BmobException e) {
+                                    if (e == null) {
+                                        course.setManager(user);
+                                        course.update(new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    ToastUtil.toast(getActivity(), "创建成功");
+                                                } else {
+                                                    ToastUtil.toast(getActivity(), "创建失败," +
+                                                            "请检查您的网络");
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                    }
+                                }
+                            });
+                        }
+                    }).show();
+        }
     }
 
     @Override
@@ -189,7 +200,7 @@ public class CourseFragment extends Fragment {
     }
 
     // 搭建RecyclerView
-    public void createRecyclerView() {
+    private void createRecyclerView() {
         recyclerView = mView.findViewById(R.id.course_list);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);  // 设置布局管理器
@@ -200,14 +211,14 @@ public class CourseFragment extends Fragment {
     }
 
     // 设置搜索框属性
-    public void initSearchView() {
+    private void initSearchView() {
         searchView.setVoiceSearch(false);
         searchView.setEllipsize(true);
         searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestion));
     }
 
     // 给搜索框添加监听事件
-    public void setListenerForSearchView() {
+    private void setListenerForSearchView() {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -235,7 +246,7 @@ public class CourseFragment extends Fragment {
     }
 
     // 根据输入关键字过滤课程条目
-    public List<Course> filter(List<Course> courses, String query) {
+    private List<Course> filter(List<Course> courses, String query) {
         query = query.toLowerCase();
 
         final List<Course> filteredModeList = new ArrayList<>();
@@ -250,7 +261,7 @@ public class CourseFragment extends Fragment {
     }
 
     // 定义下拉刷新行为
-    public void refresh() {
+    private void refresh() {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -260,15 +271,7 @@ public class CourseFragment extends Fragment {
     }
 
     // 初始化课程列表：获取Course表中的所有数据记录，Bmob规定上限为500
-    public void generateCourseList() {
-        User user = BmobUser.getCurrentUser(User.class);
-        if (user != null) {
-            if(user.getIdentity().equals("teacher")) {
-                create.setVisibility(View.VISIBLE);
-            }
-        } else {
-            ToastUtil.toast(getActivity(), "您未登录，请先登录！");
-        }
+    private void generateCourseList() {
         BmobQuery<Course> query = new BmobQuery<>();
         query.order("-createdAt");
         query.findObjects(new FindListener<Course>() {
@@ -289,6 +292,18 @@ public class CourseFragment extends Fragment {
                 }
             }
         });
+    }
+
+    // 根据用户身份判断是否呈现创建课程接口, 若为教师则显示，否则隐藏
+    private void showCreateInterfaceOrNot() {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user != null) {
+            if(user.getIdentity().equals("teacher")) {
+                create.setVisibility(View.VISIBLE);
+            }
+        } else {
+            ToastUtil.toast(getActivity(), "您未登录，请先登录！");
+        }
     }
 
     // 加载小菜单,设置搜索按钮
