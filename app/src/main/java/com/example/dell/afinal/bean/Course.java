@@ -40,12 +40,15 @@ public class Course extends BmobObject {
     public void setCourseDescription(String courseDescription) {
         this.courseDescription = courseDescription;
     }
+
     public User getManager() {
         return manager;
     }
+
     public void setManager(User manager) {
         this.manager = manager;
     }
+
     public String getCourseTime() {
         return courseTime;
     }

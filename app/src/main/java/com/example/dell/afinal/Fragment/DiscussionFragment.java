@@ -81,7 +81,8 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
     // 定义订阅者行为, 当讨论区列表需要更新时做出处理
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-        if (event.getMessage().equals("addCourse") || event.getMessage().equals("quitCourse"))
+        if (event.getMessage().equals("addCourse") || event.getMessage().equals("quitCourse")
+                || event.getMessage().equals("deleteCourse"))
             loadUserCourse();
     }
 

@@ -34,7 +34,7 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class MyCourseActivity extends AppCompatActivity {
+public class StudentCourseActivity extends AppCompatActivity {
 
     @BindView(R.id.title)
     TextView title;
@@ -68,7 +68,7 @@ public class MyCourseActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
-                MyCourseActivity.this.finish();
+                StudentCourseActivity.this.finish();
                 break;
             default: break;
         }

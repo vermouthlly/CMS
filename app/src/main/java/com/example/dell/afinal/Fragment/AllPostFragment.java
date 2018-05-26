@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.dell.afinal.Adapter.PostListAdapter;
 import com.example.dell.afinal.R;
@@ -27,7 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -39,6 +41,12 @@ public class AllPostFragment extends Fragment {
     SwipeRefreshLayout refreshLayout;       // 下拉刷新
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;  // 进度条
+    @BindView(R.id.no_content_hint)
+    TextView noContentHint;
+    @BindView(R.id.history)
+    Button history;
+    @BindView(R.id.no_content_field)
+    LinearLayout noContentField;
 
     private View mView;
     
@@ -97,6 +105,13 @@ public class AllPostFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+        if (postList.size() == 0) {
+            noContentField.setVisibility(View.VISIBLE);
+            history.setVisibility(View.INVISIBLE);
+            noContentHint.setText("讨论区还没有帖子, 快来发表你的第一帖吧~");
+        } else {
+            noContentField.setVisibility(View.INVISIBLE);
+        }
     }
     
     // 出现网络异常

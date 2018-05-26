@@ -14,21 +14,17 @@ import android.widget.TextView;
 import com.example.dell.afinal.Activity.FeedbackActivity;
 import com.example.dell.afinal.Activity.InfoActivity;
 import com.example.dell.afinal.Activity.LoginActivity;
-import com.example.dell.afinal.Activity.MyCourseActivity;
+import com.example.dell.afinal.Activity.StudentCourseActivity;
 import com.example.dell.afinal.Activity.MyNotificationActivity;
+import com.example.dell.afinal.Activity.TeacherCourseActivity;
 import com.example.dell.afinal.Activity.UserDetailActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.View.CircleImageView;
 import com.example.dell.afinal.bean.Course;
 import com.example.dell.afinal.bean.CourseNotification;
-import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.SystemNotification;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +53,8 @@ public class MineFragment extends android.support.v4.app.Fragment {
     LinearLayout myCourseList;
     @BindView(R.id.my_notification)
     LinearLayout myNotification;
+    @BindView(R.id.course_tag)
+    TextView courseTag;
     @BindView(R.id.set_ll_info)
     LinearLayout setLlInfo;
     @BindView(R.id.set_ll_feedback)
@@ -79,11 +77,20 @@ public class MineFragment extends android.support.v4.app.Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.mine_fragment, container, false);
             unbinder = ButterKnife.bind(this, mView);
-            hintTag.setVisibility(View.INVISIBLE);
-            unreadNotiNum.setVisibility(View.INVISIBLE);
+            initViewAttr();
             loadSysNotification();
         }
         return mView;
+    }
+
+    // 必要的控件属性设置
+    private void initViewAttr() {
+        hintTag.setVisibility(View.INVISIBLE);
+        unreadNotiNum.setVisibility(View.INVISIBLE);
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user.getIdentity().equals("teacher")) {
+            courseTag.setText("课程管理");
+        }
     }
 
     // 从系统消息表中读取所有消息
@@ -224,7 +231,7 @@ public class MineFragment extends android.support.v4.app.Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.my_courselist:
-                startActivity(new Intent(getContext(), MyCourseActivity.class));
+                onMyCourseTagClicked();
                 break;
             case R.id.my_notification:
                 hideUnreadHint();
@@ -240,6 +247,20 @@ public class MineFragment extends android.support.v4.app.Fragment {
                 detailOrLogin();
                 break;
             default: break;
+        }
+    }
+
+    /* 点击我的课程标签
+     * 若当前用户身份为学生，则呈现到他所选的课程列表
+     * 若为教师, 则呈现他创建的课程的列表
+     * 两个列表不同点在于教师有回收和删除所创建课程的权限, 学生仅有退选课程权限
+     * */
+    private void onMyCourseTagClicked() {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user.getIdentity().equals("student")) {
+            startActivity(new Intent(getContext(), StudentCourseActivity.class));
+        } else if (user.getIdentity().equals("teacher")) {
+            startActivity(new Intent(getContext(), TeacherCourseActivity.class));
         }
     }
 

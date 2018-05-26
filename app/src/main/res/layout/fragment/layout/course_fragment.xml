@@ -4,24 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <include
         layout="@layout/course_list_toolbar"/>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/course_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/course_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="?attr/actionBarSize">
-        </android.support.v7.widget.RecyclerView>
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/is_loading"
