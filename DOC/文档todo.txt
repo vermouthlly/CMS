@@ -1,6 +1,0 @@
-todo
-picture 1-5
-
-picture 1-7
-
-usecase of student to receive information
