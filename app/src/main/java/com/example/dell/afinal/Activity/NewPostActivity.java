@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -37,7 +36,6 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
@@ -178,6 +176,7 @@ public class NewPostActivity extends AppCompatActivity {
         post.setContent(content);
         post.setTitle(title);
         post.setAuthor(user);
+        post.setPopular(false);
         post.setCourseId(courseId);
 
         post.save(new SaveListener<String>() {
@@ -202,6 +201,7 @@ public class NewPostActivity extends AppCompatActivity {
         post.setContent(content);
         post.setTitle(title);
         post.setAuthor(user);
+        post.setPopular(false);
         post.setCourseId(courseId);
 
         bmobFile.uploadblock(new UploadFileListener() {

@@ -150,7 +150,7 @@ public class CourseFragment extends Fragment {
         });
     }
 
-    // 创建课程, 在可交互对话框中完成
+    // 创建课程, 暂定在可交互对话框中完成
     private void createCourse() {
         final User user = BmobUser.getCurrentUser(User.class);
         if (user.getIdentity().equals("teacher")) {

@@ -101,7 +101,7 @@ public class AllPostFragment extends Fragment {
     // 构建RecyclerView
     public void createRecyclerView() {
         RecyclerView recyclerView = mView.findViewById(R.id.recycler_view);
-        PostListAdapter adapter = new PostListAdapter(postList);
+        PostListAdapter adapter = new PostListAdapter(postList, AllPostFragment.this);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);

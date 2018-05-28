@@ -114,7 +114,7 @@ public class MyLikesActivity extends AppCompatActivity {
     private void createLikeList() {
         LinearLayoutManager manager = new LinearLayoutManager(MyLikesActivity.this);
         recyclerView.setLayoutManager(manager);
-        PostListAdapter adapter = new PostListAdapter(postList);
+        PostListAdapter adapter = new PostListAdapter(postList, null);
         recyclerView.setAdapter(adapter);
         if (postList.size() == 0) {
             noLikeHint.setVisibility(View.VISIBLE);

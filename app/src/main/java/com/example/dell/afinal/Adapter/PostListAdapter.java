@@ -2,23 +2,30 @@ package com.example.dell.afinal.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.dell.afinal.Activity.PostInfoActivity;
+import com.example.dell.afinal.Fragment.AllPostFragment;
+import com.example.dell.afinal.Fragment.PopularPostFragment;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.View.CircleImageView;
-import com.example.dell.afinal.bean.Comment;
+import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
 import com.example.dell.afinal.bean.User;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +44,11 @@ import cn.bmob.v3.listener.UpdateListener;
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
     private List<Post> postList = new ArrayList<>();
     private Context mContext;
+    private Fragment mFragment;
 
-    public PostListAdapter(List<Post> list) {
+    public PostListAdapter(List<Post> list, Fragment fragment) {
         postList = list;
+        mFragment = fragment;
     }
 
     @Override
@@ -47,7 +56,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.post_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.post_item, parent,
+                false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
         viewHolder.postView.setOnClickListener(new View.OnClickListener() {
@@ -57,12 +67,21 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             }
         });
 
+        viewHolder.postView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                onPostViewLongClicked(viewHolder);
+                return true;
+            }
+        });
+
         viewHolder.zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onZanIconClicked(viewHolder);
             }
         });
+
         return viewHolder;
     }
 
@@ -77,6 +96,77 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         bundle.putString("postId", viewHolder.postId);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
+    }
+
+    // 长按管理帖子 ( 教师权限 )
+    private void onPostViewLongClicked(ViewHolder viewHolder) {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (!user.getIdentity().equals("teacher"))
+            return;
+        PopupWindow popupWindow = new PopupWindow(mContext);
+        initPopupwindow(popupWindow, viewHolder);
+        popupWindow.showAsDropDown(viewHolder.postView);
+    }
+
+    // 初始化弹窗属性
+    private void initPopupwindow(final PopupWindow popupWindow, final ViewHolder viewHolder) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.post_edit_dialog, null);
+        popupWindow.setContentView(view);
+        popupWindow.setWidth(300);
+        popupWindow.setHeight(150);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        popupWindow.setFocusable(true);
+
+        View cardView = view.findViewById(R.id.popular);
+        TextView popular = view.findViewById(R.id.p_text);
+
+        if (mFragment instanceof PopularPostFragment) {
+            popular.setText("取消加精");
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editPopularPost(popupWindow, viewHolder, false);
+                }
+            });
+        }
+
+        else if (mFragment instanceof AllPostFragment) {
+            popular.setText("帖子加精");
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editPopularPost(popupWindow, viewHolder, true);
+                }
+            });
+        }
+    }
+
+    // 帖子加入 | 移出精选区
+    private void editPopularPost(final PopupWindow popupWindow, ViewHolder holder, final boolean popular) {
+        Post post = new Post();
+        post.setObjectId(holder.postId);
+        post.setPopular(popular);
+        post.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    onEditPopularSuccess(popular);
+                } else {
+                    Log.e("加精操作失败", e.toString());
+                    ToastUtil.toast(mContext, "操作失败, 请稍后重试");
+                }
+                popupWindow.dismiss();
+            }
+        });
+    }
+
+    private void onEditPopularSuccess(boolean isPopular) {
+        if (isPopular)
+            ToastUtil.toast(mContext, "已加入精选区");
+        else
+            ToastUtil.toast(mContext, "已移除精选区");
+        EventBus.getDefault().post(new MessageEvent("editPopular"));
     }
 
     // 点击点赞图标
@@ -150,6 +240,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         BmobRelation relation = new BmobRelation();
         relation.add(user);
         post.setZan(relation);
+        post.setPopular(viewHolder.isPopular);
         post.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -171,6 +262,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         BmobRelation relation = new BmobRelation();
         relation.remove(user);
         post.setZan(relation);
+        post.setPopular(viewHolder.isPopular);
         post.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -207,6 +299,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
         holder.postId = curPost.getObjectId();                   // 获取帖子的id
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
+        holder.isPopular = curPost.isPopular();
         if(curPost.getImage() != null) {
             BmobFile pros = curPost.getImage();
             Picasso.with(mContext).load(pros.getFileUrl()).into(holder.postImg);
@@ -292,6 +385,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         TextView postContent;        // 帖子正文
         String authorId;             // 作者
         String postId;               // 帖子的唯一id, 用于加载评论
+        boolean isPopular;           // 帖子是否经过加精
         ImageView ivSex;             // 性别
         ImageView postImg;           // 帖子图片图片
         ImageView zan;               // 点赞图标

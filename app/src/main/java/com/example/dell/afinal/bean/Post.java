@@ -15,6 +15,7 @@ public class Post extends BmobObject {
     private BmobFile image;       // 帖子图片(optional)
     private BmobRelation likes;   // 多对多关系：用于存储喜欢该帖子的所有用户
     private BmobRelation zan;     // 多对多关系：用于存储点赞该帖子的所有用户
+    private boolean popularTag;      // 帖子是否被教师加精
 
     public String getTitle() {
         return title;
@@ -70,5 +71,13 @@ public class Post extends BmobObject {
 
     public void setZan(BmobRelation zan) {
         this.zan = zan;
+    }
+
+    public boolean isPopular() {
+        return popularTag;
+    }
+
+    public void setPopular(boolean popular) {
+        this.popularTag = popular;
     }
 }
