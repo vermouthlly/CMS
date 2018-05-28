@@ -179,6 +179,11 @@ public class CourseFragment extends Fragment {
                             Pattern pnumber = Pattern.compile("[0-9]*");
                             Matcher result = pnumber.matcher(class_capacity);
                             int capacity = 0;
+                            int no_empty=0;
+                            if(!name.isEmpty() && !time.isEmpty() && !location.isEmpty() && !teacher.isEmpty()
+                                    && !class_capacity.isEmpty()){
+                                no_empty= 1;
+                            }
                             if (class_capacity.isEmpty()){
                                 capacity = 0;
                             } else if(result.matches()){
@@ -192,28 +197,33 @@ public class CourseFragment extends Fragment {
                             course.setCourseDescription(teacher);
                             course.setCourseCapacity(capacity);
                             course.setInvitationCode(code);
-                            course.save(new SaveListener<String>() {
-                                @Override
-                                public void done(String s, BmobException e) {
-                                    if (e == null) {
-                                        course.setManager(user);
-                                        course.update(new UpdateListener() {
-                                            @Override
-                                            public void done(BmobException e) {
-                                                if (e == null) {
-                                                    joinCourse(course);
-                                                    ToastUtil.toast(getActivity(), "创建成功");
-                                                } else {
-                                                    ToastUtil.toast(getActivity(), "创建失败," +
-                                                            "请检查您的网络");
+                            if(no_empty>0){
+                                course.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if (e == null) {
+                                            course.setManager(user);
+                                            course.update(new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        joinCourse(course);
+                                                        ToastUtil.toast(getActivity(), "创建成功");
+                                                    } else {
+                                                        ToastUtil.toast(getActivity(), "创建失败," +
+                                                                "请检查您的网络");
+                                                    }
                                                 }
-                                            }
-                                        });
-                                    } else {
-                                        ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                            });
+                                        } else {
+                                            ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }else {
+                                ToastUtil.toast(getActivity(), "创建失败,输入不能为空。");
+                            }
+
                         }
                     }).show();
         }
