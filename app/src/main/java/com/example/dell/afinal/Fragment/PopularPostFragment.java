@@ -71,8 +71,6 @@ public class PopularPostFragment extends Fragment {
 
     // 从服务器读取属于当前课程的精品帖
     private void loadPostsFromServer() {
-        progressBar.show(); // 显示进度条开始加载
-
         BmobQuery<Post> query = new BmobQuery<>();
         query.addWhereEqualTo("courseId", courseId);
         query.addWhereEqualTo("popularTag", true);

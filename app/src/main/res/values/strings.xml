@@ -13,7 +13,7 @@
     <string name="link_to_signup">还没有账号? 创建一个</string>
     <string name="link_to_login">已经有账号?前往登录</string>
     <string name="course_name">课程名称</string>
-    <string name="course_descri">课程简介</string>
+    <string name="course_descri">任课老师</string>
     <string name="course_list">课程列表</string>
     <string name="post_list">讨论区</string>
     <string name="hint_name">请输入课程名称</string>

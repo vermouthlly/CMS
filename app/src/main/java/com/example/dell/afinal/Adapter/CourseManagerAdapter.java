@@ -3,6 +3,7 @@ package com.example.dell.afinal.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.dell.afinal.Activity.EditCourseActivity;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
@@ -45,6 +47,18 @@ public class CourseManagerAdapter extends RecyclerView.Adapter<CourseManagerAdap
                 onDeleteButtonClicked(holder);
             }
         });
+        holder.releaseCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onReleaseButtonClicked(holder);
+            }
+        });
+        holder.editCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onEditButtonClicked(holder);
+            }
+        });
         return holder;
     }
 
@@ -71,7 +85,7 @@ public class CourseManagerAdapter extends RecyclerView.Adapter<CourseManagerAdap
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new MessageEvent("deleteCourse"));
+                    notifyCourseUpdate();
                     ToastUtil.toast(mContext, "课程删除成功");
                 } else {
                     ToastUtil.toast(mContext, "操作失败，请检查你的往后重试");
@@ -80,10 +94,76 @@ public class CourseManagerAdapter extends RecyclerView.Adapter<CourseManagerAdap
         });
     }
 
+    // 提醒课程更新
+    private void notifyCourseUpdate() {
+        EventBus.getDefault().post(new MessageEvent("updateCourse"));
+    }
+
+    // 点击发布（撤回）课程按钮
+    private void onReleaseButtonClicked(ViewHolder holder) {
+        if (holder.courseStatus.equals("unreleased")) {
+            releaseCourse(holder);
+        } else if (holder.courseStatus.equals("released")) {
+            revokeCourse(holder);
+        }
+    }
+
+    // 发布课程
+    private void releaseCourse(final ViewHolder holder) {
+        Course course = new Course();
+        course.setObjectId(holder.courseId);
+        course.setStatus("released");
+        course.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    notifyCourseUpdate();
+                    ToastUtil.toast(mContext, "课程已发布");
+                    holder.releaseTag.setText("撤回");
+                } else {
+                    Log.e("发布课程失败", e.toString());
+                    ToastUtil.toast(mContext, "无法发布课程, 请检查你的网络或稍后再试");
+                }
+            }
+        });
+    }
+
+    // 撤回课程
+    private void revokeCourse(final ViewHolder holder) {
+        Course course = new Course();
+        course.setObjectId(holder.courseId);
+        course.setStatus("unreleased");
+        course.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    notifyCourseUpdate();
+                    ToastUtil.toast(mContext, "课程已撤回");
+                    holder.releaseTag.setText("发布");
+                } else {
+                    Log.e("撤回课程失败", e.toString());
+                    ToastUtil.toast(mContext, "无法撤回课程, 请检查你的网络或稍后再试");
+                }
+            }
+        });
+    }
+
+    // 点击编辑按钮
+    private void onEditButtonClicked(ViewHolder holder) {
+        Intent intent = new Intent(mContext, EditCourseActivity.class);
+        intent.putExtra("courseId", holder.courseId);
+        mContext.startActivity(intent);
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Course course = courseList.get(position);
         holder.courseId = course.getObjectId();
+        holder.courseStatus = course.getStatus();
+        if (holder.courseStatus.equals("released"))
+            holder.releaseTag.setText("撤回");
+        else if (holder.courseStatus.equals("unreleased"))
+            holder.releaseTag.setText("发布");
         holder.courseName.setText(course.getCourseName());
         String description = getCourseDesrcripion(course);
         holder.courseDescription.setText(description);
@@ -105,17 +185,20 @@ public class CourseManagerAdapter extends RecyclerView.Adapter<CourseManagerAdap
         View view;
         TextView courseName;
         TextView courseDescription;
-        LinearLayout spreadCourse;
+        LinearLayout releaseCourse;
+        TextView releaseTag;
         LinearLayout editCourse;
         LinearLayout deleteCourse;
         String courseId;
+        String courseStatus;
 
         ViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             courseName = itemView.findViewById(R.id.course_name);
             courseDescription = itemView.findViewById(R.id.course_intro);
-            spreadCourse = itemView.findViewById(R.id.spread_course);
+            releaseCourse = itemView.findViewById(R.id.release_course);
+            releaseTag = itemView.findViewById(R.id.release_tag);
             editCourse = itemView.findViewById(R.id.edit_course);
             deleteCourse = itemView.findViewById(R.id.delete_course);
         }

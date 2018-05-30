@@ -99,7 +99,7 @@ public class CourseFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-        if (event.getMessage().equals("addCourse") || event.getMessage().equals("deleteCourse"))
+        if (event.getMessage().equals("addCourse") || event.getMessage().equals("updateCourse"))
             generateCourseList("refresh");
     }
 
@@ -197,6 +197,7 @@ public class CourseFragment extends Fragment {
                             course.setCourseDescription(teacher);
                             course.setCourseCapacity(capacity);
                             course.setInvitationCode(code);
+                            course.setStatus("released");
                             if(no_empty>0){
                                 course.save(new SaveListener<String>() {
                                     @Override
@@ -220,7 +221,7 @@ public class CourseFragment extends Fragment {
                                         }
                                     }
                                 });
-                            }else {
+                            } else {
                                 ToastUtil.toast(getActivity(), "创建失败,输入不能为空。");
                             }
 
@@ -314,6 +315,7 @@ public class CourseFragment extends Fragment {
     private void generateCourseList(final String op) {
         BmobQuery<Course> query = new BmobQuery<>();
         query.order("-createdAt");
+        query.addWhereEqualTo("status", "released");
         query.setLimit(loadFactor);
         query.findObjects(new FindListener<Course>() {
             @Override
@@ -327,7 +329,7 @@ public class CourseFragment extends Fragment {
         });
     }
 
-    // 读取成功, 根据加载因子决定要显示的课程数
+    // 读取成功
     private void onLoadSuccess(List<Course> list, String op) {
         courseList = list;
         createRecyclerView();

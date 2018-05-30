@@ -59,7 +59,7 @@ public class TeacherCourseActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-        if (event.getMessage().equals("deleteCourse"))
+        if (event.getMessage().equals("updateCourse"))
             loadTeacherCourses();
     }
 

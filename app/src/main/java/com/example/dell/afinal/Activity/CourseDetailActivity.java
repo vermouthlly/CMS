@@ -187,7 +187,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             query.findObjects(new FindListener<Course>() {
                 @Override
                 public void done(List<Course> list, BmobException e) {
-                    if (e==null) {
+                    if (e == null) {
                         List<String> courseIds = new ArrayList<>();
                         for (Course course : list) {
                             courseIds.add(course.getObjectId());
@@ -222,12 +222,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                 ToastUtil.toast(CourseDetailActivity.this, "已达课程上限,无法加入课程");
         } else if(joinCourse.getText().toString().equals("退出课程")){
             showQuitCourseDialog();
-        }else if(joinCourse.getText().toString().equals("发布通知")){
+        } else if(joinCourse.getText().toString().equals("发布通知")){
             sendMessage();
         }
     }
 
-    //发布通知
+    // 发布通知
     public void sendMessage(){
         Intent intent = new Intent();
         intent.putExtra("id", courseId);

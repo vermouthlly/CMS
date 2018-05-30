@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:layout_margin="5dp">
+    android:layout_margin="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +27,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
-                android:text="系统分析与设计"
                 android:textSize="17sp"
                 android:textStyle="bold"/>
 
@@ -52,24 +51,29 @@
                 android:id="@+id/course_intro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="任课老师"
                 android:textSize="15sp"
                 android:maxLength="50"
                 android:ellipsize="end"/>
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/divider"
+            android:layout_marginBottom="10dp"
+            android:layout_height="0.5dp"
+            android:layout_above="@+id/ops"/>
+
         <RelativeLayout
             android:id="@+id/ops"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:layout_alignParentBottom="true">
 
             <!--发布课程-->
             <LinearLayout
-                android:id="@+id/spread_course"
+                android:id="@+id/release_course"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -80,6 +84,7 @@
                     android:src="@mipmap/ic_like"/>
 
                 <TextView
+                    android:id="@+id/release_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"

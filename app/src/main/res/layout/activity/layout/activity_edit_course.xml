@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--外部引入标题栏-->
+    <include
+        android:id="@+id/detail_toolbar"
+        layout="@layout/new_post_toolbar"/>
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/load_courseInfo_pro"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
+
+    <LinearLayout
+        android:id="@+id/course_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_marginTop="90dp">
+
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                style="@style/item_tag"
+                android:text="@string/course_name"/>
+
+            <EditText
+                android:id="@+id/course_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="此处输入课程名称"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                android:id="@+id/cdescription"
+                style="@style/item_tag"
+                android:text="@string/course_descri" />
+
+            <EditText
+                android:id="@+id/course_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="此处输入任课老师姓名"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                style="@style/item_tag"
+                android:text="@string/course_time" />
+
+            <EditText
+                android:id="@+id/course_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="此处输入上课时间"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                style="@style/item_tag"
+                android:text="@string/course_place" />
+
+            <EditText
+                android:id="@+id/course_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="此处输入上课地点"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                style="@style/item_tag"
+                android:text="@string/course_capacity" />
+
+            <EditText
+                android:id="@+id/course_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:hint="此处输入课程容量"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/coursedetail_item">
+            <TextView
+                style="@style/item_tag"
+                android:text="@string/invitation" />
+
+            <EditText
+                android:id="@+id/invite_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:hint="此处输入课程邀请码"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

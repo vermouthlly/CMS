@@ -21,6 +21,8 @@ public class Course extends BmobObject {
 
     private String invitationCode; // 课程邀请码
 
+    private String status;       // 课程状态 : released 发布 / unreleased
+
     private User manager;      // 一对一关系：用于存储创建并发布该课程的老师
 
     private BmobRelation selectors;  // 多对多关系：用于存储选择了该课程的学生
@@ -95,5 +97,13 @@ public class Course extends BmobObject {
 
     public void setInvitationCode(String invitationCode) {
         this.invitationCode = invitationCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
