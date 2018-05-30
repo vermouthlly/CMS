@@ -27,7 +27,7 @@
             <EditText
                 android:id="@+id/course_name"
                 style="@style/item_content"
-                android:text="@string/course_name" />
+                />
         </LinearLayout>
 
         <LinearLayout style="@style/coursedetail_item">
@@ -40,7 +40,7 @@
             <EditText
                 android:id="@+id/course_intro"
                 style="@style/item_content"
-                android:text="@string/course_descri" />
+                />
         </LinearLayout>
 
         <LinearLayout style="@style/coursedetail_item">
@@ -52,8 +52,7 @@
 
             <EditText
                 android:id="@+id/course_time"
-                style="@style/item_content"
-                android:text="@string/course_time" />
+                style="@style/item_content" />
         </LinearLayout>
 
         <LinearLayout style="@style/coursedetail_item">
@@ -65,8 +64,7 @@
 
             <EditText
                 android:id="@+id/course_place"
-                style="@style/item_content"
-                android:text="@string/course_place" />
+                style="@style/item_content" />
         </LinearLayout>
 
         <LinearLayout style="@style/coursedetail_item">
@@ -78,8 +76,7 @@
 
             <EditText
                 android:id="@+id/course_capacity"
-                style="@style/item_content"
-                android:text="@string/course_capacity" />
+                style="@style/item_content" />
         </LinearLayout>
 
         <LinearLayout style="@style/coursedetail_item">
@@ -92,7 +89,7 @@
             <EditText
                 android:id="@+id/student_num"
                 style="@style/item_content"
-                android:text="@string/icode" />
+                />
         </LinearLayout>
 
 
