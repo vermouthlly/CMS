@@ -102,6 +102,7 @@ public class CourseCreate extends AppCompatActivity {
         course.setCourseDescription(CDescription);
         course.setCourseCapacity(number_capacity);
         course.setInvitationCode(Ccode);
+        course.setStatus("released");
         save(user,course);
     }
     public void save(final User user,final Course course){
