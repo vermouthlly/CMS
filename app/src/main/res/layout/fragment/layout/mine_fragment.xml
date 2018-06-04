@@ -73,7 +73,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_next"
+                    android:src="@mipmap/ic_mcourse"
                     android:contentDescription="@string/mylist" />
 
                 <TextView
@@ -97,7 +97,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_next"
+                    android:src="@mipmap/ic_mnoti"
                     android:contentDescription="@string/mynotification" />
 
                 <TextView
@@ -137,7 +137,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_info"
+                    android:src="@mipmap/ic_aboutus"
                     android:contentDescription="@string/aboutus" />
 
                 <TextView

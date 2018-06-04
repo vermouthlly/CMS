@@ -1,4 +1,5 @@
 package com.example.dell.afinal.Fragment;
+
 import com.example.dell.afinal.bean.MessageEvent;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -143,7 +144,7 @@ public class CourseFragment extends Fragment {
         searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestion));
     }
 
-    // 教师创建课程
+    // 教师点击创建课程按钮
     private void onCreateButtonClickedListener() {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,131 +154,11 @@ public class CourseFragment extends Fragment {
         });
     }
 
-    // 创建课程, 暂定在可交互对话框中完成
+    // 创建课程
     private void createCourse() {
         startActivity(new Intent(getContext(), CourseCreate.class));
-//        final User user = BmobUser.getCurrentUser(User.class);
-//        if (user.getIdentity().equals("teacher")) {
-//            LayoutInflater inflater = LayoutInflater.from(getActivity());
-//            View layout = inflater.inflate(R.layout.dialoglayout, null);
-//            final EditText ed_name= layout.findViewById(R.id.ed_name);
-//            final EditText ed_time=  layout.findViewById(R.id.ed_time);
-//            final EditText ed_location = layout.findViewById(R.id.ed_location);
-//            final EditText ed_teacher =  layout.findViewById(R.id.ed_teacher);
-//            final EditText ed_class_capacity = layout.findViewById(R.id.ed_class_capacity);
-//            final EditText ed_code=  layout.findViewById(R.id.ed_code);
-//
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//            builder.setTitle("创建课程")
-//                    .setView(layout)
-//                    .setNegativeButton("取消创建", null)
-//                    .setPositiveButton("确认创建", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            String name = ed_name.getText().toString();
-//                            String time = ed_time.getText().toString();
-//                            String location = ed_location.getText().toString();
-//                            String teacher = ed_teacher.getText().toString();
-//                            String class_capacity = ed_class_capacity.getText().toString();
-//
-//                            Pattern pnumber = Pattern.compile("[0-9]*");
-//                            Matcher result = pnumber.matcher(class_capacity);
-//                            int capacity = 0;
-//                            int no_empty=0;
-//                            if(!name.isEmpty() && !time.isEmpty() && !location.isEmpty() && !teacher.isEmpty()
-//                                    && !class_capacity.isEmpty()){
-//                                no_empty= 1;
-//                            }
-//                            if (class_capacity.isEmpty()){
-//                                capacity = 0;
-//                            } else if(result.matches()){
-//                                capacity = Integer.parseInt(class_capacity);
-//                            }
-//                            String code = ed_code.getText().toString();
-//                            final Course course = new Course();
-//                            course.setCourseName(name);
-//                            course.setCourseTime(time);
-//                            course.setCoursePlace(location);
-//                            course.setCourseDescription(teacher);
-//                            course.setCourseCapacity(capacity);
-//                            course.setInvitationCode(code);
-//                            course.setStatus("released");
-//                            if(no_empty>0){
-//                                course.save(new SaveListener<String>() {
-//                                    @Override
-//                                    public void done(String s, BmobException e) {
-//                                        if (e == null) {
-//                                            course.setManager(user);
-//                                            course.update(new UpdateListener() {
-//                                                @Override
-//                                                public void done(BmobException e) {
-//                                                    if (e == null) {
-//                                                        joinCourse(course);
-//                                                        ToastUtil.toast(getActivity(), "创建成功");
-//                                                    } else {
-//                                                        ToastUtil.toast(getActivity(), "创建失败," +
-//                                                                "请检查您的网络");
-//                                                    }
-//                                                }
-//                                            });
-//                                        } else {
-//                                            ToastUtil.toast(getActivity(), "创建失败,请检查您的网络");
-//                                        }
-//                                    }
-//                                });
-//                            } else {
-//                                ToastUtil.toast(getActivity(), "创建失败,输入不能为空。");
-//                            }
-//
-//                        }
-//                    }).show();
-//        }
     }
 
-    // 教师创建课程同时也是该课程的成员, 可以参与该课程讨论区的讨论
-    private void joinCourse(final Course course) {
-        User user = BmobUser.getCurrentUser(User.class);
-        BmobRelation relation = new BmobRelation();
-        relation.add(course);
-        user.setCourses(relation);
-        user.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    notifyUpdateCourseList();
-                    addTeacherAsMember(course);
-                    Log.d("CourseFragment", "教师加入课程成功");
-                } else {
-                    Log.e("CourseFragment", "教师加入课程失败" + e.toString());
-                }
-            }
-        });
-    }
-
-    // 课程记录教师作为成员
-    private void addTeacherAsMember(Course course) {
-        User user = BmobUser.getCurrentUser(User.class);
-        BmobRelation relation = new BmobRelation();
-        relation.add(user);
-        Course c = new Course();
-        c.setObjectId(course.getObjectId());
-        c.setSelectors(relation);
-        c.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Log.d("CourseFragment", "记录成功");
-                } else {
-                    Log.e("CourseFragment记录失败", e.toString());
-                }
-            }
-        });
-    }
-
-    // 提醒相关界面更新课程列表
-    private void notifyUpdateCourseList() {
-        EventBus.getDefault().post(new MessageEvent("addCourse"));
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

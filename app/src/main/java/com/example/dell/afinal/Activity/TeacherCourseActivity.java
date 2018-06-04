@@ -102,8 +102,8 @@ public class TeacherCourseActivity extends AppCompatActivity {
 
     // 读取失败
     private void onLoadFailed(BmobException e) {
-        Log.e("读取课程信息失败", e.toString());
-        ToastUtil.toast(TeacherCourseActivity.this, "无法读取课程, 请检查你的网络");
+        Log.e("读取教师课程信息失败", e.toString());
+        ToastUtil.toast(TeacherCourseActivity.this, "无法读取课程, 请检查你的网络或稍后重试");
     }
 
     // 初始化页面标题

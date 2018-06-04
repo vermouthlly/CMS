@@ -81,7 +81,7 @@
                     android:id="@+id/send_icon"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/ic_like"/>
+                    android:src="@mipmap/ic_cback"/>
 
                 <TextView
                     android:id="@+id/release_tag"
@@ -103,7 +103,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/ic_like"/>
+                    android:src="@mipmap/ic_cedit"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                     android:id="@+id/edit_icon"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@mipmap/ic_like"/>
+                    android:src="@mipmap/ic_cdelete"/>
 
                 <TextView
                     android:layout_width="wrap_content"

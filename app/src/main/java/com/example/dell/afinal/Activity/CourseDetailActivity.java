@@ -146,7 +146,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     // 已选人数需要读取数据库统计,单独处理
     public void setStudentNums(int num) {
-        studentNum.setText(String.valueOf(num));
+        studentNum.setText(String.valueOf(num-1));
     }
 
     // 加载完成, 显示课程信息

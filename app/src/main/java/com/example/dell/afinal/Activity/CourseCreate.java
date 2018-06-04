@@ -1,7 +1,8 @@
 package com.example.dell.afinal.Activity;
+
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -16,10 +17,6 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.User;
 import com.example.dell.afinal.bean.MessageEvent;
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +44,7 @@ public class CourseCreate extends AppCompatActivity {
     @BindView(R.id.back) ImageView backButton;                     // 返回按钮
 
     @BindView(R.id.join_course) Button CreateCourse;                 // 加入课程按钮
+    @BindView(R.id.progress_bar) ContentLoadingProgressBar progressBar;
 
     private Unbinder unbinder;
     private String Cname;
@@ -55,7 +53,6 @@ public class CourseCreate extends AppCompatActivity {
     private String CPlace;
     private String Ccapacity ;
     private String Ccode ;
-    private int number_capacity;
 
 
     @Override
@@ -64,7 +61,7 @@ public class CourseCreate extends AppCompatActivity {
         setContentView(R.layout.activity_create_course);
 
         unbinder = ButterKnife.bind(this);
-
+        progressBar.hide();
     }
 
     @OnClick({R.id.back,R.id.join_course})
@@ -79,16 +76,16 @@ public class CourseCreate extends AppCompatActivity {
         }
     }
 
-    public  void bind(){
+    public void bind(){
          Cname = courseName.getText().toString();
          CDescription = courseDescription.getText().toString();
          CTime = courseTime.getText().toString();
          CPlace = coursePlace.getText().toString();
          Ccapacity = courseCapacity.getText().toString();
-         Ccode = courseName.getText().toString();
-        courseCapacity.setInputType( InputType.TYPE_CLASS_NUMBER);
+         Ccode = courseCode.getText().toString();
     }
-    public  void create_course(){
+
+    public void create_course(){
         bind();
         check_null();
     }
@@ -100,12 +97,15 @@ public class CourseCreate extends AppCompatActivity {
         course.setCourseTime(CTime);
         course.setCoursePlace(CPlace);
         course.setCourseDescription(CDescription);
+        int number_capacity = Integer.parseInt(Ccapacity);
         course.setCourseCapacity(number_capacity);
         course.setInvitationCode(Ccode);
         course.setStatus("released");
-        save(user,course);
+        save(user, course);
     }
-    public void save(final User user,final Course course){
+
+    public void save(final User user,final Course course) {
+        progressBar.show();
         course.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
@@ -116,20 +116,20 @@ public class CourseCreate extends AppCompatActivity {
                         public void done(BmobException e) {
                             if (e == null) {
                                 joinCourse(course);
-                                ToastUtil.toast(CourseCreate.this, "创建成功");
                             } else {
-                                ToastUtil.toast(CourseCreate.this, "创建失败," +
-                                        "请检查您的网络");
+                                ToastUtil.toast(CourseCreate.this, "课程创建失败," +
+                                        "请检查您的网络后重试");
                             }
                         }
                     });
                 } else {
-                    ToastUtil.toast(CourseCreate.this, "创建失败,请检查您的网络");
+                    ToastUtil.toast(CourseCreate.this, "课程创建失败,请检查您的网络后重试");
+                    progressBar.hide();
                 }
             }
         });
-        CourseCreate.this.finish();
     }
+
     private void joinCourse(final Course course) {
         User user = BmobUser.getCurrentUser(User.class);
         BmobRelation relation = new BmobRelation();
@@ -148,6 +148,7 @@ public class CourseCreate extends AppCompatActivity {
             }
         });
     }
+
     private void addTeacherAsMember(Course course) {
         User user = BmobUser.getCurrentUser(User.class);
         BmobRelation relation = new BmobRelation();
@@ -159,32 +160,41 @@ public class CourseCreate extends AppCompatActivity {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Log.d("CourseFragment", "记录成功");
+                    ToastUtil.toast(CourseCreate.this, "课程创建成功");
+                    CourseCreate.this.finish();
                 } else {
                     Log.e("CourseFragment记录失败", e.toString());
                 }
+                progressBar.hide();
             }
         });
     }
+
     private void notifyUpdateCourseList() {
         EventBus.getDefault().post(new MessageEvent("addCourse"));
     }
+
     public  void check_null(){
-        if(Cname.isEmpty()){
+        if (Cname.isEmpty()){
             ToastUtil.toast(CourseCreate.this, "课程名称不能为空");
-        }else if(CDescription.isEmpty()){
+        } else if(CDescription.isEmpty()){
             ToastUtil.toast(CourseCreate.this, "课程描述不能为空");
-        }else if(CTime.isEmpty()){
+        } else if(CTime.isEmpty()){
             ToastUtil.toast(CourseCreate.this, "课程时间不能为空");
-        }else if(CPlace.isEmpty()){
+        } else if(CPlace.isEmpty()){
             ToastUtil.toast(CourseCreate.this, "课程地点不能为空");
-        }else if(Ccapacity.isEmpty()){
+        } else if(Ccapacity.isEmpty()){
             ToastUtil.toast(CourseCreate.this, "课程容量不能为空");
         } else if(Ccode.isEmpty()){
             ToastUtil.toast(CourseCreate.this, "课程邀请码不能为空");
-        }else {
+        } else {
             doit();
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 }

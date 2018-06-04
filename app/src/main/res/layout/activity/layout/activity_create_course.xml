@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,10 +13,9 @@
     <LinearLayout
         android:id="@+id/course_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/margin_tool_bar"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical">
 
         <LinearLayout style="@style/coursedetail_item">
 
@@ -26,8 +26,7 @@
 
             <EditText
                 android:id="@+id/course_name"
-                style="@style/item_content"
-                />
+                style="@style/item_content" />
         </LinearLayout>
 
         <LinearLayout style="@style/coursedetail_item">
@@ -76,6 +75,7 @@
 
             <EditText
                 android:id="@+id/course_capacity"
+                android:inputType="numberDecimal"
                 style="@style/item_content" />
         </LinearLayout>
 
@@ -99,11 +99,20 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
             android:background="@drawable/textview_bg_select"
             android:gravity="center"
             android:text="@string/create_course"
             android:textColor="@color/white"
             android:textSize="16sp" />
+
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</android.support.design.widget.CoordinatorLayout>

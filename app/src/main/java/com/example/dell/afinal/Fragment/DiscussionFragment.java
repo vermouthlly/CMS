@@ -82,7 +82,7 @@ public class DiscussionFragment extends android.support.v4.app.Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         if (event.getMessage().equals("addCourse") || event.getMessage().equals("quitCourse")
-                || event.getMessage().equals("deleteCourse"))
+                || event.getMessage().equals("updateCourse"))
             loadUserCourse();
     }
 

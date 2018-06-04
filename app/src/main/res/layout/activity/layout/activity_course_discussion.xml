@@ -48,30 +48,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_icon="@mipmap/ic_fab_star"
+            fab:fab_icon="@mipmap/ic_newpost"
             fab:fab_title="@string/post"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/search_background"/>
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/light_grya"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/my_likes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_icon="@mipmap/ic_fab_star"
+            fab:fab_icon="@mipmap/ic_mlike"
             fab:fab_title="@string/mylikes"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/search_background"/>
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/light_grya"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/my_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_icon="@mipmap/ic_fab_star"
+            fab:fab_icon="@mipmap/ic_mpost"
             fab:fab_title="@string/mypost"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/search_background"/>
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/light_grya"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
