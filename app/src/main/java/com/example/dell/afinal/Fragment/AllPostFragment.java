@@ -6,9 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +19,8 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,10 +36,8 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class AllPostFragment extends Fragment {
+public class AllPostFragment extends BackHandledFragment {
 
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout refreshLayout;       // 下拉刷新
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;  // 进度条
     @BindView(R.id.no_content_hint)
@@ -48,12 +46,17 @@ public class AllPostFragment extends Fragment {
     Button history;
     @BindView(R.id.no_content_field)
     LinearLayout noContentField;
+    @BindView(R.id.recycler_view)
+    XRecyclerView recyclerView;
 
     private View mView;
     
     private List<Post> postList = new ArrayList<>();
+    private PostListAdapter adapter;
     private Unbinder unbinder;
     private String courseId;
+    private int loadFactor = 3;
+    private boolean backEnable = false;
 
     @Nullable
     @Override
@@ -65,7 +68,7 @@ public class AllPostFragment extends Fragment {
             Intent intent = getActivity().getIntent();
             courseId = intent.getStringExtra("courseId");
             loadDelay();
-            onPullRefresh();
+            setOnPullLoadingListener();
         }
         EventBus.getDefault().register(this);
         return mView;
@@ -84,9 +87,9 @@ public class AllPostFragment extends Fragment {
     // 从服务器读取属于当前课程的所有帖子数据
     private void loadPostsFromServer() {
         BmobQuery<Post> query = new BmobQuery<>();
+        query.setLimit(loadFactor);
         query.addWhereEqualTo("courseId", courseId);
         query.order("-createdAt");
-        query.setLimit(20);     // 仅加载20个
         query.findObjects(new FindListener<Post>() {
             @Override
             public void done(List<Post> list, BmobException e) {
@@ -97,6 +100,7 @@ public class AllPostFragment extends Fragment {
                 } else {
                     onNetworkException();
                 }
+                backEnable = true;
             }
         });
     }
@@ -109,8 +113,8 @@ public class AllPostFragment extends Fragment {
     
     // 构建RecyclerView
     private void createRecyclerView() {
-        RecyclerView recyclerView = mView.findViewById(R.id.recycler_view);
-        PostListAdapter adapter = new PostListAdapter(postList, AllPostFragment.this);
+        recyclerView = mView.findViewById(R.id.recycler_view);
+        adapter = new PostListAdapter(postList, AllPostFragment.this);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
@@ -126,24 +130,67 @@ public class AllPostFragment extends Fragment {
     // 出现网络异常
     private void onNetworkException() {
         ToastUtil.toast(getContext(), "数据加载失败, 请刷新重试");
-        refreshLayout.setRefreshing(false);
     }
 
     // 数据加载完成
     private void onDataLoaded() {
-        /*ToastUtil.toast(getContext(), "数据加载完成");*/
-        refreshLayout.setRefreshing(false);
         progressBar.hide();
     }
 
-    // 下拉刷新
-    private void onPullRefresh() {
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    // 设置RecyclerView下拉刷新和上拉加载监听
+    private void setOnPullLoadingListener() {
+        recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                loadPostsFromServer();
+                reloadPostData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                loadFactor += 3;
+                reloadPostData();
             }
         });
+    }
+
+    private void reloadPostData() {
+        backEnable = false;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                reloadPostDataFromServer();
+            }
+        }, 1500);
+    }
+
+    // 以新的加载因子从服务器重新读取帖子数据
+    private void reloadPostDataFromServer() {
+        BmobQuery<Post> query = new BmobQuery<>();
+        query.setLimit(loadFactor);
+        query.addWhereEqualTo("courseId", courseId);
+        query.order("-createdAt");
+        query.findObjects(new FindListener<Post>() {
+            @Override
+            public void done(List<Post> list, BmobException e) {
+                if (e == null) {
+                    postList.clear();
+                    postList.addAll(list);
+                    adapter.notifyDataSetChanged();
+                    recyclerView.refreshComplete();
+                    recyclerView.loadMoreComplete();
+                } else {
+                    onNetworkException();
+                }
+                backEnable = true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return !backEnable;
     }
 
     @Override
@@ -151,5 +198,9 @@ public class AllPostFragment extends Fragment {
         super.onDestroy();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+        if (recyclerView != null) {
+            recyclerView.destroy();
+            recyclerView = null;
+        }
     }
 }

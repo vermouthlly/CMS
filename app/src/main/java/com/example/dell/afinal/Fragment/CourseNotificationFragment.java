@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +20,8 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
 import com.example.dell.afinal.bean.CourseNotification;
-import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.User;
-
-import org.greenrobot.eventbus.EventBus;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +41,7 @@ public class CourseNotificationFragment extends Fragment {
     private Unbinder unbinder;
 
     @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout refreshLayout;
+    XRecyclerView recyclerView;
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;
     @BindView(R.id.no_content_field)
@@ -71,7 +65,6 @@ public class CourseNotificationFragment extends Fragment {
             mView = inflater.inflate(R.layout.allpost_fragment, container, false);
             unbinder = ButterKnife.bind(this, mView);
             loadNotification();
-            setOnPullRefreshListener();
         }
         return mView;
     }
@@ -95,7 +88,6 @@ public class CourseNotificationFragment extends Fragment {
     // 读取成功
     private void onLoadSuccess(List<CourseNotification> list) {
         loadUserCourses(list);
-        refreshLayout.setRefreshing(false);
         progressBar.hide();
     }
 
@@ -103,7 +95,6 @@ public class CourseNotificationFragment extends Fragment {
     private void onLoadFailed(BmobException e) {
         Log.e("读取课程消息失败:", e.toString());
         ToastUtil.toast(getContext(), "无法读取课程消息, 请检查你的网络后刷新重试");
-        refreshLayout.setRefreshing(false);
     }
 
     // 读取用户已选择的课程
@@ -168,6 +159,8 @@ public class CourseNotificationFragment extends Fragment {
     private void createRecyclerView(List<CourseNotification> list) {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         CourseNotifAdapter adapter = new CourseNotifAdapter(list);
+        recyclerView.setPullRefreshEnabled(false);
+        recyclerView.setLoadingMoreEnabled(false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         if (list.size() == 0) {
@@ -196,18 +189,6 @@ public class CourseNotificationFragment extends Fragment {
         intent.putExtra("user_id", userId);
         getActivity().startActivity(intent);
     }
-
-    // 下拉刷新
-    private void setOnPullRefreshListener() {
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                notifications.clear();
-                loadNotification();
-            }
-        });
-    }
-
 
     @Override
     public void onDestroyView() {

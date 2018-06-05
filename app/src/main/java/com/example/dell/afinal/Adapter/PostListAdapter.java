@@ -165,7 +165,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         if (isPopular)
             ToastUtil.toast(mContext, "已加入精选区");
         else
-            ToastUtil.toast(mContext, "已移除精选区");
+            ToastUtil.toast(mContext, "已移出精选区");
         EventBus.getDefault().post(new MessageEvent("editPopular"));
     }
 
@@ -296,7 +296,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         Post curPost = postList.get(position);
         holder.postTitle.setText(curPost.getTitle());
         holder.postContent.setText(curPost.getContent());
-        holder.date.setText(curPost.getCreatedAt());             // 直接用Bmob SDK获取数据的创建时间
+        holder.date.setText(curPost.getCreatedAt());
         holder.postId = curPost.getObjectId();                   // 获取帖子的id
         holder.authorId = curPost.getAuthor().getObjectId();     // 获取作者的id
         holder.isPopular = curPost.isPopular();

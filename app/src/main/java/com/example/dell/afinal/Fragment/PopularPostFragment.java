@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.Post;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,8 +35,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class PopularPostFragment extends Fragment {
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout refreshLayout;       // 下拉刷新
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;  // 进度条
     @BindView(R.id.no_content_hint)
@@ -63,7 +60,6 @@ public class PopularPostFragment extends Fragment {
             Intent intent = getActivity().getIntent();
             courseId = intent.getStringExtra("courseId");
             loadPostsFromServer();
-            onPullRefresh();
         }
         EventBus.getDefault().register(this);
         return mView;
@@ -98,7 +94,9 @@ public class PopularPostFragment extends Fragment {
 
     // 构建RecyclerView
     private void createRecyclerView() {
-        RecyclerView recyclerView = mView.findViewById(R.id.recycler_view);
+        XRecyclerView recyclerView = mView.findViewById(R.id.recycler_view);
+        recyclerView.setPullRefreshEnabled(false);
+        recyclerView.setLoadingMoreEnabled(false);
         PostListAdapter adapter = new PostListAdapter(postList, PopularPostFragment.this);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
@@ -115,25 +113,14 @@ public class PopularPostFragment extends Fragment {
     // 出现网络异常
     private void onNetworkException() {
         ToastUtil.toast(getContext(), "数据加载失败, 请刷新重试");
-        refreshLayout.setRefreshing(false);
     }
 
     // 数据加载完成
     private void onDataLoaded() {
-        /*ToastUtil.toast(getContext(), "数据加载完成");*/
-        refreshLayout.setRefreshing(false);
         progressBar.hide();
     }
 
-    // 下拉刷新
-    private void onPullRefresh() {
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadPostsFromServer();
-            }
-        });
-    }
+
 
     @Override
     public void onDestroyView() {

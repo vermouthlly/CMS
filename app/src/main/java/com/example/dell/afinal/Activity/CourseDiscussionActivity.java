@@ -14,6 +14,7 @@ import com.example.dell.afinal.Fragment.AllPostFragment;
 import com.example.dell.afinal.Fragment.PopularPostFragment;
 import com.example.dell.afinal.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 
 
 import java.util.ArrayList;
@@ -105,6 +106,13 @@ public class CourseDiscussionActivity extends AppCompatActivity {
 
         TabLayout tab = findViewById(R.id.post_tab);
         tab.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!BackHandlerHelper.handleBackPress(this)) {
+            super.onBackPressed();
+        }
     }
 
     @Override

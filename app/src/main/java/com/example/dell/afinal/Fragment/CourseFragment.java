@@ -1,16 +1,12 @@
 package com.example.dell.afinal.Fragment;
 
 import com.example.dell.afinal.bean.MessageEvent;
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -22,15 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-
 import com.example.dell.afinal.Activity.CourseCreate;
-import com.example.dell.afinal.Activity.StudentCourseActivity;
 import com.example.dell.afinal.Adapter.CourseListAdapter;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
 import com.example.dell.afinal.bean.Course;
-import com.example.dell.afinal.bean.MessageEvent;
 import com.example.dell.afinal.bean.User;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -42,16 +34,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 public class CourseFragment extends Fragment {
     private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
@@ -63,32 +50,7 @@ public class CourseFragment extends Fragment {
 
     private CourseListAdapter adapter;               // 课程适配器
     private List<Course> courseList = new ArrayList<>();
-    public static final int REFRESH = 1;
-    public static final int LOAD_FAILED = 2;
-    public static final int LOAD_MORE = 3;
     private int loadFactor = 5;       // 加载课程的数目
-
-    // 通过Handler更新UI
-    @SuppressLint("HandlerLeak")
-    public Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REFRESH:
-                    progressBar.hide();
-                    recyclerView.refreshComplete();
-                    break;
-                case LOAD_FAILED:
-                    ToastUtil.toast(getContext(), "获取课程列表失败, 请检查你的网络后刷新重试");
-                    break;
-                case LOAD_MORE:
-                    recyclerView.loadMoreComplete();
-                    recyclerView.scrollToPosition(courseList.size());
-                    break;
-                default: break;
-            }
-        }
-    };
 
     public static CourseFragment newInstance() {
         return new CourseFragment();
@@ -104,7 +66,7 @@ public class CourseFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         if (event.getMessage().equals("addCourse") || event.getMessage().equals("updateCourse"))
-            generateCourseList("refresh");
+            generateCourseList();
     }
 
     @Nullable
@@ -114,9 +76,8 @@ public class CourseFragment extends Fragment {
         if (mView == null) {
             mView = inflater.inflate(R.layout.course_fragment, container, false);
             bindViews(mView);
-            setOnPullLoadingListener();
             showCreateInterfaceOrNot();
-            generateCourseList("refresh");
+            generateCourseList();
             setOnPullLoadingListener();
         } else {
             ViewGroup parent = (ViewGroup) mView.getParent();
@@ -169,7 +130,6 @@ public class CourseFragment extends Fragment {
 
     // 设置RecyclerView下拉刷新以及上拉加载监听
     private void setOnPullLoadingListener() {
-        recyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
         recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -191,13 +151,13 @@ public class CourseFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                generateCourseList(op);
+                reloadCoursesFromServer();
             }
         }, 2000);
     }
 
-    // 初始化课程列表：获取Course表中的所有数据记录
-    private void generateCourseList(final String op) {
+    // 重新从服务器读取课程信息
+    private void reloadCoursesFromServer() {
         BmobQuery<Course> query = new BmobQuery<>();
         query.order("-createdAt");
         query.addWhereEqualTo("status", "released");
@@ -206,7 +166,29 @@ public class CourseFragment extends Fragment {
             @Override
             public void done(List<Course> list, BmobException e) {
                 if (e == null) {
-                    onLoadSuccess(list, op);
+                    courseList.clear();
+                    courseList.addAll(list);
+                    adapter.notifyDataSetChanged();
+                    recyclerView.refreshComplete();
+                    recyclerView.loadMoreComplete();
+                } else {
+                    onLoadFailed(e);
+                }
+            }
+        });
+    }
+
+    // 初始化课程列表：获取Course表中的所有数据记录
+    private void generateCourseList() {
+        BmobQuery<Course> query = new BmobQuery<>();
+        query.order("-createdAt");
+        query.addWhereEqualTo("status", "released");
+        query.setLimit(loadFactor);
+        query.findObjects(new FindListener<Course>() {
+            @Override
+            public void done(List<Course> list, BmobException e) {
+                if (e == null) {
+                    onLoadSuccess(list);
                 } else {
                     onLoadFailed(e);
                 }
@@ -215,17 +197,11 @@ public class CourseFragment extends Fragment {
     }
 
     // 读取成功
-    private void onLoadSuccess(List<Course> list, String op) {
+    private void onLoadSuccess(List<Course> list) {
         courseList = list;
         createRecyclerView();
         setListenerForSearchView();
-        Message message = new Message();
-        if (op.equals("refresh")) {
-            message.what = REFRESH;
-        } else if (op.equals("loadMore")) {
-            message.what = LOAD_MORE;
-        }
-        handler.sendMessage(message);
+        progressBar.hide();
     }
 
     // 搭建RecyclerView
@@ -239,9 +215,7 @@ public class CourseFragment extends Fragment {
     // 读取失败
     private void onLoadFailed(BmobException e) {
         Log.e("读取课程数据失败:", e.toString());
-        Message msg = new Message();
-        msg.what = LOAD_FAILED;
-        handler.sendMessage(msg);
+        ToastUtil.toast(getContext(), "获取课程列表失败, 请检查你的网络后刷新重试");
     }
 
     // 给搜索框添加监听事件
