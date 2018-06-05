@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -39,7 +38,7 @@ import cn.bmob.v3.listener.FindListener;
 public class AllPostFragment extends BackHandledFragment {
 
     @BindView(R.id.progress_bar)
-    ContentLoadingProgressBar progressBar;  // 进度条
+    ContentLoadingProgressBar progressBar;
     @BindView(R.id.no_content_hint)
     TextView noContentHint;
     @BindView(R.id.history)
@@ -56,7 +55,12 @@ public class AllPostFragment extends BackHandledFragment {
     private Unbinder unbinder;
     private String courseId;
     private int loadFactor = 3;
-    private boolean backEnable = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
 
     @Nullable
     @Override
@@ -70,7 +74,6 @@ public class AllPostFragment extends BackHandledFragment {
             loadDelay();
             setOnPullLoadingListener();
         }
-        EventBus.getDefault().register(this);
         return mView;
     }
 
@@ -81,7 +84,7 @@ public class AllPostFragment extends BackHandledFragment {
             public void run() {
                 loadPostsFromServer();
             }
-        }, 1500);
+        }, 1000);
     }
 
     // 从服务器读取属于当前课程的所有帖子数据
@@ -94,13 +97,10 @@ public class AllPostFragment extends BackHandledFragment {
             @Override
             public void done(List<Post> list, BmobException e) {
                 if (e == null) {
-                    postList = list;
-                    createRecyclerView();
-                    onDataLoaded();
+                    onPostsLoadSuccess(list);
                 } else {
                     onNetworkException();
                 }
-                backEnable = true;
             }
         });
     }
@@ -110,10 +110,20 @@ public class AllPostFragment extends BackHandledFragment {
         if (event.getMessage().equals("addPost") || event.getMessage().equals("deletePost"))
             loadPostsFromServer();
     }
+
+    // 帖子数据读取成功
+    private void onPostsLoadSuccess(List<Post> list) {
+        try {
+            postList = list;
+            createRecyclerView();
+            progressBar.hide();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
     
     // 构建RecyclerView
     private void createRecyclerView() {
-        recyclerView = mView.findViewById(R.id.recycler_view);
         adapter = new PostListAdapter(postList, AllPostFragment.this);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
@@ -130,11 +140,6 @@ public class AllPostFragment extends BackHandledFragment {
     // 出现网络异常
     private void onNetworkException() {
         ToastUtil.toast(getContext(), "数据加载失败, 请刷新重试");
-    }
-
-    // 数据加载完成
-    private void onDataLoaded() {
-        progressBar.hide();
     }
 
     // 设置RecyclerView下拉刷新和上拉加载监听
@@ -156,13 +161,12 @@ public class AllPostFragment extends BackHandledFragment {
     }
 
     private void reloadPostData() {
-        backEnable = false;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 reloadPostDataFromServer();
             }
-        }, 1500);
+        }, 1000);
     }
 
     // 以新的加载因子从服务器重新读取帖子数据
@@ -175,22 +179,30 @@ public class AllPostFragment extends BackHandledFragment {
             @Override
             public void done(List<Post> list, BmobException e) {
                 if (e == null) {
-                    postList.clear();
-                    postList.addAll(list);
-                    adapter.notifyDataSetChanged();
-                    recyclerView.refreshComplete();
-                    recyclerView.loadMoreComplete();
+                    onReloadSuccess(list);
                 } else {
                     onNetworkException();
                 }
-                backEnable = true;
             }
         });
     }
 
+    // 重新加载成功（这里捕获数据加载过程中用户强制退出引起的RecyclerView空指针错误）
+    private void onReloadSuccess(List<Post> list) {
+        try {
+            postList.clear();
+            postList.addAll(list);
+            adapter.notifyDataSetChanged();
+            recyclerView.refreshComplete();
+            recyclerView.loadMoreComplete();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean onBackPressed() {
-        return !backEnable;
+        return false;
     }
 
     @Override
@@ -198,9 +210,5 @@ public class AllPostFragment extends BackHandledFragment {
         super.onDestroy();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
-        if (recyclerView != null) {
-            recyclerView.destroy();
-            recyclerView = null;
-        }
     }
 }
