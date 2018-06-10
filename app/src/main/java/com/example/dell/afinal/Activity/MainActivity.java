@@ -16,6 +16,7 @@ import com.example.dell.afinal.Fragment.DiscussionFragment;
 import com.example.dell.afinal.Fragment.MineFragment;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.Utils.ToastUtil;
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.anno.NorIcons;
 import com.jpeng.jptabbar.anno.SeleIcons;
@@ -89,14 +90,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     //双击菜单退出
     @Override
     public void onBackPressed() {
-        if (!quitFlag) {
-            quitFlag = true;
-            ToastUtil.toast(MainActivity.this, "再按一次退出");
-        } else {
-            super.onBackPressed();
+        if (!BackHandlerHelper.handleBackPress(this)) {
+            if (!quitFlag) {
+                quitFlag = true;
+                ToastUtil.toast(MainActivity.this, "再按一次退出");
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 }

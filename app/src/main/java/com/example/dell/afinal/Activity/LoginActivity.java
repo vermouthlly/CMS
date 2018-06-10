@@ -3,7 +3,6 @@ package com.example.dell.afinal.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -14,9 +13,6 @@ import android.widget.TextView;
 import com.example.dell.afinal.R;
 import com.example.dell.afinal.bean.User;
 import com.example.dell.afinal.Utils.ToastUtil;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -68,26 +64,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // 获取用户输入的用户名和密码
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
-        Pattern p = Pattern.compile("[0-9]{8}");
-        Matcher result1 = p.matcher(username);
-        Pattern p1 =Pattern.compile("[0-9A-Za-z]{6,11}");
-        Matcher result2 = p1.matcher(password);
+
         // 非空验证
-        if(username.isEmpty()) {
+        if (username.isEmpty()) {
             ToastUtil.toast(LoginActivity.this, "用户名不能为空");
             return;
-        }else if(!result1.matches()){
-                ToastUtil.toast(getApplicationContext(), "学号应为8位数字");
-                return;
         }
-        if(password.isEmpty()) {
+        if (password.isEmpty()) {
             ToastUtil.toast(LoginActivity.this, "密码不能为空");
             return;
-        }else if(!result2.matches()){
-                ToastUtil.toast(getApplicationContext(), "密码应为6到11位的数字和字母");
-                return;
         }
-
 
         // 显示进度条
         progressBar.setVisibility(View.VISIBLE);
@@ -100,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void done(User user, BmobException e) {
                 // 屏蔽进度条
-
                 progressBar.setVisibility(View.INVISIBLE);
                 if (e == null) {
                     ToastUtil.toast(getApplicationContext(), "登陆成功");

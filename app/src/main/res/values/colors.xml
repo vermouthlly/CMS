@@ -21,6 +21,7 @@
     <color name="thrid_text2">#4CAF50</color>
     <color name="ripple">#388E3C</color>
     <color name="bg_color">#eeeade</color>
+
     <!--feng added 2018.04.24-->
     <color name="originalbt_color">#053bde</color>
     <color name="button_text">#000000</color>

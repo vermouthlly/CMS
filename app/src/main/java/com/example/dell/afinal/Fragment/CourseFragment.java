@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,7 +39,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class CourseFragment extends Fragment {
+public class CourseFragment extends BackHandledFragment {
     private View mView;                // 缓存Fragment的View, 避免碎片切换时在onCreateView内重复加载布局
     private ContentLoadingProgressBar progressBar;   // 进度条
     private Toolbar toolbar;                         // 标题栏
@@ -279,6 +278,16 @@ public class CourseFragment extends Fragment {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
